@@ -9,7 +9,7 @@ export default function Welcome() {
           <span className="inline-block">easy to remember!</span>
         </h1>
 
-        <p className="mx-auto mt-12 max-w-3xl text-lg text-muted-foreground sm:text-xl">
+        <p className="mx-auto mt-12 max-w-3xl text-muted-foreground sm:text-xl">
           FlashEase is a free English learning flashcard app, designed with a
           simple, user-friendly interface and optimized performance for
           effective learning

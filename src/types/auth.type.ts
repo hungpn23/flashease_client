@@ -1,4 +1,4 @@
-import { HttpErrorType } from "./error.type";
+import type { HttpErrorType } from "./error.type";
 
 export type LoginInputType = {
   email: string;

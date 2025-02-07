@@ -11,17 +11,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LoginPage() {
   return (
-    <main className="mt-12 flex w-full items-center justify-center">
+    <main className="flex w-full items-center justify-center">
       <div className="w-full max-w-sm">
         <Tabs defaultValue="login">
-          <TabsList className="mb-2">
+          <TabsList className="mb-1">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="signup">Sign up</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login">
             {/* Login form */}
-            <Card className="flex flex-col gap-6">
+            <Card className="flex flex-col gap-4">
               <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>
@@ -37,7 +37,7 @@ export default function LoginPage() {
 
           <TabsContent value="signup">
             {/* Signup form */}
-            <Card className="flex flex-col gap-6">
+            <Card className="flex flex-col gap-4">
               <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>

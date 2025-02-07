@@ -42,5 +42,5 @@ export async function login(
     expires: jwtDecode(accessToken).exp! * 1000,
   });
 
-  redirect("/profile");
+  redirect("/home");
 }
