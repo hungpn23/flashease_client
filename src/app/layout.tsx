@@ -5,7 +5,6 @@ import { Header } from "@/components/layouts/header";
 import { Footer } from "@/components/layouts/footer";
 import { ThemeProvider } from "@/components/layouts/theme-provider";
 import { cn } from "@/lib/utils";
-import { AuthProvider } from "@/contexts/auth.context";
 
 const inconsolata = Inconsolata({
   subsets: ["vietnamese"],
@@ -35,15 +34,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-grow">
-                <div className="py-16 sm:py-24">{children}</div>
-              </main>
-              <Footer />
-            </div>
-          </AuthProvider>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-grow">
+              <div className="py-16 sm:py-24">{children}</div>
+            </main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
