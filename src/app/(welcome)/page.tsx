@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default function Welcome() {
   return (
     <section className="container mx-auto mt-24">
       <div className="mx-auto max-w-4xl text-center">
