@@ -1,3 +1,5 @@
+import { Container } from "@/components/layouts/container";
+
 export default function Home() {
-  return <h1>Home Page</h1>;
+  return <Container>Home Page</Container>;
 }

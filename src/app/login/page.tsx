@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/clients/login-form";
-import { SignUpForm } from "@/components/clients/signup-form";
+import { RegisterForm } from "@/components/clients/register-form";
 import {
   Card,
   CardContent,
@@ -16,7 +16,7 @@ export default function LoginPage() {
         <Tabs defaultValue="login">
           <TabsList className="mb-1">
             <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign up</TabsTrigger>
+            <TabsTrigger value="register">Register</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login">
@@ -35,18 +35,18 @@ export default function LoginPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="signup">
-            {/* Signup form */}
+          <TabsContent value="register">
+            {/* Register form */}
             <Card className="flex flex-col gap-4">
               <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
+                <CardTitle className="text-2xl">Register</CardTitle>
                 <CardDescription>
-                  Enter your email and password.
+                  Enter your email, password and confirm password.
                 </CardDescription>
               </CardHeader>
 
               <CardContent>
-                <SignUpForm />
+                <RegisterForm />
               </CardContent>
             </Card>
           </TabsContent>

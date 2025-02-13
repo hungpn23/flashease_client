@@ -4,6 +4,7 @@ import { isAuthenticated } from "./lib/is-authenticated";
 import type { NextRequest } from "next/server";
 
 export default async function middleware(req: NextRequest) {
+  console.log("middleware called");
   const validated = await isAuthenticated();
   const pathname = req.nextUrl.pathname;
 

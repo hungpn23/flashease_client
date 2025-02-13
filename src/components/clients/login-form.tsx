@@ -3,23 +3,25 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActionState, useEffect } from "react";
-import { login } from "@/actions/login.action";
+import { useActionState, useEffect, useState } from "react";
+import { login } from "@/actions/auth.action";
 import { useToast } from "@/hooks/use-toast";
-import type { LoginStateType } from "@/types/auth.type";
+import type { AuthStateType } from "@/types/auth.type";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 
 export function LoginForm() {
   const { toast } = useToast();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const [state, action, isPending] = useActionState<LoginStateType, FormData>(
+  const [state, action, isPending] = useActionState<AuthStateType, FormData>(
     login,
     null,
   );
 
   useEffect(() => {
-    if (state?.error && state?.error.details === undefined) {
+    if (state?.error) {
       toast({
         variant: "destructive",
         title: "Login failed.",
@@ -41,8 +43,8 @@ export function LoginForm() {
           className={errorDetails && showErrorBorder(errorDetails, "email")}
           name="email"
           type="email"
-          placeholder="user@example.com"
-          defaultValue={state?.input.email}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           tabIndex={1}
           autoFocus
           required
@@ -69,7 +71,8 @@ export function LoginForm() {
           className={errorDetails && showErrorBorder(errorDetails, "password")}
           name="password"
           type="password"
-          defaultValue={state?.input.password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           tabIndex={2}
           required
         />

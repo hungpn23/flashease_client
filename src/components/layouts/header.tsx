@@ -2,10 +2,11 @@ import Link from "next/link";
 import { NavLink } from "../clients/nav-link";
 import { Separator } from "../clients/separator";
 import { ToggleTheme } from "../clients/toggle-theme";
-import { MobileMenu } from "./mobile-menu";
 import { isAuthenticated } from "@/lib/is-authenticated";
+import { MobileNav } from "./mobile-nav";
 
 export async function Header() {
+  console.log("header called");
   const isAuth = await isAuthenticated();
 
   return (
@@ -20,7 +21,9 @@ export async function Header() {
           <nav className="hidden items-center gap-2 md:flex">
             <NavLink href="/home">Home</NavLink>
             <NavLink href="/profile">Profile</NavLink>
-            <NavLink href="/logout">Logout</NavLink>
+            <button className="mr-4 text-base font-medium last:mr-4 hover:underline hover:underline-offset-4">
+              Logout
+            </button>
 
             <Separator />
 
@@ -36,7 +39,7 @@ export async function Header() {
           </nav>
         )}
 
-        <MobileMenu />
+        <MobileNav />
       </div>
     </header>
   );
