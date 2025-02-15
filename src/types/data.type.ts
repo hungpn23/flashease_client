@@ -1,20 +1,12 @@
+import { EditableBy, VisibleTo } from "@/lib/constants";
 import type { BaseEntityType } from "./base-entity.type";
 
-export type PostType = BaseEntityType & {
-  title: string;
-  slug: string;
-  content: string;
-  wordCount: number;
-  readingTime: number;
-  viewCount: number;
-};
-
-export type PostTagsType = PostType & {
-  tags: TagType[];
-};
-
-export type TagType = BaseEntityType & {
+export type SetType = BaseEntityType & {
   name: string;
+  slug: string;
+  description: string;
+  visibleTo: VisibleTo;
+  editableBy: EditableBy;
 };
 
 export type UserType = BaseEntityType & {

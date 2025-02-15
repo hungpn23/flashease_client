@@ -9,7 +9,7 @@ export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   if (protectedRoutes.includes(pathname) && !validated) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/authentication", req.url));
   }
 
   if (publicRoutes.includes(pathname) && validated) {

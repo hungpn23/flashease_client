@@ -14,16 +14,11 @@ export async function MobileNav() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          aria-label="Open mobile menu"
-        >
+        <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" aria-label="Mobile navigation menu">
+      <SheetContent side="right">
         <VisuallyHidden>
           <SheetTitle>Menu</SheetTitle>
         </VisuallyHidden>
@@ -31,9 +26,6 @@ export async function MobileNav() {
         <div className="flex h-full flex-col pt-6">
           {isAuth ? (
             <nav className="flex flex-col items-center gap-8">
-              <NavLink className="mr-0" href="/home">
-                Home
-              </NavLink>
               <NavLink className="mr-0" href="/profile">
                 Profile
               </NavLink>
@@ -47,7 +39,7 @@ export async function MobileNav() {
             </nav>
           ) : (
             <nav className="flex flex-col items-center gap-8">
-              <NavLink className="mr-0" href="/login">
+              <NavLink className="mr-0" href="/authentication">
                 Login
               </NavLink>
 

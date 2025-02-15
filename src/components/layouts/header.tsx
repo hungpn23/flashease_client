@@ -4,6 +4,8 @@ import { Separator } from "../clients/separator";
 import { ToggleTheme } from "../clients/toggle-theme";
 import { isAuthenticated } from "@/lib/is-authenticated";
 import { MobileNav } from "./mobile-nav";
+import { LogoutBtn } from "../clients/logout-btn";
+import { Button } from "../ui/button";
 
 export async function Header() {
   console.log("header called");
@@ -19,11 +21,9 @@ export async function Header() {
 
         {isAuth ? (
           <nav className="hidden items-center gap-2 md:flex">
-            <NavLink href="/home">Home</NavLink>
+            {/* <Button className="mr-4 text-base font-medium">create</Button> */}
             <NavLink href="/profile">Profile</NavLink>
-            <button className="mr-4 text-base font-medium last:mr-4 hover:underline hover:underline-offset-4">
-              Logout
-            </button>
+            <LogoutBtn />
 
             <Separator />
 
@@ -31,7 +31,7 @@ export async function Header() {
           </nav>
         ) : (
           <nav className="hidden items-center gap-2 md:flex">
-            <NavLink href="/login">Login</NavLink>
+            <NavLink href="/authentication">Login</NavLink>
 
             <Separator />
 

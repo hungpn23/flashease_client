@@ -35,7 +35,7 @@ export function LoginForm() {
   return (
     <form className="grid gap-6" action={action}>
       <div className="grid gap-2">
-        <Label htmlFor="email" aria-required>
+        <Label htmlFor="email">
           Email<span className="text-red-500">*</span>
         </Label>
 
@@ -55,7 +55,7 @@ export function LoginForm() {
 
       <div className="grid gap-2">
         <div className="flex items-center">
-          <Label htmlFor="password" aria-required>
+          <Label htmlFor="password">
             Password<span className="text-red-500">*</span>
           </Label>
 
