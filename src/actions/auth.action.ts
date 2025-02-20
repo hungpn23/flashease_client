@@ -67,7 +67,7 @@ export async function register(
     } as AuthStateType;
   }
 
-  redirect("/authentication");
+  redirect("/auth");
 }
 
 export async function logout() {
@@ -85,5 +85,5 @@ export async function logout() {
 
   cookieStore.delete("access_token");
 
-  redirect("/authentication");
+  redirect("/auth");
 }

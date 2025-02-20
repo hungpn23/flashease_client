@@ -40,7 +40,7 @@ export default function Auth() {
 
         <TabsContent value={TabValues.REGISTER}>
           {/* Register form */}
-          <Card className="flex flex-col gap-4">
+          <Card className="flex flex-col gap-4 rounded-md">
             <CardHeader>
               <CardTitle className="text-2xl">Register</CardTitle>
               <CardDescription>

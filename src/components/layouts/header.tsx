@@ -2,14 +2,12 @@ import Link from "next/link";
 import { NavLink } from "../clients/nav-link";
 import { Separator } from "../clients/separator";
 import { ToggleTheme } from "../clients/toggle-theme";
-import { isAuthenticated } from "@/lib/is-authenticated";
 import { MobileNav } from "./mobile-nav";
 import { LogoutBtn } from "../clients/logout-btn";
-import { Button } from "../ui/button";
+import { isAuthCached } from "@/lib/is-authenticated";
 
 export async function Header() {
-  console.log("header called");
-  const isAuth = await isAuthenticated();
+  const isAuth = await isAuthCached();
 
   return (
     <header className="fixed top-0 z-10 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -31,7 +29,7 @@ export async function Header() {
           </nav>
         ) : (
           <nav className="hidden items-center gap-2 md:flex">
-            <NavLink href="/authentication">Login</NavLink>
+            <NavLink href="/auth">Login</NavLink>
 
             <Separator />
 
@@ -39,7 +37,7 @@ export async function Header() {
           </nav>
         )}
 
-        <MobileNav />
+        <MobileNav isAuth={isAuth} />
       </div>
     </header>
   );

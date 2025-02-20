@@ -1,16 +1,12 @@
 import { NavLink } from "../clients/nav-link";
 import { ToggleTheme } from "../clients/toggle-theme";
 import { Separator } from "../clients/separator";
-import { isAuthenticated } from "@/lib/is-authenticated";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Menu } from "lucide-react";
 
-export async function MobileNav() {
-  console.log("mobile nav called");
-  const isAuth = await isAuthenticated();
-
+export async function MobileNav({ isAuth }: { isAuth: boolean }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -39,7 +35,7 @@ export async function MobileNav() {
             </nav>
           ) : (
             <nav className="flex flex-col items-center gap-8">
-              <NavLink className="mr-0" href="/authentication">
+              <NavLink className="mr-0" href="/auth">
                 Login
               </NavLink>
 

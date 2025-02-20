@@ -1,4 +1,5 @@
 import { getUser } from "@/actions/fetch-data.action";
+import { cache } from "react";
 
 export async function isAuthenticated() {
   const user = await getUser();
@@ -7,3 +8,5 @@ export async function isAuthenticated() {
 
   return true;
 }
+
+export const isAuthCached = cache(isAuthenticated);

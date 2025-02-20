@@ -1,5 +1,5 @@
 import { Container } from "@/components/layouts/container";
-import { isAuthenticated } from "@/lib/is-authenticated";
+import { isAuthCached } from "@/lib/is-authenticated";
 import { Welcome } from "./welcome";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/clients/login-form";
@@ -19,7 +19,7 @@ enum TabValues {
 }
 
 export default async function Home() {
-  const isAuth = await isAuthenticated();
+  const isAuth = await isAuthCached();
 
   return (
     <Container>
@@ -27,7 +27,7 @@ export default async function Home() {
         <Tabs defaultValue={TabValues.MY_SETS}>
           <TabsList className="mb-1 grid w-full grid-cols-3 rounded-md">
             <TabsTrigger value={TabValues.MY_SETS}>My sets</TabsTrigger>
-            <TabsTrigger value={TabValues.SAVED_SETS}>Saved</TabsTrigger>
+            <TabsTrigger value={TabValues.SAVED_SETS}>Saved sets</TabsTrigger>
             <TabsTrigger value={TabValues.EXPLORE}>Explore</TabsTrigger>
           </TabsList>
 

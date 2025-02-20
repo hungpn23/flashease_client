@@ -1,5 +1,5 @@
 export const protectedRoutes = ["/profile"];
-export const publicRoutes = ["/authentication"];
+export const publicRoutes = ["/auth"];
 
 export const BASE_URL = "http://localhost:3001/api/v1";
 export const IMAGE_HOST = "http://localhost:3001/";
