@@ -1,5 +1,5 @@
 export type PaginatedType<D> = {
-  paginatedData: D[];
+  data: D[];
   metadata: MetadataType;
 };
 

@@ -1,8 +1,9 @@
+import { Container } from "@/components/layouts/container";
 import { Button } from "@/components/ui/button";
 
-export function Welcome() {
+export default function Welcome() {
   return (
-    <div className="text-center">
+    <Container className="text-center">
       <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
         Simple to learn, <span className="inline-block">easy to remember!</span>
       </h1>
@@ -14,6 +15,6 @@ export function Welcome() {
       </p>
 
       <Button>Start learning</Button>
-    </div>
+    </Container>
   );
 }

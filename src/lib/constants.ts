@@ -1,4 +1,9 @@
-export const protectedRoutes = ["/profile"];
+export const protectedRoutes = [
+  "/profile",
+  "/my-sets",
+  "/saved-sets",
+  "/explore",
+];
 export const publicRoutes = ["/auth"];
 
 export const BASE_URL = "http://localhost:3001/api/v1";

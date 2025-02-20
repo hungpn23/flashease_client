@@ -6,6 +6,7 @@ import { Footer } from "@/components/layouts/footer";
 import { ThemeProvider } from "@/components/layouts/theme-provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inconsolata = Inconsolata({
   subsets: ["vietnamese"],
@@ -38,10 +39,12 @@ export default async function RootLayout({
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-grow">
-              <div className="py-16 sm:py-24">
-                {children}
-                <Toaster />
-              </div>
+              <NuqsAdapter>
+                <div className="py-16 sm:py-24">
+                  {children}
+                  <Toaster />
+                </div>
+              </NuqsAdapter>
             </main>
             <Footer />
           </div>
