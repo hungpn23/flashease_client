@@ -13,8 +13,9 @@ export function Set({ set }: { set: SetType }) {
       </Link>
 
       <div className="mt-2 text-sm text-muted-foreground">
+        <span>Author: {set.author}</span>
+        <span className="mx-1">-</span>
         <time>{formatDate(set.createdAt)}</time>
-        <span className="mx-1">·</span>
       </div>
     </article>
   );

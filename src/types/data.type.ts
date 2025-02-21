@@ -5,6 +5,7 @@ export type SetType = BaseEntityType & {
   name: string;
   slug: string;
   description?: string;
+  author: string;
   visibleTo: VisibleTo;
   editableBy: EditableBy;
 };
