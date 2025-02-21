@@ -14,7 +14,13 @@ import {
 import { Button } from "../ui/button";
 import { EditSetForm } from "../clients/edit-set-form";
 
-export function Set({ set }: { set: SetType }) {
+export function Set({
+  set,
+  pageType,
+}: {
+  set: SetType;
+  pageType: "my-set" | "explore";
+}) {
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
@@ -36,24 +42,26 @@ export function Set({ set }: { set: SetType }) {
         </div>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="mr-4" variant="outline" size="icon">
-            <Settings className="h-5 w-5" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-xl">
-          <DialogHeader>
-            <DialogTitle>Edit set</DialogTitle>
+      {pageType === "my-set" ? (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="mr-4" variant="outline" size="icon">
+              <Settings className="h-5 w-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-xl">
+            <DialogHeader>
+              <DialogTitle>Edit set</DialogTitle>
 
-            <DialogDescription>
-              Make changes to your set here. Click save when you&apos;re done.
-            </DialogDescription>
-          </DialogHeader>
+              <DialogDescription>
+                Make changes to your set here. Click save when you&apos;re done.
+              </DialogDescription>
+            </DialogHeader>
 
-          <EditSetForm set={set} />
-        </DialogContent>
-      </Dialog>
+            <EditSetForm set={set} />
+          </DialogContent>
+        </Dialog>
+      ) : null}
     </article>
   );
 }

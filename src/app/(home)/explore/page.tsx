@@ -17,7 +17,7 @@ export default async function Explore({
   return (
     <div className="flex flex-col flex-wrap">
       {publicSets.data.map((set) => (
-        <Set key={set.id} set={set} />
+        <Set pageType="explore" key={set.id} set={set} />
       ))}
 
       <Pagination

@@ -17,7 +17,7 @@ export default async function MySets({
   return (
     <div className="flex flex-col flex-wrap">
       {mySets.data.map((set) => (
-        <Set key={set.id} set={set} />
+        <Set pageType="my-set" key={set.id} set={set} />
       ))}
 
       <Pagination key={mySets.metadata.totalPages} metadata={mySets.metadata} />
