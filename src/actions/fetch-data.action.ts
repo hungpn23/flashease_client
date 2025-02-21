@@ -52,7 +52,7 @@ export async function findMySets(
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(
-    `${BASE_URL}/set/my-sets?page=${currentPage}&take=${take}&order=${order}`,
+    `${BASE_URL}/set/my-set?page=${currentPage}&take=${take}&order=${order}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken || "nothing"}`,

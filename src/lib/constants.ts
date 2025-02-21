@@ -1,6 +1,6 @@
 export const protectedRoutes = [
   "/profile",
-  "/my-sets",
+  "/my-set",
   "/saved-sets",
   "/explore",
 ];

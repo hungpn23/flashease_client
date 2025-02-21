@@ -21,18 +21,18 @@ export default function HomeLayout({
         <ul className="grid grid-cols-3 text-center">
           <li>
             <Link
-              href="/my-sets"
-              className={`block py-2 ${isActive("/my-sets")}`}
+              href="/my-set"
+              className={`block py-2 ${isActive("/my-set")}`}
             >
-              My Sets
+              My Set
             </Link>
           </li>
           <li>
             <Link
-              href="/saved-sets"
-              className={`block py-2 ${isActive("/saved-sets")}`}
+              href="/progress"
+              className={`block py-2 ${isActive("/progress")}`}
             >
-              Saved Sets
+              Progress
             </Link>
           </li>
           <li>
