@@ -3,9 +3,18 @@ import { SetType } from "@/types/data.type";
 import Link from "next/link";
 import { Visibility } from "./visibility";
 import { Settings } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { EditSetForm } from "../clients/edit-set-form";
 
 export function Set({ set }: { set: SetType }) {
-  console.log("🚀 ~ Set ~ set:", set);
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
@@ -27,7 +36,24 @@ export function Set({ set }: { set: SetType }) {
         </div>
       </div>
 
-      <Settings className="mr-8 h-5 w-5" />
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="mr-4" variant="outline" size="icon">
+            <Settings className="h-5 w-5" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Edit set</DialogTitle>
+
+            <DialogDescription>
+              Make changes to your set here. Click save when you&apos;re done.
+            </DialogDescription>
+          </DialogHeader>
+
+          <EditSetForm set={set} />
+        </DialogContent>
+      </Dialog>
     </article>
   );
 }
