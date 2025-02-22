@@ -29,7 +29,7 @@ export async function findPublicSets(
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(
-    `${BASE_URL}/set/all?page=${currentPage}&take=${take}&order=${order}`,
+    `${BASE_URL}/set/public?page=${currentPage}&take=${take}&order=${order}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken || "nothing"}`,
@@ -71,6 +71,22 @@ export async function findMySet(
 export async function findMySetDetail(id: string) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(`${BASE_URL}/set/my-set/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken || "nothing"}`,
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) return data as HttpErrorType;
+
+  return data as SetType;
+}
+
+export async function findPublicSetDetail(id: string) {
+  const accessToken = (await cookies()).get("access_token")?.value;
+  const response = await fetch(`${BASE_URL}/set/public/${id}`, {
     headers: {
       Authorization: `Bearer ${accessToken || "nothing"}`,
     },
