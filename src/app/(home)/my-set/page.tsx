@@ -16,8 +16,12 @@ export default async function MySets({
 
   return (
     <div className="flex flex-col flex-wrap">
+      <p className="text-sm text-muted-foreground">
+        Click a set to add/remove cards and start learning.
+      </p>
+
       {mySets.data.map((set) => (
-        <Set pageType="my-set" key={set.id} set={set} />
+        <Set path="my-set" key={set.id} set={set} />
       ))}
 
       <Pagination key={mySets.metadata.totalPages} metadata={mySets.metadata} />

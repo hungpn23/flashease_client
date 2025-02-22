@@ -12,13 +12,15 @@ export default function HomeLayout({
   const pathname = usePathname();
 
   const isActive = (path: string) => {
-    return pathname === path ? "border-b-2 border-primary" : "";
+    return pathname.includes(path)
+      ? "border-b-2 border-primary text-foreground"
+      : "";
   };
 
   return (
-    <Container className="border-2 p-4">
-      <nav className="mb-8">
-        <ul className="grid grid-cols-3 text-center">
+    <Container className="flex flex-col gap-8 border-2">
+      <nav>
+        <ul className="grid grid-cols-3 text-center text-muted-foreground">
           <li>
             <Link
               href="/my-set"
@@ -45,6 +47,7 @@ export default function HomeLayout({
           </li>
         </ul>
       </nav>
+
       {children}
     </Container>
   );

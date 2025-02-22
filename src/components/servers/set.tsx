@@ -16,17 +16,17 @@ import { EditSetForm } from "../clients/edit-set-form";
 
 export function Set({
   set,
-  pageType,
+  path,
 }: {
   set: SetType;
-  pageType: "my-set" | "explore";
+  path: "my-set" | "explore";
 }) {
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
         <div className="flex items-center gap-2">
           <Link
-            href={`/set/${set.id}/${set.slug}`}
+            href={`/${path}/${set.id}`}
             className="text-xl font-semibold text-link hover:underline hover:underline-offset-4"
           >
             {set.name}
@@ -42,7 +42,7 @@ export function Set({
         </div>
       </div>
 
-      {pageType === "my-set" ? (
+      {path === "my-set" ? (
         <Dialog>
           <DialogTrigger asChild>
             <Button className="mr-4" variant="outline" size="icon">

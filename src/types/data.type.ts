@@ -4,7 +4,6 @@ import type { BaseEntityType } from "./base-entity.type";
 export type SetType = BaseEntityType & {
   id: string;
   name: string;
-  slug: string;
   description?: string;
   author: string;
   visibleTo: VisibleTo;

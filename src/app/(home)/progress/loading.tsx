@@ -1,3 +1,5 @@
+import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
+
 export default function Loading() {
-  return <p>Loading...</p>;
+  return <TextShimmerWave duration={0.5}>Loading...</TextShimmerWave>;
 }
