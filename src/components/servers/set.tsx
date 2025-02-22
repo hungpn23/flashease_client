@@ -36,7 +36,7 @@ export function Set({
         </div>
 
         <div className="mt-2 text-sm text-muted-foreground">
-          <span>Author: {set.author}</span>
+          <span>Author: {set.user.username}</span>
           <span className="mx-1">-</span>
           <time>{formatDate(set.createdAt)}</time>
         </div>

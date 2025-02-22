@@ -1,4 +1,4 @@
-import { findMySets } from "@/actions/fetch-data.action";
+import { findMySet } from "@/actions/fetch-data.action";
 import { Pagination } from "@/components/clients/pagination";
 import { Set } from "@/components/servers/set";
 import { searchParamsCache } from "@/lib/search-params";
@@ -10,7 +10,7 @@ export default async function MySets({
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const mySets = await findMySets(page, take, order);
+  const mySets = await findMySet(page, take, order);
 
   if ("statusCode" in mySets) throw new Error("failed to fetch data");
 

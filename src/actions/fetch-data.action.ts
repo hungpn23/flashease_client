@@ -45,7 +45,7 @@ export async function findPublicSets(
   return data as PaginatedType<SetType>;
 }
 
-export async function findMySets(
+export async function findMySet(
   currentPage: number,
   take: number,
   order: string,
@@ -66,4 +66,20 @@ export async function findMySets(
   if (!response.ok) return data as HttpErrorType;
 
   return data as PaginatedType<SetType>;
+}
+
+export async function findMySetDetail(id: string) {
+  const accessToken = (await cookies()).get("access_token")?.value;
+  const response = await fetch(`${BASE_URL}/set/my-set/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken || "nothing"}`,
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) return data as HttpErrorType;
+
+  return data as SetType;
 }
