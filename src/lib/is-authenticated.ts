@@ -1,4 +1,4 @@
-import { findUser } from "@/actions/fetch-data.action";
+import { findUser } from "@/actions/user/find-user.action";
 import { cache } from "react";
 
 export async function isAuthenticated() {

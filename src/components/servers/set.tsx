@@ -27,7 +27,7 @@ export function Set({
         <div className="flex items-center gap-2">
           <Link
             href={`/${path}/${set.id}`}
-            className="text-xl font-semibold text-link hover:underline hover:underline-offset-4"
+            className="text-heading text-xl font-semibold hover:underline hover:underline-offset-4"
           >
             {set.name}
           </Link>

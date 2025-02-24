@@ -1,4 +1,4 @@
-import { findPaginated } from "@/actions/fetch-data.action";
+import { findPaginated } from "@/actions/find-paginated.action";
 import { Pagination } from "@/components/clients/pagination";
 import { Set } from "@/components/servers/set";
 import { searchParamsCache } from "@/lib/search-params";

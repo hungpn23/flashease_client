@@ -1,4 +1,4 @@
-import { findSetDetail } from "@/actions/fetch-data.action";
+import { findSetDetail } from "@/actions/set/find-set-detail.action";
 import { Button } from "@/components/ui/button";
 import {
   Table,

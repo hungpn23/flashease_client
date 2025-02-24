@@ -31,10 +31,10 @@ export default function HomeLayout({
           </li>
           <li>
             <Link
-              href="/progress"
-              className={`block py-2 ${isActive("/progress")}`}
+              href="/my-progress"
+              className={`block py-2 ${isActive("/my-progress")}`}
             >
-              Progress
+              My Progress
             </Link>
           </li>
           <li>

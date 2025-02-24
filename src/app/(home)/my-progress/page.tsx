@@ -1,24 +1,24 @@
-import { findPaginated } from "@/actions/fetch-data.action";
+import { findPaginated } from "@/actions/find-paginated.action";
 import { Pagination } from "@/components/clients/pagination";
-import { MyProgress } from "@/components/servers/progress";
+import { ProgressWithMetadata } from "@/components/servers/progress";
 import { searchParamsCache } from "@/lib/search-params";
-import { MyProgressType } from "@/types/data/progress.type";
+import { ProgressWithMetadataType } from "@/types/data/progress.type";
 import { SearchParams } from "nuqs/server";
 
-export default async function Progress({
+export default async function MyProgress({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const myProgress = await findPaginated<MyProgressType>(
+  const progress = await findPaginated<ProgressWithMetadataType>(
     "/progress/my-progress",
     page,
     take,
     order,
   );
 
-  if ("statusCode" in myProgress) throw new Error("failed to fetch data");
+  if ("statusCode" in progress) throw new Error("failed to fetch data");
 
   return (
     <div className="flex flex-col flex-wrap">
@@ -26,13 +26,13 @@ export default async function Progress({
         Click a progress to learn.
       </p>
 
-      {myProgress.data.map((p) => (
-        <MyProgress key={p.id} myProgress={p} />
+      {progress.data.map((p) => (
+        <ProgressWithMetadata key={p.id} progress={p} />
       ))}
 
       <Pagination
-        key={myProgress.metadata.totalPages}
-        metadata={myProgress.metadata}
+        key={progress.metadata.totalPages}
+        metadata={progress.metadata}
       />
     </div>
   );

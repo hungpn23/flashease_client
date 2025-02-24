@@ -52,6 +52,8 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
         link: "hsl(222, 75%, 54%)",
+        heading: "hsl(25 80% 50%)",
+        highlight: "hsl(110 80% 45%)",
       },
       borderRadius: {
         lg: "var(--radius)",

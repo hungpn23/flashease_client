@@ -11,7 +11,7 @@ import { showErrorDetail } from "@/lib/show-error-detail";
 import { Check } from "lucide-react";
 import { DialogClose, DialogFooter } from "../ui/dialog";
 import { EditSetInputType, EditSetStateType } from "@/types/edit-set.type";
-import { editSet } from "@/actions/edit-data.action";
+import { editSet } from "@/actions/set/edit-set.action";
 import { EditableBy, VisibleTo } from "@/lib/constants";
 import { Textarea } from "../ui/textarea";
 import {

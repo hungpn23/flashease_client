@@ -1,4 +1,4 @@
-import { findSetDetail } from "@/actions/fetch-data.action";
+import { findSetDetail } from "@/actions/set/find-set-detail.action";
 
 type Params = Promise<{ id: string }>;
 
