@@ -10,9 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Params } from "@/types/page-params.type";
 import { ArrowRight, Trash2 } from "lucide-react";
-
-type Params = Promise<{ id: string }>;
 
 export default async function MySetDetail({ params }: { params: Params }) {
   const { id } = await params;

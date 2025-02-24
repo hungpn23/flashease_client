@@ -3,8 +3,10 @@
 import { BASE_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import type { HttpErrorType } from "@/types/error.type";
-import type { SetDetailType, SetType, UserType } from "@/types/data.type";
 import { PaginatedType } from "@/types/paginated.type";
+import { BaseEntityType } from "@/types/base-entity.type";
+import { SetDetailType } from "@/types/data/set.type";
+import { UserType } from "@/types/data/user.type";
 
 export async function findUser() {
   const accessToken = (await cookies()).get("access_token")?.value;
@@ -22,14 +24,15 @@ export async function findUser() {
   return data as UserType;
 }
 
-export async function findPublicSets(
+export async function findPaginated<Entity extends BaseEntityType>(
+  path: string,
   currentPage: number,
   take: number,
   order: string,
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(
-    `${BASE_URL}/set/public?page=${currentPage}&take=${take}&order=${order}`,
+    `${BASE_URL}${path}?page=${currentPage}&take=${take}&order=${order}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken || "nothing"}`,
@@ -42,30 +45,7 @@ export async function findPublicSets(
 
   if (!response.ok) return data as HttpErrorType;
 
-  return data as PaginatedType<SetType>;
-}
-
-export async function findMySet(
-  currentPage: number,
-  take: number,
-  order: string,
-) {
-  const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(
-    `${BASE_URL}/set/my-set?page=${currentPage}&take=${take}&order=${order}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken || "nothing"}`,
-      },
-      credentials: "include",
-    },
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) return data as HttpErrorType;
-
-  return data as PaginatedType<SetType>;
+  return data as PaginatedType<Entity>;
 }
 
 export async function findSetDetail(id: string, path: "my-set" | "public") {

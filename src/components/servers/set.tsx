@@ -1,5 +1,4 @@
 import { formatDate } from "@/lib/format-date";
-import { SetType } from "@/types/data.type";
 import Link from "next/link";
 import { Visibility } from "./visibility";
 import { Settings } from "lucide-react";
@@ -13,6 +12,7 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { EditSetForm } from "../clients/edit-set-form";
+import { SetType } from "@/types/data/set.type";
 
 export function Set({
   set,

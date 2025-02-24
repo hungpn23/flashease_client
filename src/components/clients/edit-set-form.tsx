@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { Check } from "lucide-react";
-import type { SetType } from "@/types/data.type";
 import { DialogClose, DialogFooter } from "../ui/dialog";
 import { EditSetInputType, EditSetStateType } from "@/types/edit-set.type";
 import { editSet } from "@/actions/edit-data.action";
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { SetType } from "@/types/data/set.type";
 
 export function EditSetForm({ set }: { set: SetType }) {
   const { toast } = useToast();

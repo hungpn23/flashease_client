@@ -1,16 +1,17 @@
-import { findMySet } from "@/actions/fetch-data.action";
+import { findPaginated } from "@/actions/fetch-data.action";
 import { Pagination } from "@/components/clients/pagination";
 import { Set } from "@/components/servers/set";
 import { searchParamsCache } from "@/lib/search-params";
+import { SetType } from "@/types/data/set.type";
 import { SearchParams } from "nuqs/server";
 
-export default async function MySets({
+export default async function MySet({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const mySets = await findMySet(page, take, order);
+  const mySets = await findPaginated<SetType>("/set/my-set", page, take, order);
 
   if ("statusCode" in mySets) throw new Error("failed to fetch data");
 

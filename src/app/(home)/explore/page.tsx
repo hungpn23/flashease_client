@@ -1,7 +1,8 @@
-import { findPublicSets } from "@/actions/fetch-data.action";
+import { findPaginated } from "@/actions/fetch-data.action";
 import { Pagination } from "@/components/clients/pagination";
 import { Set } from "@/components/servers/set";
 import { searchParamsCache } from "@/lib/search-params";
+import { SetType } from "@/types/data/set.type";
 import { SearchParams } from "nuqs/server";
 
 export default async function Explore({
@@ -10,7 +11,12 @@ export default async function Explore({
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const publicSets = await findPublicSets(page, take, order);
+  const publicSets = await findPaginated<SetType>(
+    "/set/public",
+    page,
+    take,
+    order,
+  );
 
   if ("statusCode" in publicSets) throw new Error("failed to fetch data");
 

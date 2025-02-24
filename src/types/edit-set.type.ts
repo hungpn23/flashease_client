@@ -1,4 +1,4 @@
-import { SetType } from "./data.type";
+import { SetType } from "./data/set.type";
 import { HttpErrorType } from "./error.type";
 
 export type EditSetInputType = Partial<
