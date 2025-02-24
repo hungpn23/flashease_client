@@ -9,7 +9,8 @@ export type ProgressType = BaseEntityType & {
   items: ProgressItemType[];
 };
 
-export type ProgressWithMetadataType = ProgressType & {
+export type ProgressWithMetadataType = {
+  progress: ProgressType;
   metadata: ProgressMetadata;
 };
 

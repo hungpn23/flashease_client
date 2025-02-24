@@ -53,7 +53,7 @@ export default {
         },
         link: "hsl(222, 75%, 54%)",
         heading: "hsl(25 80% 50%)",
-        highlight: "hsl(110 80% 45%)",
+        highlight: "hsl(110 70% 40%)",
       },
       borderRadius: {
         lg: "var(--radius)",

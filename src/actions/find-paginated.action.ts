@@ -6,7 +6,7 @@ import { HttpErrorType } from "@/types/error.type";
 import { PaginatedType } from "@/types/paginated.type";
 import { cookies } from "next/headers";
 
-export async function findPaginated<Entity extends BaseEntityType>(
+export async function findPaginated<Entity>(
   path: string,
   currentPage: number,
   take: number,

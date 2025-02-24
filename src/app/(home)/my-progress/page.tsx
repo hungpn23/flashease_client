@@ -11,14 +11,14 @@ export default async function MyProgress({
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const progress = await findPaginated<ProgressWithMetadataType>(
+  const res = await findPaginated<ProgressWithMetadataType>(
     "/progress/my-progress",
     page,
     take,
     order,
   );
 
-  if ("statusCode" in progress) throw new Error("failed to fetch data");
+  if ("statusCode" in res) throw new Error("failed to fetch data");
 
   return (
     <div className="flex flex-col flex-wrap">
@@ -26,14 +26,11 @@ export default async function MyProgress({
         Click a progress to learn.
       </p>
 
-      {progress.data.map((p) => (
-        <ProgressWithMetadata key={p.id} progress={p} />
+      {res.data.map((item) => (
+        <ProgressWithMetadata key={item.progress.id} item={item} />
       ))}
 
-      <Pagination
-        key={progress.metadata.totalPages}
-        metadata={progress.metadata}
-      />
+      <Pagination key={res.metadata.totalPages} metadata={res.metadata} />
     </div>
   );
 }

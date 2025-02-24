@@ -18,6 +18,7 @@ export type SetType = BaseEntityType & {
   progresses: ProgressType[];
 };
 
-export type SetDetailType = SetType & {
+export type SetDetailType = {
+  set: SetType;
   isLearning: boolean;
 };
