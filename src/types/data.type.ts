@@ -2,7 +2,6 @@ import { EditableBy, VisibleTo } from "@/lib/constants";
 import type { BaseEntityType } from "./base-entity.type";
 
 export type SetType = BaseEntityType & {
-  id: string;
   name: string;
   description?: string;
   visibleTo: VisibleTo;
@@ -11,6 +10,10 @@ export type SetType = BaseEntityType & {
   editableByPassword?: string;
   user: UserType;
   cards: CardType[];
+};
+
+export type SetDetailType = SetType & {
+  isLearning: boolean;
 };
 
 export type UserType = BaseEntityType & {
@@ -25,4 +28,26 @@ export type UserType = BaseEntityType & {
 export type CardType = BaseEntityType & {
   term: string;
   definition: string;
+};
+
+export type ProgressType = BaseEntityType & {
+  items: ProgressItemType[];
+};
+
+export type MyProgressType = BaseEntityType &
+  Pick<SetType, "name" | "description"> &
+  Pick<UserType, "username"> &
+  Pick<ProgressType, "createdAt"> & {
+    metadata: ProgressMetadata;
+  };
+
+export type ProgressMetadata = {
+  totalCards: number;
+  notStudiedCount: number;
+  learningCount: number;
+  knownCount: number;
+};
+
+export type ProgressItemType = BaseEntityType & {
+  correctCount?: number;
 };

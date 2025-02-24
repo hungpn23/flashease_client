@@ -1,16 +1,16 @@
-import { findPublicSetDetail } from "@/actions/fetch-data.action";
+import { findSetDetail } from "@/actions/fetch-data.action";
 
 type Params = Promise<{ id: string }>;
 
 export default async function PublicSetDetail({ params }: { params: Params }) {
   const { id } = await params;
-  const set = await findPublicSetDetail(id);
+  const data = await findSetDetail(id, "public");
 
-  if ("statusCode" in set) throw new Error("failed to fetch data");
+  if ("statusCode" in data) throw new Error("failed to fetch data");
 
   return (
     <div>
-      <p>{JSON.stringify(set)}</p>
+      <p>{JSON.stringify(data.set.cards)}</p>
     </div>
   );
 }
