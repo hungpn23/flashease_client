@@ -12,7 +12,7 @@ import {
   Table,
 } from "@/components/ui/table";
 import { Params } from "@/types/page-params.type";
-import { ArrowRight, Trash2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default async function PublicSetDetail({ params }: { params: Params }) {

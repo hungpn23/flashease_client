@@ -1,7 +1,6 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { BaseEntityType } from "@/types/base-entity.type";
 import { HttpErrorType } from "@/types/error.type";
 import { PaginatedType } from "@/types/paginated.type";
 import { cookies } from "next/headers";

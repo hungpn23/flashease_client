@@ -28,7 +28,7 @@ import {
 import toast from "react-hot-toast";
 
 export function EditSetForm({ set }: { set: SetType }) {
-  const [id, _setId] = useState<string>(set.id);
+  const [id] = useState<string>(set.id);
   const [name, setName] = useState<string>(set.name);
   const [description, setDescription] = useState<string>(set.description || "");
   const [visibleTo, setVisibleTo] = useState<VisibleTo>(set.visibleTo);
@@ -59,10 +59,9 @@ export function EditSetForm({ set }: { set: SetType }) {
   );
 
   useEffect(() => {
-    if (state.error && state.error.details === undefined) {
+    if (state.error && state.error.details === undefined)
       toast.error(state.error?.message);
-    }
-  }, [state, toast]);
+  }, [state]);
 
   const errorDetails = state.error?.details;
 

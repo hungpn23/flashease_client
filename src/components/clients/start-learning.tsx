@@ -32,7 +32,7 @@ export function StartLearningBtn({ set }: { set: SetType }) {
   const isPasswordOptional =
     pathname.includes("/my-set") || set.visibleTo === VisibleTo.EVERYONE;
 
-  const [id, _setId] = useState<string>(set.id);
+  const [id] = useState<string>(set.id);
   const [password, setPassword] = useState<string>("");
 
   const initState: StartProgressStateType = {
