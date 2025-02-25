@@ -21,7 +21,7 @@ export type SetType = BaseEntityType & {
 
 export type SetDetailType = {
   set: SetType;
-  isLearning: boolean;
+  progress?: ProgressType;
 };
 
 export type EditSetInputType = Partial<

@@ -39,14 +39,17 @@ export async function startProgress(
     return {
       input: previousState.input,
       error: await response.json(),
+      progress: undefined,
       success: false,
     } as StartProgressStateType;
   }
 
-  revalidatePath(`/my-set/${input.id}`);
+  revalidatePath(`/my-set/[id]`, "page");
 
   return {
     input,
+    error: undefined,
+    progress: await response.json(),
     success: true,
   } as StartProgressStateType;
 }

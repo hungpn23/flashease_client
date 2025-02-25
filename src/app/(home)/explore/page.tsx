@@ -22,6 +22,10 @@ export default async function Explore({
 
   return (
     <div className="flex flex-col flex-wrap">
+      <p className="text-sm text-muted-foreground">
+        Click a set see cards and start learning.
+      </p>
+
       {publicSets.data.map((set) => (
         <Set path="explore" key={set.id} set={set} />
       ))}

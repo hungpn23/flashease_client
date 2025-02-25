@@ -5,7 +5,7 @@ export default async function MyProgressDetail({ params }: { params: Params }) {
   const { id } = await params;
   const res = await findProgressDetail(id);
 
-  if ("statusCode" in res) throw new Error("failed to fetch set");
+  if ("statusCode" in res) throw new Error("failed to fetch progress");
 
   return <div>{JSON.stringify(res)}</div>;
 }

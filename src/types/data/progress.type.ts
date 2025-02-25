@@ -29,5 +29,6 @@ export type StartProgressInputType = Pick<SetType, "id"> & {
 export type StartProgressStateType = {
   input: StartProgressInputType;
   error?: HttpErrorType;
+  progress?: ProgressType;
   success: boolean;
 };

@@ -17,31 +17,29 @@ import Link from "next/link";
 
 export default async function MySetDetail({ params }: { params: Params }) {
   const { id } = await params;
-  const res = await findSetDetail(id, "my-set");
+  const setDetail = await findSetDetail(id, "my-set");
 
-  if ("statusCode" in res) throw new Error("failed to fetch set");
+  if ("statusCode" in setDetail) throw new Error("failed to fetch set");
 
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
-        <h1 className="text-xl font-bold">{res.set.name}</h1>
+        <h1 className="text-xl font-bold">{setDetail.set.name}</h1>
 
-        {res.isLearning ? (
+        {setDetail.progress ? (
           <Button className="mb-4 ml-auto w-fit" asChild>
-            <Link href={`/my-progress/${res.set.id}`}>
+            <Link href={`/my-progress/${setDetail.progress.id}`}>
               Go to progress
               <ArrowRight className="h4 inline w-4" />
             </Link>
           </Button>
         ) : (
-          <StartLearningBtn set={res.set} />
+          <StartLearningBtn set={setDetail.set} />
         )}
       </div>
 
       <Table>
-        <TableCaption>
-          A list of your cards. | isLearning: {res.isLearning.toString()}
-        </TableCaption>
+        <TableCaption>A list of your cards.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-fit">No.</TableHead>
@@ -51,7 +49,7 @@ export default async function MySetDetail({ params }: { params: Params }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {res.set.cards.map((card, index) => (
+          {setDetail.set.cards.map((card, index) => (
             <TableRow key={card.id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{card.term}</TableCell>
@@ -65,7 +63,9 @@ export default async function MySetDetail({ params }: { params: Params }) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total cards</TableCell>
-            <TableCell className="text-right">{res.set.cards.length}</TableCell>
+            <TableCell className="text-right">
+              {setDetail.set.cards.length}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
