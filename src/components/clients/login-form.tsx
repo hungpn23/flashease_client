@@ -5,13 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionState, useEffect, useState } from "react";
 import { login } from "@/actions/auth.action";
-import { useToast } from "@/hooks/use-toast";
 import type { AuthStateType } from "@/types/auth.type";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
+import toast from "react-hot-toast";
 
 export function LoginForm() {
-  const { toast } = useToast();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -21,14 +20,8 @@ export function LoginForm() {
   );
 
   useEffect(() => {
-    if (state?.error) {
-      toast({
-        variant: "destructive",
-        title: "Login failed.",
-        description: state.error.message,
-      });
-    }
-  }, [state, toast]);
+    if (state?.error) toast.error(state.error.message);
+  }, [state]);
 
   const errorDetails = state?.error.details;
 

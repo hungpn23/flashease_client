@@ -1,27 +1,25 @@
 "use server";
 
-import { BASE_URL, EditableBy, VisibleTo } from "@/lib/constants";
+import { BASE_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
 import {
+  ProgressType,
   StartProgressInputType,
   StartProgressStateType,
 } from "@/types/data/progress.type";
-import { EditSetStateType } from "@/types/data/set.type";
+import { redirect } from "next/navigation";
 
 export async function startProgress(
-  previousState: EditSetStateType,
+  previousState: StartProgressStateType,
   formData: FormData,
 ) {
   const input: StartProgressInputType = {
     id: formData.get("id") as string,
     password: formData.get("password") as string | undefined,
   };
-
   const accessToken = (await cookies()).get("access_token")?.value;
 
-  if (!input.password) input.password = "";
-
+  if (input.password === "") input.password = undefined;
   const response = await fetch(
     `${BASE_URL}/progress/start-progress/${input.id}`,
     {
@@ -39,17 +37,10 @@ export async function startProgress(
     return {
       input: previousState.input,
       error: await response.json(),
-      progress: undefined,
-      success: false,
     } as StartProgressStateType;
   }
 
-  revalidatePath(`/my-set/[id]`, "page");
+  const progress: ProgressType = await response.json();
 
-  return {
-    input,
-    error: undefined,
-    progress: await response.json(),
-    success: true,
-  } as StartProgressStateType;
+  redirect(`/my-progress/${progress.id}`);
 }

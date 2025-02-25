@@ -7,20 +7,15 @@ export function ProgressDetail({
 }: {
   progressDetail: ProgressDetailType;
 }) {
+  console.log("🚀 ~ progressDetail:", progressDetail);
   return (
     <article className="items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <Link
-        href={`/progress/${progressDetail.progress.id}`}
-        className="text-heading text-xl font-semibold hover:underline hover:underline-offset-4"
+        href={`/my-progress/${progressDetail.progress.id}`}
+        className="text-xl font-semibold text-heading hover:underline hover:underline-offset-4"
       >
         {progressDetail.progress.set.name}
       </Link>
-
-      <div className="mt-2 text-sm text-muted-foreground">
-        <span>Author: {progressDetail.progress.user.username}</span>
-        <span className="mx-1">•</span>
-        <time>Created at: {formatDate(progressDetail.progress.createdAt)}</time>
-      </div>
 
       <div className="mt-2 text-sm text-muted-foreground">
         <span className="text-foreground">
@@ -38,6 +33,12 @@ export function ProgressDetail({
         <span className="text-highlight">
           Known: {progressDetail.metadata.knownCount}
         </span>
+      </div>
+
+      <div className="mt-2 text-sm text-muted-foreground">
+        <span>Learner: {progressDetail.progress.user.username}</span>
+        <span className="mx-1">•</span>
+        <time>Created at: {formatDate(progressDetail.progress.createdAt)}</time>
       </div>
     </article>
   );

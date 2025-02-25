@@ -4,14 +4,13 @@ import { register } from "@/actions/auth.action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { AuthStateType } from "@/types/auth.type";
 import { useActionState, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export function RegisterForm() {
-  const { toast } = useToast();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -22,17 +21,10 @@ export function RegisterForm() {
   );
 
   useEffect(() => {
-    if (state?.error) {
-      toast({
-        variant: "destructive",
-        title: "Register failed.",
-        description: state.error.message,
-      });
-    }
-  }, [state, toast]);
+    if (state?.error) toast.error(state.error.message);
+  }, [state]);
 
   const errorDetails = state?.error.details;
-
   const isPasswordMatch = password === confirmPassword;
 
   return (

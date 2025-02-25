@@ -5,8 +5,8 @@ import { Header } from "@/components/layouts/header";
 import { Footer } from "@/components/layouts/footer";
 import { ThemeProvider } from "@/components/layouts/theme-provider";
 import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "react-hot-toast";
 
 const inconsolata = Inconsolata({
   subsets: ["vietnamese"],
@@ -42,7 +42,7 @@ export default async function RootLayout({
               <NuqsAdapter>
                 <div className="py-16 sm:py-24">
                   {children}
-                  <Toaster />
+                  <Toaster position="top-center" />
                 </div>
               </NuqsAdapter>
             </main>

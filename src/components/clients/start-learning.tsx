@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { VisibleTo } from "@/lib/constants";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
@@ -23,28 +22,25 @@ import {
   StartProgressStateType,
 } from "@/types/data/progress.type";
 import { SetType } from "@/types/data/set.type";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export function StartLearningBtn({ set }: { set: SetType }) {
   const pathname = usePathname();
-  const isMySet = pathname.includes("/my-set");
-
-  const { toast } = useToast();
+  const isPasswordOptional =
+    pathname.includes("/my-set") || set.visibleTo === VisibleTo.EVERYONE;
 
   const [id, _setId] = useState<string>(set.id);
-  const [password, setPassword] = useState<string>(
-    isMySet ? "This set is yours so no password's required." : "",
-  );
-  const [success, setSuccess] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
 
   const initState: StartProgressStateType = {
     input: {
       id,
       password,
     } as StartProgressInputType,
-    success,
+    error: undefined,
   };
 
   const [state, action, isLoading] = useActionState<
@@ -53,29 +49,23 @@ export function StartLearningBtn({ set }: { set: SetType }) {
   >(startProgress, initState);
 
   useEffect(() => {
-    setSuccess(state.success);
-
-    if (state.error && state.error.details === undefined) {
-      toast({
-        variant: "destructive",
-        title: "Start progress failed.",
-        description: state.error?.message,
-      });
-    }
-
-    if (state.success) {
-      toast({
-        variant: "default",
-        title: "Start progress successful.",
-        description:
-          "Next step, click 'Go to progress' button to start learning.",
-      });
-    }
-  }, [state, toast]);
+    if (state.error && state.error.details === undefined)
+      toast.error(state.error?.message);
+  }, [state]);
 
   const errorDetails = state.error?.details;
 
-  return (
+  return isPasswordOptional ? (
+    <form action={action}>
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="password" value={password} />
+
+      <Button className="mb-4 ml-auto w-fit" disabled={isLoading} type="submit">
+        Start learning
+        <ArrowRight className="h4 inline w-4" />
+      </Button>
+    </form>
+  ) : (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="mb-4 ml-auto w-fit">
@@ -105,11 +95,10 @@ export function StartLearningBtn({ set }: { set: SetType }) {
               name="password"
               type="text"
               value={password}
-              placeholder="Please enter the password to start learning."
+              placeholder="Enter the password to start learning."
               onChange={(e) => setPassword(e.target.value)}
               tabIndex={1}
               autoFocus
-              disabled={isMySet}
             />
 
             <div className="col-span-3 col-start-2">
@@ -121,20 +110,13 @@ export function StartLearningBtn({ set }: { set: SetType }) {
             <div className="flex items-center gap-4">
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
-                  Close
+                  No
                 </Button>
               </DialogClose>
 
               <Button disabled={isLoading} variant="default" type="submit">
                 Yes
               </Button>
-
-              <Check
-                className={cn(
-                  "h-4 w-4",
-                  success ? "text-green-500" : "invisible",
-                )}
-              />
             </div>
           </DialogFooter>
         </form>

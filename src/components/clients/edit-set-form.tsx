@@ -4,7 +4,6 @@ import { useActionState, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
@@ -26,10 +25,9 @@ import {
   EditSetStateType,
   SetType,
 } from "@/types/data/set.type";
+import toast from "react-hot-toast";
 
 export function EditSetForm({ set }: { set: SetType }) {
-  const { toast } = useToast();
-
   const [id, _setId] = useState<string>(set.id);
   const [name, setName] = useState<string>(set.name);
   const [description, setDescription] = useState<string>(set.description || "");
@@ -41,7 +39,6 @@ export function EditSetForm({ set }: { set: SetType }) {
   const [editableByPassword, setEditableByPassword] = useState<string>(
     set.editableByPassword || "",
   );
-  const [success, setSuccess] = useState<boolean>(false);
 
   const initState: EditSetStateType = {
     input: {
@@ -53,7 +50,7 @@ export function EditSetForm({ set }: { set: SetType }) {
       editableBy,
       editableByPassword,
     } as EditSetInputType,
-    success,
+    success: false,
   };
 
   const [state, action, isLoading] = useActionState<EditSetStateType, FormData>(
@@ -62,22 +59,8 @@ export function EditSetForm({ set }: { set: SetType }) {
   );
 
   useEffect(() => {
-    setSuccess(state.success);
-
     if (state.error && state.error.details === undefined) {
-      toast({
-        variant: "destructive",
-        title: "Update failed.",
-        description: state.error?.message,
-      });
-    }
-
-    if (state.success) {
-      toast({
-        variant: "default",
-        title: "Update successful.",
-        description: "Your set has been updated.",
-      });
+      toast.error(state.error?.message);
     }
   }, [state, toast]);
 
@@ -245,7 +228,10 @@ export function EditSetForm({ set }: { set: SetType }) {
           </Button>
 
           <Check
-            className={cn("h-4 w-4", success ? "text-green-500" : "invisible")}
+            className={cn(
+              "h-4 w-4",
+              state.success ? "text-green-500" : "invisible",
+            )}
           />
         </div>
       </DialogFooter>

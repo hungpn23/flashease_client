@@ -22,7 +22,7 @@ export default function Welcome() {
       </TextEffect>
 
       <Button>
-        Start learning <ArrowRight className="h4 w-4" />
+        Start learning <ArrowRight className="h4 inline w-4" />
       </Button>
     </Container>
   );

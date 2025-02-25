@@ -1,4 +1,5 @@
 import { findSetDetail } from "@/actions/set/find-set-detail.action";
+import { StartLearningBtn } from "@/components/clients/start-learning";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/table";
 import { Params } from "@/types/page-params.type";
 import { ArrowRight, Trash2 } from "lucide-react";
-import { StartLearningBtn } from "./start-learning";
 import Link from "next/link";
 
 export default async function MySetDetail({ params }: { params: Params }) {
