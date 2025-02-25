@@ -7,7 +7,6 @@ export function ProgressDetail({
 }: {
   progressDetail: ProgressDetailType;
 }) {
-  console.log("🚀 ~ progressDetail:", progressDetail);
   return (
     <article className="items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <Link

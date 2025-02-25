@@ -42,3 +42,10 @@ export type EditSetStateType = {
   error?: HttpErrorType;
   success: boolean;
 };
+
+export type EditSetCardsInputType = Pick<SetType, "id" | "cards">;
+
+export type EditSetCardsStateType = {
+  input: EditSetCardsInputType;
+  error?: HttpErrorType;
+};

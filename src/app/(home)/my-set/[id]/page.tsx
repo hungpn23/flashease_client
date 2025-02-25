@@ -1,4 +1,5 @@
 import { findSetDetail } from "@/actions/set/find-set-detail.action";
+import { CardTable } from "@/components/clients/card-table";
 import { StartLearningBtn } from "@/components/clients/start-learning";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,37 +39,7 @@ export default async function MySetDetail({ params }: { params: Params }) {
         )}
       </div>
 
-      <Table>
-        <TableCaption>A list of your cards.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-fit">No.</TableHead>
-            <TableHead>Term</TableHead>
-            <TableHead>Definition</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {setDetail.set.cards.map((card, index) => (
-            <TableRow key={card.id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{card.term}</TableCell>
-              <TableCell>{card.definition}</TableCell>
-              <TableCell>
-                <Trash2 className="mx-auto h-4 w-4" />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total cards</TableCell>
-            <TableCell className="text-right">
-              {setDetail.set.cards.length}
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+      <CardTable initCards={setDetail.set.cards} setId={setDetail.set.id} />
     </div>
   );
 }
