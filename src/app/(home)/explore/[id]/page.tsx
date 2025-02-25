@@ -4,13 +4,13 @@ type Params = Promise<{ id: string }>;
 
 export default async function PublicSetDetail({ params }: { params: Params }) {
   const { id } = await params;
-  const set = await findSetDetail(id, "public");
+  const res = await findSetDetail(id, "public");
 
-  if ("statusCode" in set) throw new Error("failed to fetch set");
+  if ("statusCode" in res) throw new Error("failed to fetch set");
 
   return (
     <div>
-      <p>{JSON.stringify(set.cards)}</p>
+      <p>{JSON.stringify(res.set.cards)}</p>
     </div>
   );
 }

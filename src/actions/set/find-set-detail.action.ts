@@ -5,9 +5,9 @@ import { SetDetailType } from "@/types/data/set.type";
 import { HttpErrorType } from "@/types/error.type";
 import { cookies } from "next/headers";
 
-export async function findSetDetail(id: string, path: "my-set" | "public") {
+export async function findSetDetail(setId: string, path: "my-set" | "public") {
   const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(`${BASE_URL}/set/${path}/${id}`, {
+  const response = await fetch(`${BASE_URL}/set/${path}/${setId}`, {
     headers: {
       Authorization: `Bearer ${accessToken || "nothing"}`,
     },

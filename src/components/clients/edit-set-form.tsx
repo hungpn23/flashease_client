@@ -10,7 +10,6 @@ import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { Check } from "lucide-react";
 import { DialogClose, DialogFooter } from "../ui/dialog";
-import { EditSetInputType, EditSetStateType } from "@/types/edit-set.type";
 import { editSet } from "@/actions/set/edit-set.action";
 import { EditableBy, VisibleTo } from "@/lib/constants";
 import { Textarea } from "../ui/textarea";
@@ -22,12 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { SetType } from "@/types/data/set.type";
+import {
+  EditSetInputType,
+  EditSetStateType,
+  SetType,
+} from "@/types/data/set.type";
 
 export function EditSetForm({ set }: { set: SetType }) {
   const { toast } = useToast();
 
-  const [id, setId] = useState<string>(set.id);
+  const [id, _setId] = useState<string>(set.id);
   const [name, setName] = useState<string>(set.name);
   const [description, setDescription] = useState<string>(set.description || "");
   const [visibleTo, setVisibleTo] = useState<VisibleTo>(set.visibleTo);

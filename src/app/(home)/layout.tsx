@@ -13,7 +13,7 @@ export default function HomeLayout({
 
   const isActive = (path: string) => {
     return pathname.includes(path)
-      ? "border-b-2 border-primary text-foreground"
+      ? "border-b-2 border-primary text-foreground "
       : "";
   };
 

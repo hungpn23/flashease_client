@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Params } from "@/types/page-params.type";
 import { ArrowRight, Trash2 } from "lucide-react";
+import { StartLearningBtn } from "./start-learning";
+import Link from "next/link";
 
 export default async function MySetDetail({ params }: { params: Params }) {
   const { id } = await params;
@@ -24,10 +26,16 @@ export default async function MySetDetail({ params }: { params: Params }) {
       <div className="flex justify-between">
         <h1 className="text-xl font-bold">{res.set.name}</h1>
 
-        <Button className="mb-4 ml-auto w-fit">
-          {res.isLearning ? "Go to progress" : "Start learning"}{" "}
-          <ArrowRight className="h4 w-4" />
-        </Button>
+        {res.isLearning ? (
+          <Button className="mb-4 ml-auto w-fit" asChild>
+            <Link href={`/my-progress/${res.set.id}`}>
+              Go to progress
+              <ArrowRight className="h4 inline w-4" />
+            </Link>
+          </Button>
+        ) : (
+          <StartLearningBtn set={res.set} />
+        )}
       </div>
 
       <Table>
@@ -39,6 +47,7 @@ export default async function MySetDetail({ params }: { params: Params }) {
             <TableHead className="w-fit">No.</TableHead>
             <TableHead>Term</TableHead>
             <TableHead>Definition</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

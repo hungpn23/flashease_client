@@ -1,9 +1,9 @@
 "use server";
 
 import { BASE_URL, EditableBy, VisibleTo } from "@/lib/constants";
-import type { EditSetInputType, EditSetStateType } from "@/types/edit-set.type";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { EditSetStateType, EditSetInputType } from "@/types/data/set.type";
 
 export async function editSet(
   previousState: EditSetStateType,

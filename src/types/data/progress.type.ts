@@ -1,4 +1,5 @@
 import { BaseEntityType } from "../base-entity.type";
+import { HttpErrorType } from "../error.type";
 import { ProgressItemType } from "./progress-item.type";
 import { SetType } from "./set.type";
 import { UserType } from "./user.type";
@@ -9,7 +10,7 @@ export type ProgressType = BaseEntityType & {
   items: ProgressItemType[];
 };
 
-export type ProgressWithMetadataType = {
+export type ProgressDetailType = {
   progress: ProgressType;
   metadata: ProgressMetadata;
 };
@@ -19,4 +20,14 @@ export type ProgressMetadata = {
   notStudiedCount: number;
   learningCount: number;
   knownCount: number;
+};
+
+export type StartProgressInputType = Pick<SetType, "id"> & {
+  password?: string;
+};
+
+export type StartProgressStateType = {
+  input: StartProgressInputType;
+  error?: HttpErrorType;
+  success: boolean;
 };

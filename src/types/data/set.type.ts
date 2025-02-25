@@ -4,6 +4,7 @@ import { UserType } from "./user.type";
 import { FolderType } from "./folder.type";
 import { CardType } from "./card.type";
 import { ProgressType } from "./progress.type";
+import { HttpErrorType } from "../error.type";
 
 export type SetType = BaseEntityType & {
   name: string;
@@ -21,4 +22,23 @@ export type SetType = BaseEntityType & {
 export type SetDetailType = {
   set: SetType;
   isLearning: boolean;
+};
+
+export type EditSetInputType = Partial<
+  Pick<
+    SetType,
+    | "name"
+    | "description"
+    | "visibleTo"
+    | "visibleToPassword"
+    | "editableBy"
+    | "editableByPassword"
+  >
+> &
+  Pick<SetType, "id">;
+
+export type EditSetStateType = {
+  input: EditSetInputType;
+  error?: HttpErrorType;
+  success: boolean;
 };
