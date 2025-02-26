@@ -91,8 +91,13 @@ export function CardTable({
     });
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.MouseEvent<HTMLElement>) => {
     const errors: string[] = [];
+
+    if (cards.length < 4) {
+      e.preventDefault();
+      return toast.error("Minimum 4 cards required");
+    }
 
     cards.forEach((card, index) => {
       if (!validateField(card.term))
@@ -103,6 +108,7 @@ export function CardTable({
     });
 
     if (errors.length > 0) {
+      e.preventDefault();
       return toast.error((_t) => (
         <div className="mt-2">
           {errors.map((error, index) => (
