@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
-import { AuthStateType } from "@/types/auth.type";
+import { TAuthState } from "@/types/auth.type";
 import { useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,7 @@ export function RegisterForm() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const [state, action, isPending] = useActionState<AuthStateType, FormData>(
+  const [state, action, isPending] = useActionState<TAuthState, FormData>(
     register,
     null,
   );

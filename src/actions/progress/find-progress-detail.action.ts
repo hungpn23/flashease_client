@@ -1,8 +1,8 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { ProgressDetailType } from "@/types/data/progress.type";
-import { HttpErrorType } from "@/types/error.type";
+import { TProgressDetail } from "@/types/data/progress.type";
+import { THttpError } from "@/types/error.type";
 import { cookies } from "next/headers";
 
 export async function findProgressDetail(progressId: string) {
@@ -16,7 +16,7 @@ export async function findProgressDetail(progressId: string) {
 
   const data = await response.json();
 
-  if (!response.ok) return data as HttpErrorType;
+  if (!response.ok) return data as THttpError;
 
-  return data as ProgressDetailType;
+  return data as TProgressDetail;
 }

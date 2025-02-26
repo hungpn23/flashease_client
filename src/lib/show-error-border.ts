@@ -1,7 +1,7 @@
-import { ErrorDetailType } from "@/types/error.type";
+import { TErrorDetail } from "@/types/error.type";
 
 export function showErrorBorder(
-  details: ErrorDetailType[],
+  details: TErrorDetail[],
   inputProperty: string,
 ) {
   return details.some(({ property }) => property === inputProperty)

@@ -1,10 +1,10 @@
-import { BaseEntityType } from "../base-entity.type";
-import { ProgressItemType } from "./progress-item.type";
-import { SetType } from "./set.type";
+import { TBaseEntity } from "../base-entity.type";
+import { TProgressItem } from "./progress-item.type";
+import { TSet } from "./set.type";
 
-export type CardType = BaseEntityType & {
+export type TCard = TBaseEntity & {
   term: string;
   definition: string;
-  set: SetType;
-  progressItems: ProgressItemType[];
+  set?: TSet;
+  progressItems?: TProgressItem[];
 };

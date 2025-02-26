@@ -1,14 +1,14 @@
-import { BaseEntityType } from "../base-entity.type";
-import { ProgressType } from "./progress.type";
-import { SetType } from "./set.type";
+import { TBaseEntity } from "../base-entity.type";
+import { TProgress } from "./progress.type";
+import { TSet } from "./set.type";
 
-export type UserType = BaseEntityType & {
+export type TUser = TBaseEntity & {
   role: string;
   username: string;
   email: string;
   isEmailVerified: boolean;
   bio?: string;
   avatar?: string;
-  sets: SetType[];
-  progresses: ProgressType[];
+  sets: TSet[];
+  progresses: TProgress[];
 };

@@ -2,19 +2,14 @@
 
 import { BASE_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
-import {
-  EditSetCardsInputType,
-  EditSetCardsStateType,
-  SetType,
-} from "@/types/data/set.type";
+import { TEditCardsInput, TEditCardsState, TSet } from "@/types/data/set.type";
 import { revalidatePath } from "next/cache";
-import { error } from "console";
 
 export async function editSetCards(
-  previousState: EditSetCardsStateType,
+  previousState: TEditCardsState,
   formData: FormData,
 ) {
-  const input: EditSetCardsInputType = {
+  const input: TEditCardsInput = {
     id: formData.get("id") as string,
     cards: JSON.parse(formData.get("cards") as string),
   };
@@ -34,15 +29,15 @@ export async function editSetCards(
     return {
       input: previousState.input,
       error: await response.json(),
-    } as EditSetCardsStateType;
+    } as TEditCardsState;
   }
 
-  const set: SetType = await response.json();
+  const set: TSet = await response.json();
 
   revalidatePath(`/my-set/${set.id}`);
 
   return {
     input,
     error: undefined,
-  } as EditSetCardsStateType;
+  } as TEditCardsState;
 }

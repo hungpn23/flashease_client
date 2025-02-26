@@ -1,32 +1,32 @@
 import { VisibleTo, EditableBy } from "@/lib/constants";
-import { BaseEntityType } from "../base-entity.type";
-import { UserType } from "./user.type";
-import { FolderType } from "./folder.type";
-import { CardType } from "./card.type";
-import { ProgressType } from "./progress.type";
-import { HttpErrorType } from "../error.type";
+import { TBaseEntity } from "../base-entity.type";
+import { TUser } from "./user.type";
+import { TFolder } from "./folder.type";
+import { TCard } from "./card.type";
+import { TProgress } from "./progress.type";
+import { THttpError } from "../error.type";
 
-export type SetType = BaseEntityType & {
+export type TSet = TBaseEntity & {
   name: string;
   description?: string;
   visibleTo: VisibleTo;
   visibleToPassword?: string;
   editableBy: EditableBy;
   editableByPassword?: string;
-  user: UserType;
-  folder: FolderType;
-  cards: CardType[];
-  progresses: ProgressType[];
+  user: TUser;
+  folder: TFolder;
+  cards: TCard[];
+  progresses: TProgress[];
 };
 
-export type SetDetailType = {
-  set: SetType;
-  progress?: ProgressType;
+export type TSetDetail = {
+  set: TSet;
+  progress?: TProgress;
 };
 
-export type EditSetInputType = Partial<
+export type TEditSetInput = Partial<
   Pick<
-    SetType,
+    TSet,
     | "name"
     | "description"
     | "visibleTo"
@@ -35,17 +35,17 @@ export type EditSetInputType = Partial<
     | "editableByPassword"
   >
 > &
-  Pick<SetType, "id">;
+  Pick<TSet, "id">;
 
-export type EditSetStateType = {
-  input: EditSetInputType;
-  error?: HttpErrorType;
+export type TEditSetState = {
+  input: TEditSetInput;
+  error?: THttpError;
   success: boolean;
 };
 
-export type EditSetCardsInputType = Pick<SetType, "id" | "cards">;
+export type TEditCardsInput = Pick<TSet, "id" | "cards">;
 
-export type EditSetCardsStateType = {
-  input: EditSetCardsInputType;
-  error?: HttpErrorType;
+export type TEditCardsState = {
+  input: TEditCardsInput;
+  error?: THttpError;
 };

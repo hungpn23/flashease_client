@@ -2,21 +2,11 @@ import { findSetDetail } from "@/actions/set/find-set-detail.action";
 import { CardTable } from "@/components/clients/card-table";
 import { StartLearningBtn } from "@/components/clients/start-learning";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Params } from "@/types/page-params.type";
-import { ArrowRight, Trash2 } from "lucide-react";
+import { TParams } from "@/types/page-params.type";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default async function MySetDetail({ params }: { params: Params }) {
+export default async function MySetDetail({ params }: { params: TParams }) {
   const { id } = await params;
   const setDetail = await findSetDetail(id, "my-set");
 
@@ -39,7 +29,7 @@ export default async function MySetDetail({ params }: { params: Params }) {
         )}
       </div>
 
-      <CardTable initCards={setDetail.set.cards} setId={setDetail.set.id} />
+      <CardTable cards={setDetail.set.cards} setId={setDetail.set.id} />
     </div>
   );
 }

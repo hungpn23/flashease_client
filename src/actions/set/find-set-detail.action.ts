@@ -1,8 +1,8 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { SetDetailType } from "@/types/data/set.type";
-import { HttpErrorType } from "@/types/error.type";
+import { TSetDetail } from "@/types/data/set.type";
+import { THttpError } from "@/types/error.type";
 import { cookies } from "next/headers";
 
 export async function findSetDetail(setId: string, path: "my-set" | "public") {
@@ -16,7 +16,7 @@ export async function findSetDetail(setId: string, path: "my-set" | "public") {
 
   const data = await response.json();
 
-  if (!response.ok) return data as HttpErrorType;
+  if (!response.ok) return data as THttpError;
 
-  return data as SetDetailType;
+  return data as TSetDetail;
 }

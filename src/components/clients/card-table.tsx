@@ -1,6 +1,6 @@
 "use client";
 
-import { CardType } from "@/types/data/card.type";
+import { TCard } from "@/types/data/card.type";
 import { useActionState, useEffect, useState } from "react";
 import {
   Table,
@@ -12,14 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { BASE_URL } from "@/lib/constants";
 import { editSetCards } from "@/actions/set/edit-set-cards.action";
-import { EditSetCardsStateType } from "@/types/data/set.type";
+import { TEditCardsState } from "@/types/data/set.type";
 
 type ValidationStateType = {
   [cardId: string]: {
@@ -28,20 +27,29 @@ type ValidationStateType = {
   };
 };
 
+interface Card {
+  term: string;
+  definition: string;
+}
+
 export function CardTable({
-  initCards,
+  cardsInput,
   setId,
 }: {
-  initCards: CardType[];
+  cardsInput: TCard[];
   setId: string;
 }) {
-  const [cards, setCards] = useState<CardType[]>(initCards);
+  const initCards: Card[] = cardsInput.map(({ term, definition }) => ({
+    term,
+    definition,
+  }));
+  const [cards, setCards] = useState<Card[]>(initCards);
   const [validationState, setValidationState] = useState<ValidationStateType>(
     () => {
       const initial: ValidationStateType = {};
 
-      initCards.forEach((card) => {
-        initial[card.id] = {
+      initCards.forEach((_, index) => {
+        initial[index] = {
           term: true,
           definition: true,
         };
@@ -56,20 +64,18 @@ export function CardTable({
   };
 
   const handleChange = (
-    cardId: string,
+    index: number,
     field: "term" | "definition",
     value: string,
   ) => {
-    setCards((prevCards) =>
-      prevCards.map((card) =>
-        card.id === cardId
-          ? ({ ...card, [field]: value } satisfies CardType)
-          : card,
+    setCards((prev) =>
+      prev.map((card, i) =>
+        i === index ? ({ ...card, [field]: value } satisfies TCard) : card,
       ),
     );
 
     setValidationState((prevState) => {
-      const currentState = prevState[cardId];
+      const currentState = prevState[index];
       const updatedState = {
         ...currentState,
         [field]: validateField(value),
@@ -77,16 +83,16 @@ export function CardTable({
 
       return {
         ...prevState,
-        [cardId]: updatedState,
+        [index]: updatedState,
       } satisfies ValidationStateType;
     });
   };
 
-  const handleDelete = (id: string) => {
-    setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+  const handleDelete = (index: number) => {
+    setCards((prevCards) => prevCards.filter((_, i) => i !== index));
 
     setValidationState((prev) => {
-      delete prev[id];
+      delete prev[index];
       return prev;
     });
   };
@@ -109,7 +115,7 @@ export function CardTable({
 
     if (errors.length > 0) {
       e.preventDefault();
-      return toast.error((_t) => (
+      return toast.error(() => (
         <div className="mt-2">
           {errors.map((error, index) => (
             <div key={index} className="text-sm">
@@ -120,10 +126,31 @@ export function CardTable({
       ));
     }
 
+    console.log("🚀 ~ cards.forEach ~ cards:", cards);
     toast.success("Cards saved successfully");
+    e.preventDefault();
   };
 
-  const initState: EditSetCardsStateType = {
+  const handleAddCard = () => {
+    const newIndex = cards.length;
+    const newCard: TCard = {
+      id: `temp-${newIndex}`,
+      term: "",
+      definition: "",
+    };
+
+    setCards((prev) => [...prev, newCard]);
+    setValidationState((prev) => ({
+      ...prev,
+      [newIndex]: {
+        term: false,
+        definition: false,
+      },
+    }));
+  };
+
+  // ======== HANDLE FORM ======== //
+  const initState: TEditCardsState = {
     input: {
       id: setId,
       cards,
@@ -131,10 +158,10 @@ export function CardTable({
     error: undefined,
   };
 
-  const [state, action, isLoading] = useActionState<
-    EditSetCardsStateType,
-    FormData
-  >(editSetCards, initState);
+  const [state, action, isLoading] = useActionState<TEditCardsState, FormData>(
+    editSetCards,
+    initState,
+  );
 
   useEffect(() => {
     if (state.error && state.error.details === undefined)
@@ -144,14 +171,25 @@ export function CardTable({
   return (
     <Table>
       <TableCaption className="my-4">
-        <form action={action}>
-          <input type="hidden" name="id" value={setId} />
-          <input type="hidden" name="cards" value={JSON.stringify(cards)} />
-
-          <Button disabled={isLoading} onClick={handleSave} type="submit">
-            Save changes
+        <div className="flex justify-end gap-4">
+          <Button
+            className="text-foreground"
+            onClick={handleAddCard}
+            variant="outline"
+          >
+            Add card
+            <Plus className="inline h-4 w-4" />
           </Button>
-        </form>
+
+          <form action={action}>
+            <input type="hidden" name="id" value={setId} />
+            <input type="hidden" name="cards" value={JSON.stringify(cards)} />
+
+            <Button disabled={isLoading} onClick={handleSave} type="submit">
+              Save changes
+            </Button>
+          </form>
+        </div>
       </TableCaption>
       <TableHeader>
         <TableRow>
@@ -162,15 +200,15 @@ export function CardTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {cards.map(({ id, term, definition }, index) => (
-          <TableRow key={id}>
+        {cards.map(({ term, definition }, index) => (
+          <TableRow key={index}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <Input
                 value={term}
-                onChange={(e) => handleChange(id, "term", e.target.value)}
+                onChange={(e) => handleChange(index, "term", e.target.value)}
                 className={cn(
-                  !validationState[id]?.term
+                  !validationState[index]?.term
                     ? "border-red-500 focus-visible:ring-red-500"
                     : "",
                 )}
@@ -179,9 +217,11 @@ export function CardTable({
             <TableCell>
               <Input
                 value={definition}
-                onChange={(e) => handleChange(id, "definition", e.target.value)}
+                onChange={(e) =>
+                  handleChange(index, "definition", e.target.value)
+                }
                 className={cn(
-                  !validationState[id]?.definition
+                  !validationState[index]?.definition
                     ? "border-red-500 focus-visible:ring-red-500"
                     : "",
                 )}
@@ -189,7 +229,7 @@ export function CardTable({
             </TableCell>
             <TableCell>
               <button
-                onClick={() => handleDelete(id)}
+                onClick={() => handleDelete(index)}
                 className="mx-auto flex h-8 w-8 items-center justify-center rounded-md hover:bg-muted"
               >
                 <Trash2 className="h-4 w-4" />

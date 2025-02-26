@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionState, useEffect, useState } from "react";
 import { login } from "@/actions/auth.action";
-import type { AuthStateType } from "@/types/auth.type";
+import type { TAuthState } from "@/types/auth.type";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import toast from "react-hot-toast";
@@ -14,7 +14,7 @@ export function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const [state, action, isPending] = useActionState<AuthStateType, FormData>(
+  const [state, action, isPending] = useActionState<TAuthState, FormData>(
     login,
     null,
   );

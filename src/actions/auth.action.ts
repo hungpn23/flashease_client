@@ -3,11 +3,11 @@
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import type { AuthInputType, AuthStateType } from "@/types/auth.type";
+import type { TAuthInput, TAuthState } from "@/types/auth.type";
 import { BASE_URL } from "@/lib/constants";
 
-export async function login(_previousState: AuthStateType, formData: FormData) {
-  const input: AuthInputType = {
+export async function login(_previousState: TAuthState, formData: FormData) {
+  const input: TAuthInput = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
@@ -27,7 +27,7 @@ export async function login(_previousState: AuthStateType, formData: FormData) {
     return {
       input,
       error: data,
-    } as AuthStateType;
+    } as TAuthState;
   }
 
   const { accessToken } = data;
@@ -42,11 +42,8 @@ export async function login(_previousState: AuthStateType, formData: FormData) {
   redirect("/");
 }
 
-export async function register(
-  _previousState: AuthStateType,
-  formData: FormData,
-) {
-  const input: AuthInputType = {
+export async function register(_previousState: TAuthState, formData: FormData) {
+  const input: TAuthInput = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
@@ -64,7 +61,7 @@ export async function register(
     return {
       input,
       error: await response.json(),
-    } as AuthStateType;
+    } as TAuthState;
   }
 
   redirect("/auth");

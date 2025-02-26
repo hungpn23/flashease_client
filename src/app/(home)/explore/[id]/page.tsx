@@ -11,11 +11,11 @@ import {
   TableFooter,
   Table,
 } from "@/components/ui/table";
-import { Params } from "@/types/page-params.type";
+import { TParams } from "@/types/page-params.type";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default async function PublicSetDetail({ params }: { params: Params }) {
+export default async function PublicSetDetail({ params }: { params: TParams }) {
   const { id } = await params;
   const setDetail = await findSetDetail(id, "public");
 

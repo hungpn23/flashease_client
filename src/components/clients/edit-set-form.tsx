@@ -20,14 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  EditSetInputType,
-  EditSetStateType,
-  SetType,
-} from "@/types/data/set.type";
+import { TEditSetInput, TEditSetState, TSet } from "@/types/data/set.type";
 import toast from "react-hot-toast";
 
-export function EditSetForm({ set }: { set: SetType }) {
+export function EditSetForm({ set }: { set: TSet }) {
   const [id] = useState<string>(set.id);
   const [name, setName] = useState<string>(set.name);
   const [description, setDescription] = useState<string>(set.description || "");
@@ -40,7 +36,7 @@ export function EditSetForm({ set }: { set: SetType }) {
     set.editableByPassword || "",
   );
 
-  const initState: EditSetStateType = {
+  const initState: TEditSetState = {
     input: {
       id,
       name,
@@ -49,11 +45,11 @@ export function EditSetForm({ set }: { set: SetType }) {
       visibleToPassword,
       editableBy,
       editableByPassword,
-    } as EditSetInputType,
+    } as TEditSetInput,
     success: false,
   };
 
-  const [state, action, isLoading] = useActionState<EditSetStateType, FormData>(
+  const [state, action, isLoading] = useActionState<TEditSetState, FormData>(
     editSet,
     initState,
   );

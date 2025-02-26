@@ -1,7 +1,11 @@
 import { findProgressDetail } from "@/actions/progress/find-progress-detail.action";
-import { Params } from "@/types/page-params.type";
+import { TParams } from "@/types/page-params.type";
 
-export default async function MyProgressDetail({ params }: { params: Params }) {
+export default async function MyProgressDetail({
+  params,
+}: {
+  params: TParams;
+}) {
   const { id } = await params;
   const res = await findProgressDetail(id);
 

@@ -1,17 +1,17 @@
-import { BaseEntityType } from "../base-entity.type";
-import { HttpErrorType } from "../error.type";
-import { ProgressItemType } from "./progress-item.type";
-import { SetType } from "./set.type";
-import { UserType } from "./user.type";
+import { TBaseEntity } from "../base-entity.type";
+import { THttpError } from "../error.type";
+import { TProgressItem } from "./progress-item.type";
+import { TSet } from "./set.type";
+import { TUser } from "./user.type";
 
-export type ProgressType = BaseEntityType & {
-  user: UserType;
-  set: SetType;
-  items: ProgressItemType[];
+export type TProgress = TBaseEntity & {
+  user: TUser;
+  set: TSet;
+  items: TProgressItem[];
 };
 
-export type ProgressDetailType = {
-  progress: ProgressType;
+export type TProgressDetail = {
+  progress: TProgress;
   metadata: ProgressMetadata;
 };
 
@@ -22,11 +22,11 @@ export type ProgressMetadata = {
   knownCount: number;
 };
 
-export type StartProgressInputType = Pick<SetType, "id"> & {
+export type TStartProgressInput = Pick<TSet, "id"> & {
   password?: string;
 };
 
-export type StartProgressStateType = {
-  input: StartProgressInputType;
-  error?: HttpErrorType;
+export type TStartProgressState = {
+  input: TStartProgressInput;
+  error?: THttpError;
 };

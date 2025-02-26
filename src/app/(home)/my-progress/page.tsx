@@ -2,7 +2,7 @@ import { findPaginated } from "@/actions/find-paginated.action";
 import { Pagination } from "@/components/clients/pagination";
 import { ProgressDetail } from "@/components/servers/progress";
 import { searchParamsCache } from "@/lib/search-params";
-import { ProgressDetailType } from "@/types/data/progress.type";
+import { TProgressDetail } from "@/types/data/progress.type";
 import { SearchParams } from "nuqs/server";
 
 export default async function MyProgress({
@@ -11,7 +11,7 @@ export default async function MyProgress({
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const res = await findPaginated<ProgressDetailType>(
+  const res = await findPaginated<TProgressDetail>(
     "/progress/my-progress",
     page,
     take,

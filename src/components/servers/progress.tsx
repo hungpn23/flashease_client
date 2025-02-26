@@ -1,11 +1,11 @@
 import { formatDate } from "@/lib/format-date";
-import { ProgressDetailType } from "@/types/data/progress.type";
+import { TProgressDetail } from "@/types/data/progress.type";
 import Link from "next/link";
 
 export function ProgressDetail({
   progressDetail,
 }: {
-  progressDetail: ProgressDetailType;
+  progressDetail: TProgressDetail;
 }) {
   return (
     <article className="items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">

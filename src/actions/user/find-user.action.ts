@@ -1,8 +1,8 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { UserType } from "@/types/data/user.type";
-import { HttpErrorType } from "@/types/error.type";
+import { TUser } from "@/types/data/user.type";
+import { THttpError } from "@/types/error.type";
 import { cookies } from "next/headers";
 
 export async function findUser() {
@@ -16,7 +16,7 @@ export async function findUser() {
 
   const data = await response.json();
 
-  if (!response.ok) return data as HttpErrorType;
+  if (!response.ok) return data as THttpError;
 
-  return data as UserType;
+  return data as TUser;
 }

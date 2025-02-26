@@ -18,16 +18,16 @@ import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
 import {
-  StartProgressInputType,
-  StartProgressStateType,
+  TStartProgressInput,
+  TStartProgressState,
 } from "@/types/data/progress.type";
-import { SetType } from "@/types/data/set.type";
+import { TSet } from "@/types/data/set.type";
 import { ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, useActionState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export function StartLearningBtn({ set }: { set: SetType }) {
+export function StartLearningBtn({ set }: { set: TSet }) {
   const pathname = usePathname();
   const isPasswordOptional =
     pathname.includes("/my-set") || set.visibleTo === VisibleTo.EVERYONE;
@@ -35,16 +35,16 @@ export function StartLearningBtn({ set }: { set: SetType }) {
   const [id] = useState<string>(set.id);
   const [password, setPassword] = useState<string>("");
 
-  const initState: StartProgressStateType = {
+  const initState: TStartProgressState = {
     input: {
       id,
       password,
-    } as StartProgressInputType,
+    } as TStartProgressInput,
     error: undefined,
   };
 
   const [state, action, isLoading] = useActionState<
-    StartProgressStateType,
+    TStartProgressState,
     FormData
   >(startProgress, initState);
 

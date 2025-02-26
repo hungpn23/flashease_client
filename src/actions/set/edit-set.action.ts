@@ -3,13 +3,13 @@
 import { BASE_URL, EditableBy, VisibleTo } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { EditSetStateType, EditSetInputType } from "@/types/data/set.type";
+import { TEditSetState, TEditSetInput } from "@/types/data/set.type";
 
 export async function editSet(
-  previousState: EditSetStateType,
+  previousState: TEditSetState,
   formData: FormData,
 ) {
-  const input: EditSetInputType = {
+  const input: TEditSetInput = {
     id: formData.get("id") as string,
     name: formData.get("name") as string,
     description: formData.get("description") as string,
@@ -36,7 +36,7 @@ export async function editSet(
       input: previousState.input,
       error: await response.json(),
       success: false,
-    } as EditSetStateType;
+    } as TEditSetState;
   }
 
   revalidatePath("/my-set");
@@ -44,5 +44,5 @@ export async function editSet(
   return {
     input,
     success: true,
-  } as EditSetStateType;
+  } as TEditSetState;
 }

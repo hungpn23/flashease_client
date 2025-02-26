@@ -1,1 +1,1 @@
-export type Params = Promise<{ id: string }>;
+export type TParams = Promise<{ id: string }>;

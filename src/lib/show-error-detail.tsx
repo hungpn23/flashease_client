@@ -1,7 +1,7 @@
-import { ErrorDetailType } from "@/types/error.type";
+import { TErrorDetail } from "@/types/error.type";
 
 export function showErrorDetail(
-  details: ErrorDetailType[],
+  details: TErrorDetail[],
   inputProperty: string,
 ) {
   return details.map(({ property, code, message }) => {

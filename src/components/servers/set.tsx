@@ -12,22 +12,16 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { EditSetForm } from "../clients/edit-set-form";
-import { SetType } from "@/types/data/set.type";
+import { TSet } from "@/types/data/set.type";
 
-export function Set({
-  set,
-  path,
-}: {
-  set: SetType;
-  path: "my-set" | "explore";
-}) {
+export function Set({ set, path }: { set: TSet; path: "my-set" | "explore" }) {
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
         <div className="flex items-center gap-2">
           <Link
             href={`/${path}/${set.id}`}
-            className="text-heading text-xl font-semibold hover:underline hover:underline-offset-4"
+            className="text-xl font-semibold text-heading hover:underline hover:underline-offset-4"
           >
             {set.name}
           </Link>

@@ -1,11 +1,11 @@
-export type HttpErrorType = {
+export type THttpError = {
   timestamp: string;
   statusCode: number;
   message: string;
-  details?: ErrorDetailType[];
+  details?: TErrorDetail[];
 };
 
-export type ErrorDetailType = {
+export type TErrorDetail = {
   property: string;
   code: string;
   message: string;

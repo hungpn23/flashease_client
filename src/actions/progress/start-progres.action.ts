@@ -3,17 +3,17 @@
 import { BASE_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import {
-  ProgressType,
-  StartProgressInputType,
-  StartProgressStateType,
+  TProgress,
+  TStartProgressInput,
+  TStartProgressState,
 } from "@/types/data/progress.type";
 import { redirect } from "next/navigation";
 
 export async function startProgress(
-  previousState: StartProgressStateType,
+  previousState: TStartProgressState,
   formData: FormData,
 ) {
-  const input: StartProgressInputType = {
+  const input: TStartProgressInput = {
     id: formData.get("id") as string,
     password: formData.get("password") as string | undefined,
   };
@@ -37,10 +37,10 @@ export async function startProgress(
     return {
       input: previousState.input,
       error: await response.json(),
-    } as StartProgressStateType;
+    } as TStartProgressState;
   }
 
-  const progress: ProgressType = await response.json();
+  const progress: TProgress = await response.json();
 
   redirect(`/my-progress/${progress.id}`);
 }
