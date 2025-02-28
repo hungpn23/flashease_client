@@ -44,4 +44,5 @@ export type EditSetInput = z.infer<typeof editSetSchema>;
 export type EditSetState = {
   input?: EditSetInput;
   error?: HttpError;
+  success?: boolean;
 };

@@ -1,4 +1,4 @@
-import { logout } from "@/actions/auth.action";
+import { logout } from "@/actions/auth/logout";
 
 export function LogoutBtn() {
   return (

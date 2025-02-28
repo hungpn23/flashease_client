@@ -1,5 +1,5 @@
 import { findSet } from "@/actions/set/find-set-detail.action";
-import { CardTable } from "@/components/clients/card-table";
+
 import { Params } from "@/types/page-params.type";
 
 export default async function MySetDetail({ params }: { params: Params }) {
@@ -25,7 +25,7 @@ export default async function MySetDetail({ params }: { params: Params }) {
         )} */}
       </div>
 
-      <CardTable initCards={set.cards || []} setId={set.id} />
+      {/* <CardTable initCards={set.cards || []} setId={set.id} /> */}
     </div>
   );
 }

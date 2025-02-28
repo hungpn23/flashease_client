@@ -13,7 +13,7 @@ export default function HomeLayout({
 
   const isActive = (path: string) => {
     return pathname.includes(path)
-      ? "border-b-2 border-primary text-link "
+      ? "border-b-2 border-primary text-foreground"
       : "";
   };
 
@@ -26,7 +26,7 @@ export default function HomeLayout({
               href="/library"
               className={`block py-2 ${isActive("/library")}`}
             >
-              My Sets
+              Library
             </Link>
           </li>
           <li>
@@ -34,7 +34,7 @@ export default function HomeLayout({
               href="/explore"
               className={`block py-2 ${isActive("/explore")}`}
             >
-              Public Sets
+              Explore
             </Link>
           </li>
         </ul>

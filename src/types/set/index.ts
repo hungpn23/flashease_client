@@ -1,4 +1,4 @@
-import { VisibleTo, EditableBy } from "@/lib/constants";
+import { VisibleTo } from "@/lib/constants";
 import { BaseEntity } from "../base-entity.type";
 import { Card } from "../data/card.type";
 import { Folder } from "../data/folder.type";

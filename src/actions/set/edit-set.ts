@@ -2,16 +2,15 @@
 
 import { BASE_URL, VisibleTo } from "@/lib/constants";
 import { cookies } from "next/headers";
-import { CreateSetInput, CreateSetState } from "@/types/set/create-set.type";
-import { redirect } from "next/navigation";
+import { EditSetInput, EditSetState } from "@/types/set/edit-set.type";
+import { revalidatePath } from "next/cache";
 
-export async function createSetAction(
-  hello: string,
-  previousState: CreateSetState,
+export async function editSetAction(
+  setId: string,
+  previousState: EditSetState,
   formData: FormData,
 ) {
-  console.log("🚀 ~ hello:", hello);
-  const input: CreateSetInput = {
+  const input: EditSetInput = {
     name: formData.get("name") as string,
     description: formData.get("description") as string | undefined,
     visibleTo: formData.get("visibleTo") as VisibleTo,
@@ -20,9 +19,8 @@ export async function createSetAction(
   };
 
   const accessToken = (await cookies()).get("access_token")?.value;
-
-  const response = await fetch(`${BASE_URL}/set/create-set`, {
-    method: "POST",
+  const response = await fetch(`${BASE_URL}/set/edit-set/${setId}`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken || "nothing"}`,
@@ -35,8 +33,15 @@ export async function createSetAction(
     return {
       input: previousState.input,
       error: await response.json(),
-    } as CreateSetState;
+      success: false,
+    } as EditSetState;
   }
 
-  redirect("/library");
+  revalidatePath("/library");
+
+  return {
+    input: await response.json(),
+    error: undefined,
+    success: true,
+  } as EditSetState;
 }

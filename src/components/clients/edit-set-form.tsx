@@ -31,18 +31,25 @@ import {
 } from "@/components/ui/table";
 import { VisibleTo } from "@/lib/constants";
 import { Textarea } from "@/components/ui/textarea";
-import { startTransition, useActionState, useEffect } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useTransition,
+} from "react";
 import { convertToFormData } from "@/lib/to-form-data";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
-import { editSetAction } from "@/actions/set/edit-set.action";
+import { editSetAction } from "@/actions/set/edit-set";
 import {
   EditSetInput,
   editSetSchema,
   EditSetState,
 } from "@/types/set/edit-set.type";
 import { Set } from "@/types/set";
+import { DialogClose, DialogFooter } from "../ui/dialog";
+import { deleteSetAction } from "@/actions/set/delete-set";
 
 export function EditSetForm({ set }: { set: Set }) {
   const editSetActionWithSetId = editSetAction.bind(null, set.id);
@@ -54,27 +61,31 @@ export function EditSetForm({ set }: { set: Set }) {
     resolver: zodResolver(editSetSchema),
     defaultValues: {
       name: set.name,
-      description: set.description,
+      description: set.description || "",
       visibleTo: set.visibleTo,
-      passcode: set.passcode,
+      passcode: set.passcode || "",
       cards: set.cards,
     },
   });
+
   const visibleTo = form.watch("visibleTo");
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "cards",
   });
 
+  const [isDeleting, startTransition] = useTransition();
+
   const errorDetails = state.error?.details;
 
   useEffect(() => {
     if (state.error && state.error.details === undefined)
       toast.error(state.error.message);
+
+    if (state.success) toast.success("Set updated successfully!");
   }, [state]);
 
   function onSubmit(data: EditSetInput) {
-    console.log("🚀 ~ onSubmit ~ data:", data);
     const hasEmptyFields = data.cards.some(
       ({ term, definition }) => term.trim() === "" || definition.trim() === "",
     );
@@ -87,11 +98,7 @@ export function EditSetForm({ set }: { set: Set }) {
 
   return (
     <Form {...form}>
-      <form
-        name="edit-set"
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Name */}
         <FormField
           control={form.control}
@@ -310,9 +317,38 @@ export function EditSetForm({ set }: { set: Set }) {
           </div>
         </div>
 
-        <Button form="edit-set" disabled={isPending} type="submit">
-          Save changes
-        </Button>
+        <DialogFooter>
+          <div className="flex w-full items-center justify-between gap-4">
+            <Button
+              className="border-destructive text-destructive hover:bg-destructive"
+              type="button"
+              variant="outline"
+              disabled={isDeleting}
+              onClick={() =>
+                startTransition(async () => {
+                  const success = await deleteSetAction(set.id);
+                  success
+                    ? toast.success("Set deleted successfully!")
+                    : toast.error("Failed to delete set");
+                })
+              }
+            >
+              Delete <Trash2 className="inline h-4 w-4" />
+            </Button>
+
+            <div className="flex gap-4">
+              <DialogClose asChild>
+                <Button disabled={isPending} type="button" variant="secondary">
+                  Close
+                </Button>
+              </DialogClose>
+
+              <Button disabled={isPending} type="submit">
+                Save changes
+              </Button>
+            </div>
+          </div>
+        </DialogFooter>
       </form>
     </Form>
   );
