@@ -1,8 +1,8 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { THttpError } from "@/types/error.type";
-import { TPaginated } from "@/types/paginated.type";
+import { HttpError } from "@/types/error.type";
+import { Paginated } from "@/types/paginated.type";
 import { cookies } from "next/headers";
 
 export async function findPaginated<Entity>(
@@ -24,7 +24,7 @@ export async function findPaginated<Entity>(
 
   const data = await response.json();
 
-  if (!response.ok) return data as THttpError;
+  if (!response.ok) return data as HttpError;
 
-  return data as TPaginated<Entity>;
+  return data as Paginated<Entity>;
 }

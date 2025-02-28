@@ -1,7 +1,6 @@
-import { formatDate } from "@/lib/format-date";
 import Link from "next/link";
 import { Visibility } from "./visibility";
-import { Settings } from "lucide-react";
+import { Pencil } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,10 +10,18 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { Set, SetMetadata } from "@/types/set";
 import { EditSetForm } from "../clients/edit-set-form";
-import { TSet } from "@/types/data/set.type";
 
-export function Set({ set, path }: { set: TSet; path: "my-set" | "explore" }) {
+export function SetComponent({
+  set,
+  metadata,
+  path,
+}: {
+  set: Set;
+  metadata?: SetMetadata;
+  path: "library" | "explore";
+}) {
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
@@ -29,23 +36,42 @@ export function Set({ set, path }: { set: TSet; path: "my-set" | "explore" }) {
           <Visibility visibleTo={set.visibleTo} />
         </div>
 
+        {metadata && (
+          <div className="mt-2 text-sm text-muted-foreground">
+            <span className="text-foreground">
+              Total cards: {metadata.totalCards}
+            </span>
+            <span className="mx-1">•</span>
+            <span className="text-heading">
+              Not studied: {metadata.notStudiedCount}
+            </span>
+            <span className="mx-1">•</span>
+            <span className="text-link">
+              Learning: {metadata.learningCount}
+            </span>
+            <span className="mx-1">•</span>
+            <span className="text-highlight">Known: {metadata.knownCount}</span>
+          </div>
+        )}
+
         <div className="mt-2 text-sm text-muted-foreground">
-          <span>Author: {set.user.username}</span>
-          <span className="mx-1">•</span>
-          <time>{formatDate(set.createdAt)}</time>
+          <span>Author: {set.author}</span>
         </div>
       </div>
 
-      {path === "my-set" ? (
+      {path === "library" ? (
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="mr-4" variant="outline" size="icon">
-              <Settings className="h-5 w-5" />
+            <Button className="mr-4" variant="outline">
+              Edit <Pencil className="inline h-4 w-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-xl">
+
+          <DialogContent className="max-h-[80vh] overflow-scroll sm:max-w-3xl">
             <DialogHeader>
-              <DialogTitle>Edit set</DialogTitle>
+              <DialogTitle className="text-xl font-semibold">
+                Edit set
+              </DialogTitle>
 
               <DialogDescription>
                 Make changes to your set here. Click save when you&apos;re done.

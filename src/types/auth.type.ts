@@ -1,11 +1,11 @@
-import type { THttpError } from "./error.type";
+import type { HttpError } from "./error.type";
 
-export type TAuthInput = {
+export type AuthInput = {
   email: string;
   password: string;
 };
 
-export type TAuthState = {
-  input: TAuthInput;
-  error: THttpError;
+export type AuthState = {
+  input: AuthInput;
+  error: HttpError;
 } | null;

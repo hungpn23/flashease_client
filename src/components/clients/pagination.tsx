@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { parseAsPageIndex } from "@/lib/search-params";
-import type { TMetadata } from "@/types/paginated.type";
+import type { Metadata } from "@/types/paginated.type";
 
 // TODO: implement limit & order query state
-export function Pagination({ metadata }: { metadata: TMetadata }) {
+export function Pagination({ metadata }: { metadata: Metadata }) {
   const [page, setPage] = useQueryState(
     "page",
     parseAsPageIndex

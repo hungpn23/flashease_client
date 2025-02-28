@@ -1,6 +1,4 @@
-import { findSetDetail } from "@/actions/set/find-set-detail.action";
-import { StartLearningBtn } from "@/components/clients/start-learning";
-import { Button } from "@/components/ui/button";
+import { findSet } from "@/actions/set/find-set-detail.action";
 import {
   TableCaption,
   TableHeader,
@@ -11,31 +9,29 @@ import {
   TableFooter,
   Table,
 } from "@/components/ui/table";
-import { TParams } from "@/types/page-params.type";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Params } from "@/types/page-params.type";
 
-export default async function PublicSetDetail({ params }: { params: TParams }) {
-  const { id } = await params;
-  const setDetail = await findSetDetail(id, "public");
+export default async function PublicSetDetail({ params }: { params: Params }) {
+  const { setId } = await params;
+  const set = await findSet(setId, "public-sets");
 
-  if ("statusCode" in setDetail) throw new Error("failed to fetch set");
+  if ("statusCode" in set) throw new Error("failed to fetch set");
 
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
-        <h1 className="text-xl font-bold">{setDetail.set.name}</h1>
+        <h1 className="text-xl font-bold">{set.name}</h1>
 
-        {setDetail.progress ? (
+        {/* {progress ? (
           <Button className="mb-4 ml-auto w-fit" asChild>
-            <Link href={`/my-progress/${setDetail.progress.id}`}>
+            <Link href={`/my-progress/${progress.id}`}>
               Go to progress
               <ArrowRight className="h4 inline w-4" />
             </Link>
           </Button>
         ) : (
-          <StartLearningBtn set={setDetail.set} />
-        )}
+          <StartLearningBtn set={set} />
+        )} */}
       </div>
 
       <Table>
@@ -48,7 +44,7 @@ export default async function PublicSetDetail({ params }: { params: TParams }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {setDetail.set.cards.map((card, index) => (
+          {set.cards?.map((card, index) => (
             <TableRow key={card.id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{card.term}</TableCell>
@@ -59,9 +55,7 @@ export default async function PublicSetDetail({ params }: { params: TParams }) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={2}>Total cards</TableCell>
-            <TableCell className="text-right">
-              {setDetail.set.cards.length}
-            </TableCell>
+            <TableCell className="text-right">{set.cards?.length}</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

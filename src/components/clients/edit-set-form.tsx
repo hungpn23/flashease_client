@@ -1,235 +1,319 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { cn } from "@/lib/utils";
-import { showErrorBorder } from "@/lib/show-error-border";
-import { showErrorDetail } from "@/lib/show-error-detail";
-import { Check } from "lucide-react";
-import { DialogClose, DialogFooter } from "../ui/dialog";
-import { editSet } from "@/actions/set/edit-set.action";
-import { EditableBy, VisibleTo } from "@/lib/constants";
-import { Textarea } from "../ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFieldArray, useForm } from "react-hook-form";
+import { Plus, Trash2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { TEditSetInput, TEditSetState, TSet } from "@/types/data/set.type";
-import toast from "react-hot-toast";
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { VisibleTo } from "@/lib/constants";
+import { Textarea } from "@/components/ui/textarea";
+import { startTransition, useActionState, useEffect } from "react";
+import { convertToFormData } from "@/lib/to-form-data";
+import { showErrorDetail } from "@/lib/show-error-detail";
+import { cn } from "@/lib/utils";
+import { showErrorBorder } from "@/lib/show-error-border";
+import { editSetAction } from "@/actions/set/edit-set.action";
+import {
+  EditSetInput,
+  editSetSchema,
+  EditSetState,
+} from "@/types/set/edit-set.type";
+import { Set } from "@/types/set";
 
-export function EditSetForm({ set }: { set: TSet }) {
-  const [id] = useState<string>(set.id);
-  const [name, setName] = useState<string>(set.name);
-  const [description, setDescription] = useState<string>(set.description || "");
-  const [visibleTo, setVisibleTo] = useState<VisibleTo>(set.visibleTo);
-  const [visibleToPassword, setVisibleToPassword] = useState<string>(
-    set.visibleToPassword || "",
+export function EditSetForm({ set }: { set: Set }) {
+  const editSetActionWithSetId = editSetAction.bind(null, set.id);
+  const [state, formAction, isPending] = useActionState<EditSetState, FormData>(
+    editSetActionWithSetId,
+    {},
   );
-  const [editableBy, setEditableBy] = useState<EditableBy>(set.editableBy);
-  const [editableByPassword, setEditableByPassword] = useState<string>(
-    set.editableByPassword || "",
-  );
-
-  const initState: TEditSetState = {
-    input: {
-      id,
-      name,
-      description,
-      visibleTo,
-      visibleToPassword,
-      editableBy,
-      editableByPassword,
-    } as TEditSetInput,
-    success: false,
-  };
-
-  const [state, action, isLoading] = useActionState<TEditSetState, FormData>(
-    editSet,
-    initState,
-  );
-
-  useEffect(() => {
-    if (state.error && state.error.details === undefined)
-      toast.error(state.error?.message);
-  }, [state]);
+  const form = useForm<EditSetInput>({
+    resolver: zodResolver(editSetSchema),
+    defaultValues: {
+      name: set.name,
+      description: set.description,
+      visibleTo: set.visibleTo,
+      passcode: set.passcode,
+      cards: set.cards,
+    },
+  });
+  const visibleTo = form.watch("visibleTo");
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "cards",
+  });
 
   const errorDetails = state.error?.details;
 
+  useEffect(() => {
+    if (state.error && state.error.details === undefined)
+      toast.error(state.error.message);
+  }, [state]);
+
+  function onSubmit(data: EditSetInput) {
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    const hasEmptyFields = data.cards.some(
+      ({ term, definition }) => term.trim() === "" || definition.trim() === "",
+    );
+
+    if (hasEmptyFields)
+      return toast.error("All terms and definitions must be filled");
+
+    startTransition(() => formAction(convertToFormData(data)));
+  }
+
   return (
-    <form className="grid gap-2 py-4" action={action}>
-      <input type="hidden" name="id" value={id} />
-
-      {/* Name */}
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="name" className="text-right">
-          Name
-        </Label>
-
-        <Input
-          className={cn(
-            "col-span-3",
-            errorDetails && showErrorBorder(errorDetails, "name"),
-          )}
+    <Form {...form}>
+      <form
+        name="edit-set"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+      >
+        {/* Name */}
+        <FormField
+          control={form.control}
           name="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          tabIndex={1}
-          autoFocus
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base">Name</FormLabel>
+              <FormControl>
+                <div>
+                  <Input
+                    className="bg-background"
+                    placeholder="Enter set name here"
+                    {...field}
+                  />
+
+                  {errorDetails && showErrorDetail(errorDetails, "name")}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <div className="col-span-3 col-start-2">
-          {errorDetails && showErrorDetail(errorDetails, "name")}
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="description" className="text-right">
-          Description
-        </Label>
-
-        <Textarea
-          className={cn(
-            "col-span-3",
-            errorDetails && showErrorBorder(errorDetails, "description"),
-          )}
+        {/* Description */}
+        <FormField
+          control={form.control}
           name="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          tabIndex={2}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base">
+                Description (optional)
+              </FormLabel>
+              <FormControl>
+                <div>
+                  <Textarea
+                    placeholder="Enter set description here"
+                    {...field}
+                  />
+
+                  {errorDetails && showErrorDetail(errorDetails, "description")}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <div className="col-span-3 col-start-2">
-          {errorDetails && showErrorDetail(errorDetails, "description")}
-        </div>
-      </div>
-
-      {/* VisibleTo */}
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="visibleTo" className="text-right">
-          VisibleTo
-        </Label>
-
-        <Select
+        {/* Visible To */}
+        <FormField
+          control={form.control}
           name="visibleTo"
-          value={visibleTo}
-          onValueChange={(value) => setVisibleTo(value as VisibleTo)}
-        >
-          <SelectTrigger
-            className={cn(
-              errorDetails && showErrorBorder(errorDetails, "visibleTo"),
-            )}
-            tabIndex={3}
-          >
-            <SelectValue placeholder={set.visibleTo} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value={VisibleTo.EVERYONE}>everyone</SelectItem>
-              <SelectItem value={VisibleTo.JUST_ME}>just me</SelectItem>
-              <SelectItem value={VisibleTo.PEOPLE_WITH_A_PASSWORD}>
-                people with a password
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base">Visible To</FormLabel>
+              <div>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value={VisibleTo.JUST_ME}>Just me</SelectItem>
+                    <SelectItem value={VisibleTo.PEOPLE_WITH_A_PASSCODE}>
+                      People with a password
+                    </SelectItem>
+                    <SelectItem value={VisibleTo.EVERYONE}>Everyone</SelectItem>
+                  </SelectContent>
+                </Select>
 
-        <Input
-          className={cn(
-            "col-span-2",
-            errorDetails && showErrorBorder(errorDetails, "visibleToPassword"),
+                {errorDetails && showErrorDetail(errorDetails, "visibleTo")}
+              </div>
+              <FormMessage />
+            </FormItem>
           )}
-          name="visibleToPassword"
-          type={
-            visibleTo === VisibleTo.PEOPLE_WITH_A_PASSWORD ? "text" : "hidden"
-          }
-          value={visibleToPassword}
-          onChange={(e) => setVisibleToPassword(e.target.value)}
-          tabIndex={4}
-          placeholder="enter your password"
         />
 
-        <div className="col-span-3 col-start-2">
-          {errorDetails && showErrorDetail(errorDetails, "visibleToPassword")}
-        </div>
-      </div>
+        {/* Passcode - Only shown when visibleTo is PEOPLE_WITH_A_PASSCODE */}
+        {visibleTo === VisibleTo.PEOPLE_WITH_A_PASSCODE && (
+          <FormField
+            control={form.control}
+            name="passcode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <div>
+                    <Input
+                      type="text"
+                      placeholder="Enter your passcode"
+                      {...field}
+                    />
 
-      {/* EditableBy */}
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="editableBy" className="text-right">
-          EditableBy
-        </Label>
-
-        <Select
-          name="editableBy"
-          value={editableBy}
-          onValueChange={(value) => setEditableBy(value as EditableBy)}
-        >
-          <SelectTrigger
-            className={cn(
-              errorDetails && showErrorBorder(errorDetails, "editableBy"),
-            )}
-            tabIndex={3}
-          >
-            <SelectValue placeholder={set.editableBy} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value={EditableBy.JUST_ME}>just me</SelectItem>
-              <SelectItem value={EditableBy.PEOPLE_WITH_A_PASSWORD}>
-                people with a password
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Input
-          className={cn(
-            "col-span-2",
-            errorDetails && showErrorBorder(errorDetails, "editableByPassword"),
-          )}
-          name="editableByPassword"
-          type={
-            editableBy === EditableBy.PEOPLE_WITH_A_PASSWORD ? "text" : "hidden"
-          }
-          value={editableByPassword}
-          onChange={(e) => setEditableByPassword(e.target.value)}
-          tabIndex={5}
-          placeholder="enter your password"
-        />
-
-        <div className="col-span-3 col-start-2">
-          {errorDetails && showErrorDetail(errorDetails, "editableByPassword")}
-        </div>
-      </div>
-
-      <DialogFooter>
-        <div className="flex items-center gap-4">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-
-          <Button disabled={isLoading} variant="default" type="submit">
-            Save changes
-          </Button>
-
-          <Check
-            className={cn(
-              "h-4 w-4",
-              state.success ? "text-green-500" : "invisible",
+                    {errorDetails && showErrorDetail(errorDetails, "passcode")}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
+        )}
+
+        {/* Cards Table */}
+        <div>
+          <Table className="overflow-hidden rounded-md">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10">No.</TableHead>
+                <TableHead>Term</TableHead>
+                <TableHead>Definition</TableHead>
+                <TableHead className="w-12"></TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {fields.map((field, index) => (
+                <TableRow key={field.id}>
+                  <TableCell>{index + 1}</TableCell>
+
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name={`cards.${index}.term`}
+                      render={({ field }) => {
+                        const hasError =
+                          form.formState.errors.cards?.[index]?.term;
+
+                        return (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                className={cn(
+                                  hasError
+                                    ? "border-destructive focus-visible:ring-destructive"
+                                    : "",
+                                  errorDetails &&
+                                    showErrorBorder(
+                                      errorDetails,
+                                      `cards.${index}.term`,
+                                    ),
+                                )}
+                                placeholder={`term ${index + 1}`}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  </TableCell>
+
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name={`cards.${index}.definition`}
+                      render={({ field }) => {
+                        const hasError =
+                          form.formState.errors.cards?.[index]?.definition;
+
+                        return (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                className={cn(
+                                  hasError
+                                    ? "border-destructive focus-visible:ring-destructive"
+                                    : "",
+                                  errorDetails &&
+                                    showErrorBorder(
+                                      errorDetails,
+                                      `cards.${index}.definition`,
+                                    ),
+                                )}
+                                placeholder={`def ${index + 1}`}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  </TableCell>
+
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        fields.length > 4
+                          ? remove(index)
+                          : toast.error("You need at least 4 cards");
+                      }}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          <div className="mt-4 flex items-center justify-between">
+            <p className="font-medium">Total cards: {fields.length}</p>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => append({ term: "", definition: "" })}
+            >
+              Add card <Plus className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </DialogFooter>
-    </form>
+
+        <Button form="edit-set" disabled={isPending} type="submit">
+          Save changes
+        </Button>
+      </form>
+    </Form>
   );
 }

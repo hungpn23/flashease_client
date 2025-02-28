@@ -1,17 +1,20 @@
 import { findPaginated } from "@/actions/find-paginated.action";
 import { Pagination } from "@/components/clients/pagination";
 import { SetComponent } from "@/components/servers/set";
+import { Button } from "@/components/ui/button";
 import { searchParamsCache } from "@/lib/search-params";
-import { Set } from "@/types/data/set.type";
+import { SetDetail } from "@/types/set";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { SearchParams } from "nuqs/server";
 
-export default async function Explore({
+export default async function MySet({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const { page, take, order } = searchParamsCache.parse(await searchParams);
-  const res = await findPaginated<Set>("/set/explore", page, take, order);
+  const res = await findPaginated<SetDetail>("/set/library", page, take, order);
 
   if ("statusCode" in res) throw new Error("failed to fetch data");
 
@@ -20,11 +23,22 @@ export default async function Explore({
   return (
     <div className="flex flex-col flex-wrap">
       <p className="text-sm text-muted-foreground">
-        Click a set see cards and start learning.
+        Click a set to start learning.
       </p>
 
-      {data.map((set) => (
-        <SetComponent path="public-sets" key={set.id} set={set} />
+      <Button className="ml-auto mr-4 w-fit" asChild>
+        <Link href="/create-set">
+          Create set <Plus className="inline h-4 w-4" />
+        </Link>
+      </Button>
+
+      {data.map(({ set, metadata }) => (
+        <SetComponent
+          path="library"
+          key={set.id}
+          set={set}
+          metadata={metadata}
+        />
       ))}
 
       <Pagination key={metadata.totalPages} metadata={metadata} />

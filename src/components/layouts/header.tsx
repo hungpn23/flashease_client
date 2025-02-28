@@ -31,7 +31,7 @@ export async function Header() {
           </nav>
         ) : (
           <nav className="hidden items-center gap-2 md:flex">
-            <NavLink href="/auth">Login</NavLink>
+            <NavLink href="/login">Login</NavLink>
 
             <Separator />
 

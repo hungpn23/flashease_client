@@ -7,7 +7,7 @@ export function Visibility({ visibleTo }: { visibleTo: VisibleTo }) {
       return <Globe className="h-4 w-4" />;
     case VisibleTo.JUST_ME:
       return <UserRound className="h-4 w-4" />;
-    case VisibleTo.PEOPLE_WITH_A_PASSWORD:
+    case VisibleTo.PEOPLE_WITH_A_PASSCODE:
       return <Lock className="h-4 w-4" />;
   }
 }

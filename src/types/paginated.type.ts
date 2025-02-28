@@ -1,9 +1,9 @@
-export type TPaginated<D> = {
+export type Paginated<D> = {
   data: D[];
-  metadata: TMetadata;
+  metadata: Metadata;
 };
 
-export type TMetadata = {
+export type Metadata = {
   limit: number;
   totalRecords: number;
   totalPages: number;

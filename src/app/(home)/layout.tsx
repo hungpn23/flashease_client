@@ -20,21 +20,13 @@ export default function HomeLayout({
   return (
     <Container className="flex flex-col gap-8 border-2">
       <nav>
-        <ul className="grid grid-cols-3 text-center">
+        <ul className="grid grid-cols-2 text-center">
           <li>
             <Link
-              href="/my-set"
-              className={`block py-2 ${isActive("/my-set")}`}
+              href="/library"
+              className={`block py-2 ${isActive("/library")}`}
             >
-              My Set
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/my-progress"
-              className={`block py-2 ${isActive("/my-progress")}`}
-            >
-              My Progress
+              My Sets
             </Link>
           </li>
           <li>
@@ -42,7 +34,7 @@ export default function HomeLayout({
               href="/explore"
               className={`block py-2 ${isActive("/explore")}`}
             >
-              Explore
+              Public Sets
             </Link>
           </li>
         </ul>

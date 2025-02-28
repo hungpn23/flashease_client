@@ -1,10 +1,15 @@
-import { TBaseEntity } from "../base-entity.type";
-import { TProgressItem } from "./progress-item.type";
-import { TSet } from "./set.type";
+import { BaseEntity } from "../base-entity.type";
+import { Set } from "./set.type";
 
-export type TCard = TBaseEntity & {
+export type Card = {
   term: string;
   definition: string;
-  set?: TSet;
-  progressItems?: TProgressItem[];
+  correctCount?: number;
+};
+
+export type CardValidation = {
+  [cardId: string]: {
+    term: boolean;
+    definition: boolean;
+  };
 };

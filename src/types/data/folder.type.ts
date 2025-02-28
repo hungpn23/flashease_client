@@ -1,8 +1,8 @@
-import { TBaseEntity } from "../base-entity.type";
-import { TSet } from "./set.type";
+import { BaseEntity } from "../base-entity.type";
+import { Set } from "./set.type";
 
-export type TFolder = TBaseEntity & {
+export type Folder = BaseEntity & {
   name: string;
   description?: string;
-  sets: TSet[];
+  sets?: Set[];
 };

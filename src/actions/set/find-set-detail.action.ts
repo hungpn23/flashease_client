@@ -1,11 +1,11 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { TSetDetail } from "@/types/data/set.type";
-import { THttpError } from "@/types/error.type";
+import { HttpError } from "@/types/error.type";
+import { Set } from "@/types/set";
 import { cookies } from "next/headers";
 
-export async function findSetDetail(setId: string, path: "my-set" | "public") {
+export async function findSet(setId: string, path: "library" | "explore") {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(`${BASE_URL}/set/${path}/${setId}`, {
     headers: {
@@ -16,7 +16,7 @@ export async function findSetDetail(setId: string, path: "my-set" | "public") {
 
   const data = await response.json();
 
-  if (!response.ok) return data as THttpError;
+  if (!response.ok) return data as HttpError;
 
-  return data as TSetDetail;
+  return data as Set;
 }
