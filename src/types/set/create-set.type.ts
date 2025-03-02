@@ -35,7 +35,7 @@ export const createSetSchema = z
     },
     {
       message:
-        "Password is required when visibility is set to 'people with a password'",
+        "Passcode is required when visibility is set to 'people with a passcode'",
       path: ["passcode"],
     },
   );

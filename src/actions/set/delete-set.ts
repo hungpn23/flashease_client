@@ -4,7 +4,7 @@ import { BASE_URL } from "@/lib/constants";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export async function deleteSetAction(setId: string) {
+export async function DeleteSet(setId: string) {
   const accessToken = (await cookies()).get("access_token")?.value;
 
   const response = await fetch(`${BASE_URL}/set/delete-set/${setId}`, {

@@ -31,17 +31,12 @@ import {
 } from "@/components/ui/table";
 import { VisibleTo } from "@/lib/constants";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  startTransition,
-  useActionState,
-  useEffect,
-  useTransition,
-} from "react";
+import { useActionState, useEffect, useTransition } from "react";
 import { convertToFormData } from "@/lib/to-form-data";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
-import { editSetAction } from "@/actions/set/edit-set";
+import { EditSet } from "@/actions/set/edit-set";
 import {
   EditSetInput,
   editSetSchema,
@@ -49,12 +44,12 @@ import {
 } from "@/types/set/edit-set.type";
 import { Set } from "@/types/set";
 import { DialogClose, DialogFooter } from "../ui/dialog";
-import { deleteSetAction } from "@/actions/set/delete-set";
+import { DeleteSet } from "@/actions/set/delete-set";
 
 export function EditSetForm({ set }: { set: Set }) {
-  const editSetActionWithSetId = editSetAction.bind(null, set.id);
+  const EditSetWithSetId = EditSet.bind(null, set.id);
   const [state, formAction, isPending] = useActionState<EditSetState, FormData>(
-    editSetActionWithSetId,
+    EditSetWithSetId,
     {},
   );
   const form = useForm<EditSetInput>({
@@ -326,7 +321,7 @@ export function EditSetForm({ set }: { set: Set }) {
               disabled={isDeleting}
               onClick={() =>
                 startTransition(async () => {
-                  const success = await deleteSetAction(set.id);
+                  const success = await DeleteSet(set.id);
                   success
                     ? toast.success("Set deleted successfully!")
                     : toast.error("Failed to delete set");

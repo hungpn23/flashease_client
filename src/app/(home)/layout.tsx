@@ -18,7 +18,7 @@ export default function HomeLayout({
   };
 
   return (
-    <Container className="flex flex-col gap-8 border-2">
+    <Container className="flex flex-col gap-8">
       <nav>
         <ul className="grid grid-cols-2 text-center">
           <li>

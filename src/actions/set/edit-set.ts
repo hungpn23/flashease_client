@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { EditSetInput, EditSetState } from "@/types/set/edit-set.type";
 import { revalidatePath } from "next/cache";
 
-export async function editSetAction(
+export async function EditSet(
   setId: string,
   previousState: EditSetState,
   formData: FormData,

@@ -22,6 +22,8 @@ export function SetComponent({
   metadata?: SetMetadata;
   path: "library" | "explore";
 }) {
+  const isLibrary = path === "library";
+
   return (
     <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
       <div>
@@ -33,7 +35,7 @@ export function SetComponent({
             {set.name}
           </Link>
 
-          <Visibility visibleTo={set.visibleTo} />
+          {isLibrary && <Visibility visibleTo={set.visibleTo} />}
         </div>
 
         {metadata && (
@@ -54,12 +56,20 @@ export function SetComponent({
           </div>
         )}
 
-        <div className="mt-2 text-sm text-muted-foreground">
-          <span>Author: {set.author}</span>
+        <div className="mt-2 text-sm">
+          <span className="text-muted-foreground">Author: {set.author}</span>
+          {!isLibrary && (
+            <span>
+              <span className="mx-1">•</span>
+              <span className="text-foreground">
+                Total cards: {set.cards?.length ?? 0}
+              </span>
+            </span>
+          )}
         </div>
       </div>
 
-      {path === "library" ? (
+      {isLibrary ? (
         <Dialog>
           <DialogTrigger asChild>
             <Button className="mr-4" variant="outline">

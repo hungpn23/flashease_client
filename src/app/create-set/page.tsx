@@ -39,7 +39,7 @@ import {
   CreateSetState,
 } from "@/types/set/create-set.type";
 import { startTransition, useActionState, useEffect } from "react";
-import { createSetAction } from "@/actions/set/create-set";
+import { CreateSet } from "@/actions/set/create-set";
 import { convertToFormData } from "@/lib/to-form-data";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
@@ -49,7 +49,7 @@ export default function CreateSetPage() {
   const [state, formAction, isPending] = useActionState<
     CreateSetState,
     FormData
-  >(createSetAction, {});
+  >(CreateSet, {});
   const form = useForm<CreateSetInput>({
     resolver: zodResolver(createSetSchema),
     defaultValues: {

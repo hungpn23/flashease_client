@@ -2,7 +2,7 @@ import { findPaginated } from "@/actions/find-paginated.action";
 import { Pagination } from "@/components/clients/pagination";
 import { SetComponent } from "@/components/servers/set";
 import { searchParamsCache } from "@/lib/search-params";
-import { Set } from "@/types/data/set.type";
+import { Set } from "@/types/set";
 import { SearchParams } from "nuqs/server";
 
 export default async function Explore({
@@ -24,7 +24,7 @@ export default async function Explore({
       </p>
 
       {data.map((set) => (
-        <SetComponent path="public-sets" key={set.id} set={set} />
+        <SetComponent path="explore" key={set.id} set={set} />
       ))}
 
       <Pagination key={metadata.totalPages} metadata={metadata} />

@@ -5,7 +5,7 @@ import { HttpError } from "@/types/error.type";
 import { Set } from "@/types/set";
 import { cookies } from "next/headers";
 
-export async function findSet(setId: string, path: "library" | "explore") {
+export async function LoadSet(setId: string, path: "library" | "explore") {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(`${BASE_URL}/set/${path}/${setId}`, {
     headers: {

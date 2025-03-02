@@ -23,8 +23,8 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Container } from "@/components/layouts/container";
-import { startTransition, useActionState, useEffect, useRef } from "react";
-import { loginAction } from "@/actions/auth/login";
+import { startTransition, useActionState, useEffect } from "react";
+import { Login } from "@/actions/auth/login";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { LoginInput, loginSchema, LoginState } from "@/types/auth/login.type";
@@ -32,7 +32,7 @@ import { convertToFormData } from "@/lib/to-form-data";
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(
-    loginAction,
+    Login,
     {},
   );
   const form = useForm<LoginInput>({

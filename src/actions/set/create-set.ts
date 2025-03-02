@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { CreateSetInput, CreateSetState } from "@/types/set/create-set.type";
 import { redirect } from "next/navigation";
 
-export async function createSetAction(
+export async function CreateSet(
   previousState: CreateSetState,
   formData: FormData,
 ) {

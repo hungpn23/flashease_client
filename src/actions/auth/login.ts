@@ -6,10 +6,7 @@ import { cookies } from "next/headers";
 import { BASE_URL } from "@/lib/constants";
 import { LoginState, LoginInput } from "@/types/auth/login.type";
 
-export async function loginAction(
-  _previousState: LoginState,
-  formData: FormData,
-) {
+export async function Login(_previousState: LoginState, formData: FormData) {
   const input: LoginInput = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,

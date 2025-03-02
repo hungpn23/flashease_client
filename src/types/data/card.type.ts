@@ -1,10 +1,7 @@
-import { BaseEntity } from "../base-entity.type";
-import { Set } from "./set.type";
-
 export type Card = {
   term: string;
   definition: string;
-  correctCount?: number;
+  correctCount: number | null;
 };
 
 export type CardValidation = {

@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { SearchParams } from "nuqs/server";
 
-export default async function MySet({
+export default async function LibraryPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
