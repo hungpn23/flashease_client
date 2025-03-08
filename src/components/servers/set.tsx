@@ -38,6 +38,12 @@ export function SetComponent({
           <Visibility visibleTo={set.visibleTo} />
         </div>
 
+        {!isLibrary && (
+          <p className="text-sm text-muted-foreground">
+            {set.description || ""}
+          </p>
+        )}
+
         {metadata && (
           <div className="mt-2 text-sm text-muted-foreground">
             <span className="text-foreground">
@@ -57,9 +63,9 @@ export function SetComponent({
         )}
 
         <div className="mt-2 text-sm">
-          <span className="text-muted-foreground">Author: {set.author}</span>
           {!isLibrary && (
             <span>
+              <span>Author: {set.author}</span>
               <span className="mx-1">•</span>
               <span className="text-foreground">
                 Total cards: {set.cards?.length ?? 0}

@@ -12,7 +12,7 @@ export type Set = BaseEntity & {
   passcode?: string;
   user?: User;
   folder?: Folder;
-  cards?: Card[];
+  cards: Card[];
 };
 
 export type SetMetadata = {

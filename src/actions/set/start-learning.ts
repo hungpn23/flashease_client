@@ -2,7 +2,6 @@
 
 import { BASE_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
-import { Set } from "@/types/set";
 import {
   StartLearningInput,
   StartLearningState,
@@ -18,7 +17,6 @@ export async function StartLearning(
   const input: StartLearningInput = {
     passcode: formData.get("passcode") as string,
   };
-  console.log("🚀 ~ input:", input);
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(`${BASE_URL}/set/start-learning/${setId}`, {
     method: "POST",

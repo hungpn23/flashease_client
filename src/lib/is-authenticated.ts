@@ -9,6 +9,7 @@ export async function isAuthenticated() {
       new TextEncoder().encode("secret"),
     ));
   } catch (error) {
+    console.log("🚀 ~ isAuthenticated ~ error:", error);
     return false;
   }
 }
