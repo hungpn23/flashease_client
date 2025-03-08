@@ -1,13 +1,14 @@
-import { findUser } from "@/actions/user/find-user.action";
-import { cache } from "react";
+import { cookies } from "next/headers";
+import * as jose from "jose";
 
 export async function isAuthenticated() {
-  const user = await findUser();
-
-  if ("statusCode" in user) return false;
-
-  return true;
+  const accessToken = (await cookies()).get("access_token")?.value || "";
+  try {
+    return !!(await jose.jwtVerify(
+      accessToken,
+      new TextEncoder().encode("secret"),
+    ));
+  } catch (error) {
+    return false;
+  }
 }
-
-// ! React will invalidate the cache for all memoized functions for each server request.
-export const isAuthCached = cache(isAuthenticated);

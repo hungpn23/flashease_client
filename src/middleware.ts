@@ -4,16 +4,14 @@ import { isAuthenticated } from "./lib/is-authenticated";
 import type { NextRequest } from "next/server";
 
 export default async function middleware(req: NextRequest) {
-  const isAuth = await isAuthenticated(); // react cache will not work here!
+  const isAuth = await isAuthenticated();
   const pathname = req.nextUrl.pathname;
 
-  if (protectedRoutes.includes(pathname) && !isAuth) {
+  if (protectedRoutes.includes(pathname) && !isAuth)
     return NextResponse.redirect(new URL("/login", req.url));
-  }
 
-  if (publicRoutes.includes(pathname) && isAuth) {
+  if (publicRoutes.includes(pathname) && isAuth)
     return NextResponse.redirect(new URL("/", req.url));
-  }
 
   return NextResponse.next();
 }

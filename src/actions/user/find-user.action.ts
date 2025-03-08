@@ -5,7 +5,7 @@ import { User } from "@/types/data/user.type";
 import { HttpError } from "@/types/error.type";
 import { cookies } from "next/headers";
 
-export async function findUser() {
+export async function LoadUser() {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(`${BASE_URL}/user`, {
     headers: {

@@ -213,9 +213,9 @@ export default function CreateSetPage() {
 
               {/* Cards Table */}
               <div>
-                <Table className="overflow-hidden rounded-md">
+                <Table className="overflow-hidden">
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="bg-secondary hover:bg-secondary">
                       <TableHead className="w-10">No.</TableHead>
                       <TableHead>Term</TableHead>
                       <TableHead>Definition</TableHead>

@@ -1,6 +1,13 @@
-import { findSet } from "@/actions/set/load-set";
+import { LoadSet } from "@/actions/set/load-set";
+import { StartLearningBtn } from "@/components/clients/start-learning-btn";
 import {
-  TableCaption,
+  Card as CardComponent,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   TableHeader,
   TableRow,
   TableHead,
@@ -13,41 +20,52 @@ import { Params } from "@/types/page-params.type";
 
 export default async function PublicSetDetail({ params }: { params: Params }) {
   const { setId } = await params;
-  const set = await findSet(setId, "explore");
-
+  const set = await LoadSet(setId, "explore");
   if ("statusCode" in set) throw new Error("failed to fetch set");
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-bold">{set.name}</h1>
+    <CardComponent>
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
+        <CardDescription>
+          <span>Author: {set.author}</span>
+          <span className="mx-1">•</span>
+          <span>{set.description}</span>
+        </CardDescription>
+      </CardHeader>
 
-      <p className="text-sm text-muted-foreground">{set.description}</p>
+      <CardContent className="flex flex-col">
+        <StartLearningBtn setId={set.id} visibleTo={set.visibleTo} />
 
-      <Table>
-        <TableCaption>A list of your cards.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-fit">No.</TableHead>
-            <TableHead>Term</TableHead>
-            <TableHead>Definition</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {set.cards?.map((card, index) => (
-            <TableRow key={index}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{card.term}</TableCell>
-              <TableCell>{card.definition}</TableCell>
+        <Table className="mt-8">
+          <TableHeader>
+            <TableRow className="bg-secondary hover:bg-secondary">
+              <TableHead className="w-14">No.</TableHead>
+              <TableHead>Term</TableHead>
+              <TableHead>Definition</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={2}>Total cards</TableCell>
-            <TableCell className="text-right">{set.cards?.length}</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </div>
+          </TableHeader>
+
+          <TableBody>
+            {set.cards?.map((card, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{card.term}</TableCell>
+                <TableCell>{card.definition}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={2}>Total cards</TableCell>
+              <TableCell className="text-right">
+                {set.cards?.length || 0}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </CardContent>
+    </CardComponent>
   );
 }

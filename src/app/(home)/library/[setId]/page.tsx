@@ -62,13 +62,13 @@ export default async function SetDetailPage({ params }: { params: Params }) {
       <CardContent>
         <div className="flex gap-4">
           <Button variant="outline">
-            <Link href={`/library/${set.id}/flashcard`}>
-              Flaskcard <NotebookPen className="inline" />
+            <Link href={`/flashcard/${set.id}`}>
+              Flaskcard <NotebookPen className="inline h-4 w-4" />
             </Link>
           </Button>
 
           <Button variant="outline">
-            Test <BookCheck className="inline" />
+            Test <BookCheck className="inline h-4 w-4" />
           </Button>
 
           <Button variant="outline">Coming soon...</Button>
@@ -76,7 +76,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
 
         <Table className="mt-8">
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-secondary hover:bg-secondary">
               <TableHead className="w-14">No.</TableHead>
               <TableHead>Term</TableHead>
               <TableHead>Definition</TableHead>
@@ -132,7 +132,8 @@ export default async function SetDetailPage({ params }: { params: Params }) {
               </DialogTitle>
 
               <DialogDescription>
-                Make changes to your set here. Click save when you&apos;re done.
+                Note, this process will be reset from the beginning if you make
+                any changes!
               </DialogDescription>
             </DialogHeader>
 

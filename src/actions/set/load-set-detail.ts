@@ -1,13 +1,13 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { TProgressDetail } from "@/types/data/progress.type";
 import { HttpError } from "@/types/error.type";
+import { Set, SetDetail } from "@/types/set";
 import { cookies } from "next/headers";
 
-export async function findProgressDetail(progressId: string) {
+export async function LoadSetDetail(setId: string) {
   const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(`${BASE_URL}/progress/${progressId}`, {
+  const response = await fetch(`${BASE_URL}/set/library/${setId}`, {
     headers: {
       Authorization: `Bearer ${accessToken || "nothing"}`,
     },
@@ -18,5 +18,5 @@ export async function findProgressDetail(progressId: string) {
 
   if (!response.ok) return data as HttpError;
 
-  return data as TProgressDetail;
+  return data as SetDetail;
 }

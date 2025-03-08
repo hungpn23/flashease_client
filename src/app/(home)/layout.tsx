@@ -13,7 +13,7 @@ export default function HomeLayout({
 
   const isActive = (path: string) => {
     return pathname.includes(path)
-      ? "border-b-2 border-primary text-foreground"
+      ? "border-b-2 border-primary text-foreground bg-secondary/50"
       : "";
   };
 
@@ -24,7 +24,7 @@ export default function HomeLayout({
           <li>
             <Link
               href="/library"
-              className={`block py-2 ${isActive("/library")}`}
+              className={`block py-2 hover:underline ${isActive("/library")}`}
             >
               Library
             </Link>
@@ -32,7 +32,7 @@ export default function HomeLayout({
           <li>
             <Link
               href="/explore"
-              className={`block py-2 ${isActive("/explore")}`}
+              className={`block py-2 hover:underline ${isActive("/explore")}`}
             >
               Explore
             </Link>

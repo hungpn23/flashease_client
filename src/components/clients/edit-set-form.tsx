@@ -62,15 +62,12 @@ export function EditSetForm({ set }: { set: Set }) {
       cards: set.cards,
     },
   });
-
   const visibleTo = form.watch("visibleTo");
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "cards",
   });
-
   const [isDeleting, startTransition] = useTransition();
-
   const errorDetails = state.error?.details;
 
   useEffect(() => {
@@ -201,8 +198,8 @@ export function EditSetForm({ set }: { set: Set }) {
 
         {/* Cards Table */}
         <div>
-          <Table className="overflow-hidden rounded-md">
-            <TableHeader>
+          <Table className="overflow-hidden">
+            <TableHeader className="bg-secondary hover:bg-secondary">
               <TableRow>
                 <TableHead className="w-10">No.</TableHead>
                 <TableHead>Term</TableHead>
@@ -305,7 +302,12 @@ export function EditSetForm({ set }: { set: Set }) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => append({ term: "", definition: "" })}
+              onClick={() => {
+                append({
+                  term: "",
+                  definition: "",
+                });
+              }}
             >
               Add card <Plus className="ml-2 h-4 w-4" />
             </Button>
@@ -322,9 +324,7 @@ export function EditSetForm({ set }: { set: Set }) {
               onClick={() =>
                 startTransition(async () => {
                   const success = await DeleteSet(set.id);
-                  success
-                    ? toast.success("Set deleted successfully!")
-                    : toast.error("Failed to delete set");
+                  if (!success) toast.error("Failed to delete set");
                 })
               }
             >

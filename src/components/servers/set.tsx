@@ -35,7 +35,7 @@ export function SetComponent({
             {set.name}
           </Link>
 
-          {isLibrary && <Visibility visibleTo={set.visibleTo} />}
+          <Visibility visibleTo={set.visibleTo} />
         </div>
 
         {metadata && (
@@ -84,7 +84,8 @@ export function SetComponent({
               </DialogTitle>
 
               <DialogDescription>
-                Make changes to your set here. Click save when you&apos;re done.
+                Note, this process will be reset from the beginning if you make
+                any changes!
               </DialogDescription>
             </DialogHeader>
 

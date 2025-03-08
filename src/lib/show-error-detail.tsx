@@ -4,9 +4,9 @@ export function showErrorDetail(details: ErrorDetail[], inputProperty: string) {
   return details.map(({ property, code, message }) => {
     if (property === inputProperty) {
       return (
-        <span key={code} className="text-[0.8rem] font-medium text-destructive">
+        <div key={code} className="text-[0.8rem] font-medium text-destructive">
           {message}
-        </span>
+        </div>
       );
     }
   });

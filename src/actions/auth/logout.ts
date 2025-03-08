@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/lib/constants";
 
-export async function logout() {
+export async function Logout() {
   const cookieStore = await cookies();
 
   const response = await fetch(`${BASE_URL}/auth/logout`, {
