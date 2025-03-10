@@ -88,8 +88,15 @@ export function Flashcard({ set, metadata }: FlashcardProps) {
         <CardContent className="flex flex-1 items-center justify-center text-3xl font-medium">
           {isFlipped
             ? set.cards[currentCardIndex].definition
-            : `${currentCardIndex + 1}/${set.cards.length}: ${set.cards[currentCardIndex].term} (${set.cards[currentCardIndex].correctCount})`}
+            : set.cards[currentCardIndex].term}
         </CardContent>
+
+        <Badge
+          variant="outline"
+          className="absolute bottom-4 left-4 px-2 py-1 hover:cursor-auto"
+        >
+          {currentCardIndex + 1}/{set.cards.length}
+        </Badge>
 
         <Badge
           // variant="outline"

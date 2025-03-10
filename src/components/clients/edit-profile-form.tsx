@@ -122,7 +122,7 @@ export function EditProfileForm({ user }: { user: User }) {
 
         <DialogFooter>
           <div className="flex w-full items-center justify-between gap-4">
-            <div className="flex gap-4">
+            <div className="ml-auto flex gap-4">
               <DialogClose asChild>
                 <Button disabled={isPending} type="button" variant="secondary">
                   Close

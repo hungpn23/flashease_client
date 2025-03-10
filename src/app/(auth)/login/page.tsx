@@ -29,8 +29,10 @@ import { showErrorDetail } from "@/lib/show-error-detail";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { LoginInput, loginSchema, LoginState } from "@/types/auth/login.type";
 import { convertToFormData } from "@/lib/to-form-data";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  // ===== LOGIN ===== //
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(
     Login,
     {},
@@ -54,6 +56,25 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<LoginInput> = (data: LoginInput) => {
     startTransition(() => formAction(convertToFormData(data)));
   };
+
+  // ===== GOOGLE LOGIN ===== //
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const accessToken = searchParams.get("accessToken");
+
+    if (accessToken) {
+      fetch(
+        `http://localhost:3000/api/set-cookie?accessToken=${accessToken}`,
+      ).then((response) => {
+        response.ok
+          ? toast.success("Login successfully!")
+          : toast.error("Login failed!");
+        router.refresh();
+      });
+    }
+  }, [searchParams]);
 
   return (
     <Container>
@@ -140,18 +161,20 @@ export default function LoginPage() {
                 <Button disabled={isPending} type="submit" className="w-full">
                   Login
                 </Button>
-
-                {/* Google */}
-                <Button
-                  disabled={isPending}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Login with Google
-                </Button>
               </div>
             </form>
           </Form>
+
+          {/* Google */}
+          <Button
+            onClick={() =>
+              router.replace("http://localhost:3001/api/v1/auth/google")
+            }
+            variant="outline"
+            className="mt-4 w-full"
+          >
+            Login with Google
+          </Button>
 
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}

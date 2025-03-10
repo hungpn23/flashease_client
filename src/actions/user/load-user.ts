@@ -1,8 +1,8 @@
 "use server";
 
 import { BASE_URL } from "@/lib/constants";
-import { User } from "@/types/data/user.type";
 import { HttpError } from "@/types/error.type";
+import { User } from "@/types/user";
 import { cookies } from "next/headers";
 
 export async function LoadUser() {

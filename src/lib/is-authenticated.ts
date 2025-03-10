@@ -1,15 +1,7 @@
 import { cookies } from "next/headers";
-import * as jose from "jose";
+import { verifyJwt } from "./jwt-verify";
 
 export async function isAuthenticated() {
   const accessToken = (await cookies()).get("access_token")?.value || "";
-  try {
-    return !!(await jose.jwtVerify(
-      accessToken,
-      new TextEncoder().encode("secret"),
-    ));
-  } catch (error) {
-    console.log("🚀 ~ isAuthenticated ~ error:", error);
-    return false;
-  }
+  return await verifyJwt(accessToken);
 }

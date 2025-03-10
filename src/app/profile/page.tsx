@@ -18,6 +18,7 @@ import Image from "next/image";
 
 export default async function ProfilePage() {
   const user = await LoadUser();
+  console.log("🚀 ~ ProfilePage ~ user:", user);
 
   if ("statusCode" in user) throw new Error("Something went wrong!");
 
@@ -30,7 +31,7 @@ export default async function ProfilePage() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Image
-                    className="cursor-pointer rounded-full hover:opacity-75"
+                    className="cursor-pointer rounded-full border-2 border-primary hover:opacity-75"
                     src={user.avatar || ""}
                     alt={user.username}
                     height={100}

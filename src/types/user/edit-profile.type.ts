@@ -2,8 +2,10 @@ import { z } from "zod";
 import { HttpError } from "../error.type";
 
 export const editProfileSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
-  email: z.string().min(1, { message: "Username is required" }),
+  username: z
+    .string()
+    .min(6, { message: "Username must have at least 6 characters" }),
+  email: z.string().email({ message: "Email is required" }),
   bio: z.string().optional(),
 });
 
