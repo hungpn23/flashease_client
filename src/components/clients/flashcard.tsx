@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { Card as CardUI, CardContent } from "../ui/card";
 import { SaveAnswer } from "@/actions/set/save-answer";
 import { Badge } from "@/components/ui/badge";
+import toast from "react-hot-toast";
 
 interface FlashcardProps {
   set: Set;
@@ -29,6 +30,8 @@ export function Flashcard({ set, metadata }: FlashcardProps) {
       const error = await SaveAnswer(setId, cardId, isCorrect);
 
       if (error) return alert("Có lỗi xảy ra khi lưu câu trả lời!");
+
+      isCorrect ? toast.success("Good job!") : toast.error("Keep going!");
 
       if (currentCardIndex < set.cards.length - 1) {
         setCurrentCardIndex((prev) => prev + 1);

@@ -25,15 +25,12 @@ export function SetComponent({
   const isLibrary = path === "library";
 
   return (
-    <article className="flex items-center justify-between border-b border-dashed border-gray-500 py-4 first:pt-0 last:border-none">
-      <div>
+    <article className="flex items-center justify-between border-b border-dashed border-primary px-4 py-2 last:border-none hover:bg-secondary/25">
+      <Link className="w-full" href={`/${path}/${set.id}`}>
         <div className="flex items-center gap-2">
-          <Link
-            href={`/${path}/${set.id}`}
-            className="text-xl font-semibold text-heading hover:underline hover:underline-offset-4"
-          >
+          <span className="text-xl font-semibold text-heading hover:underline hover:underline-offset-4">
             {set.name}
-          </Link>
+          </span>
 
           <Visibility visibleTo={set.visibleTo} />
         </div>
@@ -73,7 +70,7 @@ export function SetComponent({
             </span>
           )}
         </div>
-      </div>
+      </Link>
 
       {isLibrary ? (
         <Dialog>

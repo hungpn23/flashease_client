@@ -18,7 +18,6 @@ import Image from "next/image";
 
 export default async function ProfilePage() {
   const user = await LoadUser();
-  console.log("🚀 ~ ProfilePage ~ user:", user);
 
   if ("statusCode" in user) throw new Error("Something went wrong!");
 
