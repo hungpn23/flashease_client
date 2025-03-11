@@ -1,6 +1,5 @@
 "use server";
 
-import { BASE_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -11,7 +10,7 @@ export async function UploadAvatar(
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
 
-  const response = await fetch(`${BASE_URL}/user/upload-avatar`, {
+  const response = await fetch(`${process.env.SERVER_URL}/user/upload-avatar`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken || "nothing"}`,

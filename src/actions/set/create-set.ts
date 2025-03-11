@@ -1,6 +1,6 @@
 "use server";
 
-import { BASE_URL, VisibleTo } from "@/lib/constants";
+import { VisibleTo } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { CreateSetInput, CreateSetState } from "@/types/set/create-set.type";
 import { redirect } from "next/navigation";
@@ -19,7 +19,7 @@ export async function CreateSet(
 
   const accessToken = (await cookies()).get("access_token")?.value;
 
-  const response = await fetch(`${BASE_URL}/set/create-set`, {
+  const response = await fetch(`${process.env.SERVER_URL}/set/create-set`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

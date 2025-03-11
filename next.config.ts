@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // A standalone build output, .next/standalone directory, that only includes necessary files/dependencies. Useful for self-hosting in a Docker container.
+  output: "standalone",
   images: {
     remotePatterns: [
       {

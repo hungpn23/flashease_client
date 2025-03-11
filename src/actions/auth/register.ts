@@ -1,6 +1,5 @@
 "use server";
 
-import { BASE_URL } from "@/lib/constants";
 import { RegisterInput, RegisterState } from "@/types/auth/register.type";
 import { redirect } from "next/navigation";
 
@@ -15,7 +14,7 @@ export async function registerAction(
     confirmPassword: formData.get("confirmPassword") as string,
   };
 
-  const response = await fetch(`${BASE_URL}/auth/register`, {
+  const response = await fetch(`${process.env.SERVER_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

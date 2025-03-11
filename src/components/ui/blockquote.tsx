@@ -23,7 +23,7 @@ const BlockquoteAuthor = ({ children, className }: BlockquoteProps) => {
   return (
     <p
       className={cn(
-        "mt-2 pr-2 text-right font-bold not-italic text-primary-foreground/90",
+        "mt-2 pr-2 text-right font-bold not-italic text-primary",
         className,
       )}
     >

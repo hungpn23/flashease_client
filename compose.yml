@@ -1,0 +1,18 @@
+services:
+  client:
+    image: hungpn23/flashease/client:1.0
+    container_name: client
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - ${CLIENT_PORT}:3000
+    networks:
+      - flashease
+
+networks:
+  flashease:
+    driver: bridge

@@ -3,7 +3,7 @@
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { BASE_URL } from "@/lib/constants";
+
 import { LoginState, LoginInput } from "@/types/auth/login.type";
 
 export async function Login(_previousState: LoginState, formData: FormData) {
@@ -12,7 +12,7 @@ export async function Login(_previousState: LoginState, formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const response = await fetch(`${BASE_URL}/auth/login`, {
+  const response = await fetch(`${process.env.SERVER_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

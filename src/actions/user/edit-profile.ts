@@ -1,6 +1,5 @@
 "use server";
 
-import { BASE_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
 
 import { revalidatePath } from "next/cache";
@@ -20,7 +19,7 @@ export async function EditProfile(
   };
 
   const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(`${BASE_URL}/user`, {
+  const response = await fetch(`${process.env.SERVER_URL}/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

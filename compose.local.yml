@@ -1,0 +1,23 @@
+# docker compose -f compose.local.yml up --build
+services:
+  client:
+    image: hungpn23/flashease/client:1.0
+    container_name: client
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+    ports:
+      - ${CLIENT_PORT}:3000
+    networks:
+      - flashease
+    command: ["pnpm", "dev"]
+
+networks:
+  flashease:
+    external: true
