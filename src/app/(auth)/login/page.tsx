@@ -74,7 +74,7 @@ export default function LoginPage() {
         router.refresh();
       });
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   return (
     <Container>

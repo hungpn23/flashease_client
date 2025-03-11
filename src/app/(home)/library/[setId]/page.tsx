@@ -55,7 +55,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
         <CardDescription>
           <span>Author: {set.author}</span>
           <span className="mx-1">•</span>
-          <span>{set.description}</span>
+          <span>{set.description || "No description provided."}</span>
         </CardDescription>
       </CardHeader>
 
@@ -63,7 +63,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
         <div className="flex gap-4">
           <Button variant="outline">
             <Link href={`/flashcard/${set.id}`}>
-              Flaskcard <NotebookPen className="inline h-4 w-4" />
+              Flashcard <NotebookPen className="inline h-4 w-4" />
             </Link>
           </Button>
 
