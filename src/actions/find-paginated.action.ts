@@ -11,7 +11,6 @@ export async function findPaginated<Entity>(
   order: string,
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
-  console.log(process.env.SERVER_URL);
   const response = await fetch(
     `${process.env.SERVER_URL}${path}?page=${currentPage}&take=${take}&order=${order}`,
     {

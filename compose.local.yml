@@ -8,8 +8,6 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-    env_file:
-      - .env
     volumes:
       - ./src:/app/src
     ports:
