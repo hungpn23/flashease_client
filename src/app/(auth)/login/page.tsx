@@ -65,14 +65,14 @@ export default function LoginPage() {
     const accessToken = searchParams.get("accessToken");
 
     if (accessToken) {
-      fetch(
-        `http://localhost:3000/api/set-cookie?accessToken=${accessToken}`,
-      ).then((response) => {
-        response.ok
-          ? toast.success("Login successfully!")
-          : toast.error("Login failed!");
-        router.refresh();
-      });
+      fetch(`http://localhost/api/set-cookie?accessToken=${accessToken}`).then(
+        (response) => {
+          response.ok
+            ? toast.success("Login successfully!")
+            : toast.error("Login failed!");
+          router.refresh();
+        },
+      );
     }
   }, [searchParams, router]);
 
