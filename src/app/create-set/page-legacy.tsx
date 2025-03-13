@@ -239,8 +239,6 @@ export default function CreateSetPage() {
     // Thêm các cards mới vào fields
     append(parsedCards);
 
-    console.log("Current form values:", form.getValues("cards"));
-
     // Hiển thị thông báo thành công
     toast.success(`Imported ${parsedCards.length} cards successfully`);
 

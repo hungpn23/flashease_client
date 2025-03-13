@@ -31,16 +31,6 @@ import { LoginInput, loginSchema, LoginState } from "@/types/auth/login.type";
 import { convertToFormData } from "@/lib/to-form-data";
 import { useRouter, useSearchParams } from "next/navigation";
 
-console.log(
-  "process.env.NEXT_PUBLIC_SERVER_URL::::::::::::::::",
-  process.env.NEXT_PUBLIC_SERVER_URL,
-);
-
-console.log(
-  "process.env.NEXT_PUBLIC_APP_HOST::::::::::::::::",
-  process.env.NEXT_PUBLIC_APP_HOST,
-);
-
 export default function LoginPage() {
   // ===== LOGIN ===== //
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(
@@ -75,9 +65,7 @@ export default function LoginPage() {
     const accessToken = searchParams.get("accessToken");
 
     if (accessToken) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_APP_HOST}/api/set-cookie?accessToken=${accessToken}`,
-      ).then((response) => {
+      fetch(`/api/set-cookie?accessToken=${accessToken}`).then((response) => {
         response.ok
           ? toast.success("Login successfully!")
           : toast.error("Login failed!");
