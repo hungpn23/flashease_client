@@ -65,14 +65,14 @@ export default function LoginPage() {
     const accessToken = searchParams.get("accessToken");
 
     if (accessToken) {
-      fetch(`http://localhost/api/set-cookie?accessToken=${accessToken}`).then(
-        (response) => {
-          response.ok
-            ? toast.success("Login successfully!")
-            : toast.error("Login failed!");
-          router.refresh();
-        },
-      );
+      fetch(
+        `${process.env.NEXT_PUBLIC_APP_HOST}/api/set-cookie?accessToken=${accessToken}`,
+      ).then((response) => {
+        response.ok
+          ? toast.success("Login successfully!")
+          : toast.error("Login failed!");
+        router.refresh();
+      });
     }
   }, [searchParams, router]);
 
@@ -168,7 +168,9 @@ export default function LoginPage() {
           {/* Google */}
           <Button
             onClick={() =>
-              router.replace("http://localhost:3001/api/v1/auth/google")
+              router.replace(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google`,
+              )
             }
             variant="outline"
             className="mt-4 w-full"
