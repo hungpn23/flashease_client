@@ -31,6 +31,16 @@ import { LoginInput, loginSchema, LoginState } from "@/types/auth/login.type";
 import { convertToFormData } from "@/lib/to-form-data";
 import { useRouter, useSearchParams } from "next/navigation";
 
+console.log(
+  "process.env.NEXT_PUBLIC_SERVER_URL::::::::::::::::",
+  process.env.NEXT_PUBLIC_SERVER_URL,
+);
+
+console.log(
+  "process.env.NEXT_PUBLIC_APP_HOST::::::::::::::::",
+  process.env.NEXT_PUBLIC_APP_HOST,
+);
+
 export default function LoginPage() {
   // ===== LOGIN ===== //
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(

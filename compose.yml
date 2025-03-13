@@ -17,7 +17,8 @@ services:
     container_name: nginx
     restart: unless-stopped
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro # File cấu hình Nginx
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../certs/letsencrypt:/etc/letsencrypt
     ports:
       - 80:80 # Export cổng 80 ra ngoài
       - 443:443 # Export cổng 443 nếu dùng HTTPS
