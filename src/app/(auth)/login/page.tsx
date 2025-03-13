@@ -177,11 +177,7 @@ export default function LoginPage() {
 
           {/* Google */}
           <Button
-            onClick={() =>
-              router.replace(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google`,
-              )
-            }
+            onClick={() => router.replace(`/api/v1/auth/google`)}
             variant="outline"
             className="mt-4 w-full"
           >
