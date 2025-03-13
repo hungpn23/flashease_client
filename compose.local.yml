@@ -1,7 +1,20 @@
-# docker compose -f compose.yml --env-file .env.local up -d --build
+# docker compose -f compose.yml --env-file .env.development up -d --build
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80" # Chỉ cần port 80 cho dev
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Mount file nginx.conf đã sửa
+    depends_on:
+      - client
+    networks:
+      - flashease
+
   client:
-    image: flashease_client
+    image: client_local
     container_name: client
     restart: unless-stopped
     build:
@@ -10,9 +23,6 @@ services:
       target: development
     volumes:
       - ./src:/app/src
-    ports:
-      - 80:3000
-      - 443:3000
     networks:
       - flashease
     command: ["pnpm", "dev"]

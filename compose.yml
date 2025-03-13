@@ -1,11 +1,11 @@
-# docker compose -f compose.yml --env-file .env.docker up -d
+# docker compose -f compose.yml --env-file .env.production up -d
 services:
   client:
-    image: flashease_client
+    image: client
     container_name: client
     restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env.production
     build:
       context: .
       dockerfile: Dockerfile
