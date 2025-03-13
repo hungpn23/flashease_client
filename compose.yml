@@ -4,6 +4,8 @@ services:
     image: flashease_client
     container_name: client
     restart: unless-stopped
+    env_file:
+      - .env.docker
     build:
       context: .
       dockerfile: Dockerfile
