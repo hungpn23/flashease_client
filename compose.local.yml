@@ -1,4 +1,4 @@
-# docker compose -f compose.local.yml up --build
+# docker compose -f compose.yml --env-file .env.local up -d --build
 services:
   client:
     image: flashease_client
