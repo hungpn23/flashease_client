@@ -1,7 +1,8 @@
 import { LoadSet } from "@/actions/set/load-set";
 import { EditSetForm } from "@/components/clients/edit-set-form";
 import { FlashcardBtn } from "@/components/clients/flashcard-btn";
-import { ResetFlashcardBtn } from "@/components/clients/reset-flashcard";
+import { LearnBtn } from "@/components/clients/learn-btn";
+import { ResetFlashcardBtn } from "@/components/clients/reset-flashcard-btn";
 import { Button } from "@/components/ui/button";
 import {
   Card as CardComponent,
@@ -68,9 +69,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
         <div className="flex flex-row items-center gap-4 overflow-x-auto">
           <FlashcardBtn set={set} known={known.length} />
 
-          <Button variant="outline">
-            Learn <NotebookPen className="inline h-4 w-4" />
-          </Button>
+          <LearnBtn set={set} known={known.length} />
 
           <Button variant="outline">
             Test <BookCheck className="inline h-4 w-4" />

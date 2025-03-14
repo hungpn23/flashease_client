@@ -1,6 +1,11 @@
 User-agent: *
-Allow: /welcome
-Allow: /login
-Allow: /register
-Disallow: /
+Disallow: /home
+Disallow: /explore
+Disallow: /learn
+Disallow: /library
+Disallow: /setId/
+Disallow: /api/
+Disallow: /actions/
+Disallow: /forgot-password
+Disallow: /reset-password
 Sitemap: https://phamngochung.id.vn/sitemap.xml
