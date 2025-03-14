@@ -64,7 +64,7 @@ export default async function ProfilePage() {
             {/* edit profile button */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline">edit profile</Button>
+                <Button variant="outline">Edit profile</Button>
               </DialogTrigger>
 
               <DialogContent className="sm:max-w-2xl">
@@ -88,8 +88,7 @@ export default async function ProfilePage() {
             <hr />
 
             <h3>
-              <em className="font-semibold">Email: </em>
-              <span className="mr-2">{user.email}</span>
+              <span className="mr-2">Email: {user.email}</span>
 
               {user.isEmailVerified ? (
                 <Badge variant="outline">verified</Badge>
@@ -98,14 +97,10 @@ export default async function ProfilePage() {
               )}
             </h3>
 
-            <h3>
-              <em className="font-semibold">Bio: </em>
-              <span>{user.bio || "No bio provided"}</span>
-            </h3>
+            <h3>Bio: {user.bio || "No bio provided"}</h3>
 
             <h3>
-              <em className="font-semibold">Account created: </em>
-              <time className="inline">{formatDate(user.createdAt)}</time>
+              <time>Account created: {formatDate(user.createdAt)}</time>
             </h3>
           </div>
         </CardContent>
