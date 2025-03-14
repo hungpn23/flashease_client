@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inconsolata } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layouts/header";
 import { Footer } from "@/components/layouts/footer";
 import { ThemeProvider } from "@/components/layouts/theme-provider";
-import { cn } from "@/lib/utils";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "react-hot-toast";
 
-const inconsolata = Inconsolata({
+const font = Roboto({
+  weight: ["100", "300", "400"],
   subsets: ["vietnamese"],
   display: "swap",
 });
@@ -24,11 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("text-lg", inconsolata.className)}
-    >
+    <html lang="en" suppressHydrationWarning className={font.className}>
       <body>
         <ThemeProvider
           attribute="class"

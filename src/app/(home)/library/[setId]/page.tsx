@@ -65,7 +65,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
       </CardHeader>
 
       <CardContent>
-        <div className="flex gap-4">
+        <div className="flex flex-row items-center gap-4 overflow-x-auto">
           <Button variant="outline">
             <Link href={`/flashcard/${set.id}`}>
               Flashcard <NotebookPen className="inline h-4 w-4" />

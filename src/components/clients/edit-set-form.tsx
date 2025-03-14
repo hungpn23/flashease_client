@@ -201,10 +201,10 @@ export function EditSetForm({ set }: { set: Set }) {
           <Table className="overflow-hidden">
             <TableHeader className="bg-secondary hover:bg-secondary">
               <TableRow>
-                <TableHead className="w-10">No.</TableHead>
+                <TableHead className="w-4">No.</TableHead>
                 <TableHead>Term</TableHead>
                 <TableHead>Definition</TableHead>
-                <TableHead className="w-12"></TableHead>
+                <TableHead className="w-4"></TableHead>
               </TableRow>
             </TableHeader>
 

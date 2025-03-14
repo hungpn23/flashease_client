@@ -22,7 +22,9 @@ export async function MobileNav({ isAuth }: { isAuth: boolean }) {
         <div className="flex h-full flex-col pt-6">
           {isAuth ? (
             <nav className="flex flex-col items-center gap-8">
-              <NavLink href="/">Home</NavLink>
+              <NavLink className="mr-0" href="/">
+                Home
+              </NavLink>
               <NavLink className="mr-0" href="/profile">
                 Profile
               </NavLink>
