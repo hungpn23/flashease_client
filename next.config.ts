@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // A standalone build output, .next/standalone directory, that only includes necessary files/dependencies. Useful for self-hosting in a Docker container.
   output: "standalone",
   images: {
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: "http",
@@ -17,6 +18,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "d3pwkd63xuu3ap.cloudfront.net",
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
       },
     ],
   },

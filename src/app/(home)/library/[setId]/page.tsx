@@ -1,5 +1,6 @@
 import { LoadSet } from "@/actions/set/load-set";
 import { EditSetForm } from "@/components/clients/edit-set-form";
+import { ResetFlashcardBtn } from "@/components/clients/reset-flashcard";
 import { Button } from "@/components/ui/button";
 import {
   Card as CardComponent,
@@ -52,10 +53,14 @@ export default async function SetDetailPage({ params }: { params: Params }) {
     <CardComponent>
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
-        <CardDescription>
-          <span>Author: {set.author}</span>
-          <span className="mx-1">•</span>
-          <span>{set.description || "No description provided."}</span>
+        <CardDescription className="flex items-center justify-between">
+          <div>
+            <span>Author: {set.author}</span>
+            <span className="mx-1">•</span>
+            <span>{set.description || "No description provided."}</span>
+          </div>
+
+          <ResetFlashcardBtn setId={setId} />
         </CardDescription>
       </CardHeader>
 
@@ -76,7 +81,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
 
         <Table className="mt-8">
           <TableHeader>
-            <TableRow className="bg-secondary hover:bg-secondary">
+            <TableRow className="bg-secondary/50 hover:bg-secondary/50">
               <TableHead className="w-14">No.</TableHead>
               <TableHead>Term</TableHead>
               <TableHead>Definition</TableHead>
@@ -85,21 +90,21 @@ export default async function SetDetailPage({ params }: { params: Params }) {
 
           <TableBody>
             <TableRow>
-              <TableCell colSpan={3} className="font-medium text-highlight">
+              <TableCell colSpan={3} className="font-medium">
                 Known ({known.length})
               </TableCell>
             </TableRow>
             {renderCards(known, 0)}
 
             <TableRow>
-              <TableCell colSpan={3} className="font-medium text-link">
+              <TableCell colSpan={3} className="font-medium">
                 Learning ({learning.length})
               </TableCell>
             </TableRow>
             {renderCards(learning, known.length)}
 
             <TableRow>
-              <TableCell colSpan={3} className="font-medium text-heading">
+              <TableCell colSpan={3} className="font-medium">
                 Not Studied ({notStudied.length})
               </TableCell>
             </TableRow>

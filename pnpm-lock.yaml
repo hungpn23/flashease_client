@@ -102,6 +102,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.2.0
         version: 3.2.0
+      '@types/eslint__eslintrc':
+        specifier: ^3.3.0
+        version: 3.3.0
       '@types/node':
         specifier: ^20.17.19
         version: 20.17.19
@@ -834,6 +837,10 @@ packages:
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
+
+  '@types/eslint__eslintrc@3.3.0':
+    resolution: {integrity: sha512-u9C5PHo8zhLBTEpWAV1YsP3ijj3GjM+4r2aGLbkT+vqtBubwgSI8KiRHXtC2QcxDGR0qM3Qapg7OtTB58JmoYQ==}
+    deprecated: This is a stub types definition. @eslint/eslintrc provides its own type definitions, so you do not need this installed.
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -3099,6 +3106,12 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+
+  '@types/eslint__eslintrc@3.3.0':
+    dependencies:
+      '@eslint/eslintrc': 3.2.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@types/estree@1.0.6': {}
 

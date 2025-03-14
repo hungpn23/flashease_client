@@ -20,6 +20,7 @@ export default async function ProfilePage() {
   const user = await LoadUser();
 
   if ("statusCode" in user) throw new Error("Something went wrong!");
+  const firstLetter = user.username.charAt(0).toUpperCase();
 
   return (
     <Container>
@@ -31,7 +32,10 @@ export default async function ProfilePage() {
                 <DialogTrigger asChild>
                   <Image
                     className="cursor-pointer rounded-full border-2 border-primary hover:opacity-75"
-                    src={user.avatar!}
+                    src={
+                      user.avatar ||
+                      `https://placehold.co/200?text=${firstLetter}`
+                    }
                     alt={user.username}
                     height={100}
                     width={100}

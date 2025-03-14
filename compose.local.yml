@@ -1,4 +1,4 @@
-# docker compose -f compose.yml --env-file .env.development up -d --build
+# COMPOSE_BAKE=true docker compose -f compose.yml --env-file .env.development up -d --build
 services:
   nginx:
     image: nginx:latest

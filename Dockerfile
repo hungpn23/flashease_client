@@ -23,6 +23,7 @@ WORKDIR /app
 COPY --chown=node:node package*.json pnpm-lock.yaml ./
 COPY --chown=node:node --from=development /app/node_modules ./node_modules
 COPY --chown=node:node --from=development /app/src ./src
+COPY --chown=node:node --from=development /app/public ./public
 COPY --chown=node:node --from=development /app/components.json .
 COPY --chown=node:node --from=development /app/next.config.ts .
 COPY --chown=node:node --from=development /app/tsconfig.json .
@@ -39,6 +40,7 @@ USER node
 ######################
 FROM base AS production
 WORKDIR /app
+COPY --chown=node:node --from=builder /app/public ./public
 COPY --chown=node:node --from=builder /app/.next/standalone .
 COPY --chown=node:node --from=builder /app/.next/static ./.next/static
 USER node

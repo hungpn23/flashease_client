@@ -10,12 +10,46 @@ import { Badge } from "@/components/ui/badge";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Card } from "@/types/data/card.type";
+import { Switch } from "../ui/switch";
+// import sound from "@/../public/sound/success.mp3";
 
 interface FlashcardProps {
   set: Set;
 }
 
 export function Flashcard({ set }: FlashcardProps) {
+  // **************
+  // * SOUND EFFECT
+  // **************
+  const [successSound, setSuccessSound] = useState<HTMLAudioElement | null>(
+    null,
+  );
+  const [finishSound, setFinishSound] = useState<HTMLAudioElement | null>(null);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true); // State cho âm thanh
+
+  useEffect(() => {
+    setSuccessSound(new Audio("/sound/success.mp3"));
+    setFinishSound(new Audio("/sound/finish.mp3"));
+  }, []);
+
+  useEffect(() => {
+    const soundEffect = localStorage.getItem("sound_effect");
+    if (soundEffect !== null) {
+      setIsSoundEnabled(soundEffect === "true");
+    } else {
+      setIsSoundEnabled(true);
+      localStorage.setItem("sound_effect", "true");
+    }
+  }, []);
+
+  const handleSoundToggle = (checked: boolean) => {
+    setIsSoundEnabled(checked);
+    localStorage.setItem("sound_effect", checked.toString());
+  };
+
+  // *****************
+  // * FLASHCARD LOGIC
+  // *****************
   const router = useRouter();
   const [isFlipped, setIsFlipped] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -27,7 +61,6 @@ export function Flashcard({ set }: FlashcardProps) {
   }, []);
 
   useEffect(() => {
-    // Khi component mount, tính toán và lưu thứ tự ban đầu
     if (sortedCardIds.length === 0 && set.cards.length > 0) {
       const sorted = [...set.cards].sort((cardA, cardB) => {
         const getOrder = (card: (typeof set.cards)[number]) => {
@@ -41,7 +74,6 @@ export function Flashcard({ set }: FlashcardProps) {
       setOrderedCards(sorted);
     }
 
-    // Mỗi khi set.cards cập nhật (do revalidate), cập nhật lại thông tin chi tiết của card theo thứ tự ban đầu
     if (sortedCardIds.length > 0) {
       const newCardsMap = new Map(set.cards.map((card) => [card.id, card]));
       const newOrderedCards = sortedCardIds
@@ -51,27 +83,58 @@ export function Flashcard({ set }: FlashcardProps) {
     }
   }, [set, sortedCardIds]);
 
+  useEffect(() => {
+    const finished = orderedCards.every(
+      (card) => card.correctCount && card.correctCount >= 2,
+    );
+
+    if (finished) {
+      if (finishSound && isSoundEnabled) {
+        finishSound
+          .play()
+          .catch((err) => toast.error("Error playing finish sound:", err));
+      }
+      toast.success("You have completed all the cards!");
+      router.push(`/library/${set.id}`);
+    }
+  }, [set, isSoundEnabled, orderedCards, router, finishSound]);
+
   const saveAnswer = useCallback(
     async (isCorrect: boolean, currentCardIndex: number, set: Set) => {
       const cardId = orderedCards[currentCardIndex].id;
       const setId = set.id;
+      await SaveAnswer(setId, cardId, isCorrect).catch((err) => {
+        toast.error("An error occurred while saving the answer!");
+      });
 
-      const error = await SaveAnswer(setId, cardId, isCorrect);
-
-      if (error)
-        return toast.error("An error occurred while saving the answer!");
-
+      // If not all cards are known, proceed
       if (currentCardIndex < orderedCards.length - 1) {
+        // Move to the next card
         setCurrentCardIndex((prev) => prev + 1);
         setIsFlipped(false);
       } else {
-        toast.success("You have completed all the cards!");
-        return router.push("/library");
+        // Reached the end, filter remaining cards (not studied or learning)
+        const remainingCards = orderedCards.filter(
+          (card) => card.correctCount === null || card.correctCount < 2,
+        );
+        setOrderedCards(remainingCards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
       }
 
-      isCorrect ? toast.success("Good job!") : toast.error("Keep going!");
+      if (isCorrect) {
+        if (successSound && isSoundEnabled) {
+          successSound
+            .play()
+            .catch((err) => toast.error("Error playing success sound:", err));
+        }
+
+        toast.success("Good job!");
+      } else {
+        toast.error("Keep going!");
+      }
     },
-    [orderedCards, router],
+    [orderedCards, isSoundEnabled, successSound],
   );
 
   const handleKeyDown = useCallback(
@@ -95,7 +158,6 @@ export function Flashcard({ set }: FlashcardProps) {
     };
   }, [handleKeyDown]);
 
-  // Xác định trạng thái của card hiện tại dựa trên orderedCards
   const currentCard = orderedCards[currentCardIndex];
   let cardStatus = "Not studied";
   if (currentCard.correctCount !== null) {
@@ -143,6 +205,11 @@ export function Flashcard({ set }: FlashcardProps) {
           Already know
           <Check className="inline text-highlight" />
         </Button>
+      </div>
+
+      <div className="mx-auto mt-4 flex items-center gap-2">
+        <Switch checked={isSoundEnabled} onCheckedChange={handleSoundToggle} />
+        <span>Sound effect</span>
       </div>
     </div>
   );
