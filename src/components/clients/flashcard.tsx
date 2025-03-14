@@ -163,7 +163,7 @@ export function Flashcard({ set }: FlashcardProps) {
 
       setTimeout(() => {
         isKeyProcessed.current = false;
-      }, 200);
+      }, 333);
     },
     [handleFlip, saveAnswer, currentCardIndex, set],
   );

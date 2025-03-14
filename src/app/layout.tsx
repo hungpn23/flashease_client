@@ -14,8 +14,14 @@ const font = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "FlashEase",
+  title: {
+    default: "FlashEase",
+    template: "%s | FlashEase",
+  },
   description: "Simple to learn, easy to remember!",
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default async function RootLayout({

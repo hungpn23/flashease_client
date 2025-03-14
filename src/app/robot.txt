@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /welcome
+Allow: /login
+Allow: /register
+Disallow: /
+Sitemap: https://phamngochung.id.vn/sitemap.xml

@@ -2,7 +2,12 @@ import { Container } from "@/components/layouts/container";
 import { Button } from "@/components/ui/button";
 import { TextEffect } from "@/components/ui/text-effect";
 import { ArrowRight } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Welcome",
+};
 
 export default function Welcome() {
   return (
