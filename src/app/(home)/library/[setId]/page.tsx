@@ -1,5 +1,6 @@
 import { LoadSet } from "@/actions/set/load-set";
 import { EditSetForm } from "@/components/clients/edit-set-form";
+import { FlashcardBtn } from "@/components/clients/flashcard-btn";
 import { ResetFlashcardBtn } from "@/components/clients/reset-flashcard";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,8 +31,7 @@ import {
 import { getCardsStatus } from "@/lib/get-cards-status";
 import { Card } from "@/types/data/card.type";
 import { Params } from "@/types/page-params.type";
-import { BookCheck, NotebookPen, StickyNote, Pencil } from "lucide-react";
-import Link from "next/link";
+import { BookCheck, NotebookPen, Pencil } from "lucide-react";
 
 export default async function SetDetailPage({ params }: { params: Params }) {
   const { setId } = await params;
@@ -66,11 +66,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
 
       <CardContent>
         <div className="flex flex-row items-center gap-4 overflow-x-auto">
-          <Button variant="outline">
-            <Link href={`/flashcard/${set.id}`}>
-              Flashcard <StickyNote className="ml-1 inline h-4 w-4" />
-            </Link>
-          </Button>
+          <FlashcardBtn set={set} known={known.length} />
 
           <Button variant="outline">
             Learn <NotebookPen className="inline h-4 w-4" />

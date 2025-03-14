@@ -9,7 +9,10 @@ export function ResetFlashcardBtn({ setId }: { setId: string }) {
     <Button
       onClick={() =>
         ResetFlashcard(setId)
-          .then(() => toast.success("Flashcard has been reset!"))
+          .then(() => {
+            toast.dismiss();
+            toast.success("Flashcard has been reset!");
+          })
           .catch((err) => toast.error(err.message))
       }
     >

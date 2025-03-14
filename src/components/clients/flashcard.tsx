@@ -2,7 +2,7 @@
 
 import { Set } from "@/types/set";
 import { X, Check } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Card as CardUI, CardContent, CardHeader } from "../ui/card";
 import { SaveAnswer } from "@/actions/set/save-answer";
@@ -94,7 +94,9 @@ export function Flashcard({ set }: FlashcardProps) {
           .play()
           .catch((err) => toast.error("Error playing finish sound:", err));
       }
-      toast.success("You have completed all the cards!");
+
+      toast.dismiss();
+      toast.success("You have completed all the cards!", { duration: 3000 });
       router.push(`/library/${set.id}`);
     }
   }, [set, isSoundEnabled, orderedCards, router, finishSound]);
@@ -129,16 +131,27 @@ export function Flashcard({ set }: FlashcardProps) {
             .catch((err) => toast.error("Error playing success sound:", err));
         }
 
+        toast.dismiss();
         toast.success("Good job!");
       } else {
+        toast.dismiss();
         toast.error("Keep going!");
       }
     },
     [orderedCards, isSoundEnabled, successSound],
   );
 
+  const isKeyProcessed = useRef(false);
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if (e.repeat) {
+        e.preventDefault();
+        return;
+      }
+
+      if (isKeyProcessed.current) return;
+      isKeyProcessed.current = true;
+
       if (e.code === "Space") {
         e.preventDefault();
         handleFlip();
@@ -147,6 +160,10 @@ export function Flashcard({ set }: FlashcardProps) {
       } else if (e.code === "ArrowRight") {
         saveAnswer(true, currentCardIndex, set);
       }
+
+      setTimeout(() => {
+        isKeyProcessed.current = false;
+      }, 200);
     },
     [handleFlip, saveAnswer, currentCardIndex, set],
   );
@@ -160,7 +177,7 @@ export function Flashcard({ set }: FlashcardProps) {
 
   const currentCard = orderedCards[currentCardIndex];
   let cardStatus = "Not studied";
-  if (currentCard.correctCount !== null) {
+  if (currentCard.correctCount) {
     if (currentCard.correctCount >= 2) {
       cardStatus = "Known";
     } else {
