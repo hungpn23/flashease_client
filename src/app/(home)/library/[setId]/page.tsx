@@ -30,7 +30,7 @@ import {
 import { getCardsStatus } from "@/lib/get-cards-status";
 import { Card } from "@/types/data/card.type";
 import { Params } from "@/types/page-params.type";
-import { BookCheck, NotebookPen, Pencil } from "lucide-react";
+import { BookCheck, NotebookPen, StickyNote, Pencil } from "lucide-react";
 import Link from "next/link";
 
 export default async function SetDetailPage({ params }: { params: Params }) {
@@ -68,8 +68,12 @@ export default async function SetDetailPage({ params }: { params: Params }) {
         <div className="flex flex-row items-center gap-4 overflow-x-auto">
           <Button variant="outline">
             <Link href={`/flashcard/${set.id}`}>
-              Flashcard <NotebookPen className="inline h-4 w-4" />
+              Flashcard <StickyNote className="ml-1 inline h-4 w-4" />
             </Link>
+          </Button>
+
+          <Button variant="outline">
+            Learn <NotebookPen className="inline h-4 w-4" />
           </Button>
 
           <Button variant="outline">

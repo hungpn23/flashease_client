@@ -52,6 +52,11 @@ export function EditSetForm({ set }: { set: Set }) {
     EditSetWithSetId,
     {},
   );
+  // Ánh xạ set.cards để đảm bảo id là string
+  const normalizedCards = set.cards.map((card) => ({
+    ...card,
+    id: String(card.id),
+  }));
   const form = useForm<EditSetInput>({
     resolver: zodResolver(editSetSchema),
     defaultValues: {
@@ -59,7 +64,7 @@ export function EditSetForm({ set }: { set: Set }) {
       description: set.description || "",
       visibleTo: set.visibleTo,
       passcode: set.passcode || "",
-      cards: set.cards,
+      cards: normalizedCards,
     },
   });
   const visibleTo = form.watch("visibleTo");
@@ -76,6 +81,13 @@ export function EditSetForm({ set }: { set: Set }) {
 
     if (state.success) toast.success("Set updated successfully!");
   }, [state]);
+
+  //! Debug: Log validation errors
+  // useEffect(() => {
+  //   if (form.formState.errors) {
+  //     console.error("Validation errors:", form.formState.errors);
+  //   }
+  // }, [form.formState.errors]);
 
   function onSubmit(data: EditSetInput) {
     const hasEmptyFields = data.cards.some(
@@ -211,7 +223,13 @@ export function EditSetForm({ set }: { set: Set }) {
             <TableBody>
               {fields.map((field, index) => (
                 <TableRow key={field.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    {index + 1}
+                    <input
+                      type="hidden"
+                      {...form.register(`cards.${index}.id`)}
+                    />
+                  </TableCell>
 
                   <TableCell>
                     <FormField

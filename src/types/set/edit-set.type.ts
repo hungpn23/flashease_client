@@ -20,6 +20,7 @@ export const editSetSchema = z
     cards: z
       .array(
         z.object({
+          id: z.string().optional(),
           term: z.string().min(1),
           definition: z.string().min(1),
         }),

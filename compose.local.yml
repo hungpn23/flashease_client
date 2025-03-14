@@ -5,7 +5,7 @@ services:
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "80:80" # Chỉ cần port 80 cho dev
+      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf # Mount file nginx.conf đã sửa
     depends_on:
