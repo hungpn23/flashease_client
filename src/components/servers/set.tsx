@@ -28,7 +28,7 @@ export function SetComponent({
     <article className="flex items-center justify-between border-b border-dashed border-primary px-4 py-2 last:border-none hover:bg-secondary/25">
       <Link className="w-full" href={`/${path}/${set.id}`}>
         <div className="flex items-center gap-2">
-          <span className="text-xl font-semibold text-heading hover:underline hover:underline-offset-4">
+          <span className="text-xl font-semibold hover:underline hover:underline-offset-4">
             {set.name}
           </span>
 
@@ -43,30 +43,22 @@ export function SetComponent({
 
         {metadata && (
           <div className="mt-2 text-sm text-muted-foreground">
-            <span className="text-foreground">
-              Total cards: {metadata.totalCards}
-            </span>
+            <span>Total cards: {metadata.totalCards}</span>
             <span className="mx-1">•</span>
-            <span className="text-heading">
-              Not studied: {metadata.notStudiedCount}
-            </span>
+            <span>Not studied: {metadata.notStudiedCount}</span>
             <span className="mx-1">•</span>
-            <span className="text-link">
-              Learning: {metadata.learningCount}
-            </span>
+            <span>Learning: {metadata.learningCount}</span>
             <span className="mx-1">•</span>
-            <span className="text-highlight">Known: {metadata.knownCount}</span>
+            <span>Known: {metadata.knownCount}</span>
           </div>
         )}
 
-        <div className="mt-2 text-sm">
+        <div className="mt-2 text-sm text-muted-foreground">
           {!isLibrary && (
             <span>
               <span>Author: {set.author}</span>
               <span className="mx-1">•</span>
-              <span className="text-foreground">
-                Total cards: {set.cards?.length ?? 0}
-              </span>
+              <span>Total cards: {set.cards?.length ?? 0}</span>
             </span>
           )}
         </div>

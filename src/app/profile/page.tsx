@@ -31,7 +31,7 @@ export default async function ProfilePage() {
                 <DialogTrigger asChild>
                   <Image
                     className="cursor-pointer rounded-full border-2 border-primary hover:opacity-75"
-                    src={user.avatar || ""}
+                    src={user.avatar!}
                     alt={user.username}
                     height={100}
                     width={100}
