@@ -1,5 +1,6 @@
 "use server";
 
+import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
 import {
   StartLearningInput,
@@ -17,18 +18,15 @@ export async function StartLearning(
     passcode: formData.get("passcode") as string,
   };
   const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(
-    `${process.env.SERVER_URL}/set/start-learning/${setId}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || "nothing"}`,
-      },
-      credentials: "include",
-      body: JSON.stringify(input),
+  const response = await fetch(`${SERVER_URL}/set/start-learning/${setId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken || "nothing"}`,
     },
-  );
+    credentials: "include",
+    body: JSON.stringify(input),
+  });
 
   const data = await response.json();
 

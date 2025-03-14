@@ -1,13 +1,13 @@
-# COMPOSE_BAKE=true docker compose -f compose.yml --env-file .env.development up -d --build
+# COMPOSE_BAKE=true docker compose -f compose.local.yml up --build
 services:
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - 80:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf # Mount file nginx.conf đã sửa
+      - ./nginx.local.conf:/etc/nginx/nginx.conf
     depends_on:
       - client
     networks:
@@ -21,6 +21,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
+    expose:
+      - 3000
     volumes:
       - ./src:/app/src
     networks:

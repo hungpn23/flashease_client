@@ -1,5 +1,6 @@
 "use server";
 
+import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
 import { Paginated } from "@/types/paginated.type";
 import { cookies } from "next/headers";
@@ -12,7 +13,7 @@ export async function findPaginated<Entity>(
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(
-    `${process.env.SERVER_URL}${path}?page=${currentPage}&take=${take}&order=${order}`,
+    `${SERVER_URL}${path}?page=${currentPage}&take=${take}&order=${order}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken || "nothing"}`,

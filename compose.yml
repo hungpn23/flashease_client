@@ -4,8 +4,6 @@ services:
     image: client
     container_name: client
     restart: unless-stopped
-    env_file:
-      - .env.production
     build:
       context: .
       dockerfile: Dockerfile

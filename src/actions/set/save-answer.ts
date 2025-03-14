@@ -1,5 +1,6 @@
 "use server";
 
+import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -11,7 +12,7 @@ export async function SaveAnswer(
 ) {
   const accessToken = (await cookies()).get("access_token")?.value;
   const response = await fetch(
-    `${process.env.SERVER_URL}/set/flashcard/save-answer/${cardId}`,
+    `${SERVER_URL}/set/flashcard/save-answer/${cardId}`,
     {
       method: "POST",
       headers: {

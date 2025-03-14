@@ -7,6 +7,7 @@ import {
   EditProfileInput,
   EditProfileState,
 } from "@/types/user/edit-profile.type";
+import { SERVER_URL } from "@/lib/constants";
 
 export async function EditProfile(
   previousState: EditProfileState,
@@ -19,7 +20,7 @@ export async function EditProfile(
   };
 
   const accessToken = (await cookies()).get("access_token")?.value;
-  const response = await fetch(`${process.env.SERVER_URL}/user`, {
+  const response = await fetch(`${SERVER_URL}/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

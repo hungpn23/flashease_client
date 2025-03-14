@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { LoginState, LoginInput } from "@/types/auth/login.type";
+import { SERVER_URL } from "@/lib/constants";
 
 export async function Login(_previousState: LoginState, formData: FormData) {
   const input: LoginInput = {
@@ -12,7 +13,7 @@ export async function Login(_previousState: LoginState, formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const response = await fetch(`${process.env.SERVER_URL}/auth/login`, {
+  const response = await fetch(`${SERVER_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
