@@ -18,6 +18,11 @@ import { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production"
+      ? "https://phamngochung.id.vn"
+      : "localhost",
+  ),
   title: "Profile",
 };
 

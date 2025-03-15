@@ -14,6 +14,11 @@ const font = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production"
+      ? "https://phamngochung.id.vn"
+      : "localhost",
+  ),
   title: {
     default: "FlashEase",
     template: "%s | FlashEase",

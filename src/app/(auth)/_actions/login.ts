@@ -4,8 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-import { LoginState, LoginInput } from "@/types/auth/login.type";
 import { SERVER_URL } from "@/lib/constants";
+import { LoginState, LoginInput } from "../_types/login.type";
 
 export async function Login(_previousState: LoginState, formData: FormData) {
   const input: LoginInput = {

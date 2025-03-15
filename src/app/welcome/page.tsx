@@ -6,6 +6,11 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production"
+      ? "https://phamngochung.id.vn"
+      : "localhost",
+  ),
   title: "Welcome",
 };
 
