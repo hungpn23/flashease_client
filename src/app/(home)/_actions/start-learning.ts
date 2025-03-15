@@ -7,7 +7,6 @@ import {
   StartLearningState,
 } from "@/app/(home)/_types/start-learning.type";
 import { cookies } from "next/headers";
-import { Set } from "@/types/data/set";
 
 export async function StartLearning(
   setId: string,
@@ -28,7 +27,7 @@ export async function StartLearning(
     body: JSON.stringify(input),
   });
 
-  let data = await response.json();
+  const data = await response.json();
 
   if (!response.ok)
     return {

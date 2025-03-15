@@ -88,7 +88,7 @@ export default function CreateSetPage() {
       toast.success("Flashcard set created successfully");
       router.replace("/library");
     }
-  }, [state]);
+  }, [state, router]);
 
   function onSubmit(data: CreateSetInput) {
     const hasEmptyFields = data.cards.some(
