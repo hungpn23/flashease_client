@@ -24,15 +24,17 @@ import toast from "react-hot-toast";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Container } from "@/components/layouts/container";
 import { startTransition, useActionState, useEffect } from "react";
-import { Login } from "@/actions/auth/login";
+import { Login } from "@/app/(auth)/_actions/login";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { showErrorBorder } from "@/lib/show-error-border";
-import { LoginInput, loginSchema, LoginState } from "@/types/auth/login.type";
-import { convertToFormData } from "@/lib/to-form-data";
+import { convertToFormData } from "@/lib/convert-formdata";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LoginState, LoginInput, loginSchema } from "../_types/login.type";
 
 export default function LoginPage() {
-  // ===== LOGIN ===== //
+  // **************
+  // * NORMAL LOGIN
+  // **************
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(
     Login,
     {},
@@ -57,7 +59,9 @@ export default function LoginPage() {
     startTransition(() => formAction(convertToFormData(data)));
   };
 
-  // ===== GOOGLE LOGIN ===== //
+  // **************
+  // * GOOGLE LOGIN
+  // **************
   const searchParams = useSearchParams();
   const router = useRouter();
 

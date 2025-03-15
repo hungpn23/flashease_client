@@ -1,9 +1,9 @@
-import { findPaginated } from "@/actions/find-paginated.action";
-import { Pagination } from "@/components/clients/pagination";
-import { SetComponent } from "@/components/servers/set";
+import { findPaginated } from "@/app/(home)/_actions/find-paginated.action";
+import { Pagination } from "@/app/(home)/_components/pagination";
+import { SetUI } from "@/app/(home)/_components/set";
 import { Blockquote, BlockquoteAuthor } from "@/components/ui/blockquote";
 import { searchParamsCache } from "@/lib/search-params";
-import { Set } from "@/types/set";
+import { Set } from "@/types/data/set";
 import { SearchParams } from "nuqs/server";
 
 export default async function Explore({
@@ -31,7 +31,7 @@ export default async function Explore({
       </p>
 
       {data.map((set) => (
-        <SetComponent path="explore" key={set.id} set={set} />
+        <SetUI path="explore" key={set.id} set={set} />
       ))}
 
       <Pagination key={metadata.totalPages} metadata={metadata} />

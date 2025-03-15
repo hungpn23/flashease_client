@@ -45,7 +45,7 @@ import {
   type CreateSetInput,
   createSetSchema,
   type CreateSetState,
-} from "@/types/set/create-set.type";
+} from "@/app/create-set/_types/create-set.type";
 import {
   startTransition,
   useActionState,
@@ -53,8 +53,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { CreateSet } from "@/actions/set/create-set";
-import { convertToFormData } from "@/lib/to-form-data";
+import { CreateSet } from "@/app/create-set/_actions/create-set";
+import { convertToFormData } from "@/lib/convert-formdata";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
@@ -70,7 +70,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   ImportFormInput,
   importFormSchema,
-} from "@/types/set/import-cards.type";
+} from "@/app/create-set/_types/import-cards.type";
 
 export default function CreateSetPage() {
   const [state, formAction, isPending] = useActionState<
@@ -78,9 +78,9 @@ export default function CreateSetPage() {
     FormData
   >(CreateSet, {});
 
-  // =========================================== //
-  // ============= CREATE SET FORM ============= //
-  // =========================================== //
+  // *****************
+  // * CREATE SET FORM
+  // *****************
   const form = useForm<CreateSetInput>({
     resolver: zodResolver(createSetSchema),
     defaultValues: {
@@ -120,15 +120,10 @@ export default function CreateSetPage() {
 
     startTransition(() => formAction(convertToFormData(data)));
   }
-  // =========================================== //
-  // =========== END CREATE SET FORM =========== //
-  // =========================================== //
 
-  // =========================================== //
-
-  // =========================================== //
-  // =============== IMPORT FORM =============== //
-  // =========================================== //
+  // *******************
+  // * IMPORT CARDS FORM
+  // *******************
   const importForm = useForm<ImportFormInput>({
     resolver: zodResolver(importFormSchema),
     defaultValues: {
@@ -143,14 +138,12 @@ export default function CreateSetPage() {
   const [previewData, setPreviewData] = useState<
     { term: string; definition: string }[]
   >([]);
-  // Watch các giá trị từ importForm để cập nhật preview
   const importText = importForm.watch("importText");
   const termSeparator = importForm.watch("termSeparator");
   const cardSeparator = importForm.watch("cardSeparator");
   const customTermSeparator = importForm.watch("customTermSeparator");
   const customCardSeparator = importForm.watch("customCardSeparator");
 
-  // Cập nhật preview khi các giá trị form thay đổi
   useEffect(() => {
     if (importText) {
       const parsedCards = parseFlashcards(
@@ -172,9 +165,6 @@ export default function CreateSetPage() {
     customCardSeparator,
   ]);
 
-  /**
-   * Hàm chuyển đổi đoạn text thành mảng { term, definition }.
-   */
   function parseFlashcards(
     input: string,
     termDefSeparator: string,
@@ -195,35 +185,25 @@ export default function CreateSetPage() {
     if (cardSeparator === "semicolon") actualCardSeparator = ";";
     if (cardSeparator === "custom") actualCardSeparator = customCardSep;
 
-    // Tách toàn bộ input thành các "card" dựa trên cardSeparator
     const rawCards = input.split(actualCardSeparator);
 
-    // Duyệt qua từng card, tách tiếp để lấy term và definition
-    return (
-      rawCards
-        .filter((card) => card.trim())
-        .map((card) => {
-          // Tách thành 2 phần: term và definition
-          const [rawTerm, rawDefinition] = card.split(actualTermSeparator);
+    return rawCards
+      .filter((card) => card.trim())
+      .map((card) => {
+        const [rawTerm, rawDefinition] = card.split(actualTermSeparator);
+        const term = rawTerm?.trim() ?? "";
+        const definition = rawDefinition?.trim() ?? "";
 
-          // Trim để loại bỏ khoảng trắng thừa (nếu có)
-          const term = rawTerm?.trim() ?? "";
-          const definition = rawDefinition?.trim() ?? "";
-
-          return { term, definition };
-        })
-        // Lọc bỏ các card mà cả term và definition đều rỗng
-        .filter(({ term, definition }) => term !== "" || definition !== "")
-    );
+        return { term, definition };
+      })
+      .filter(({ term, definition }) => term !== "" || definition !== "");
   }
 
-  // Xử lý khi người dùng nhấn nút Import
   const handleImport = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const formValues = importForm.getValues();
 
-    // Parse flashcards từ input text
     const parsedCards = parseFlashcards(
       formValues.importText,
       formValues.termSeparator,
@@ -232,37 +212,27 @@ export default function CreateSetPage() {
       formValues.customCardSeparator,
     );
 
-    // Kiểm tra nếu không có cards nào được parse
     if (parsedCards.length === 0) {
       toast.error("No valid cards found to import");
       return;
     }
 
-    // Thêm các cards mới vào fields
     append(parsedCards);
 
-    // Lấy tất cả cards hiện tại từ form
     const allCards = form.getValues("cards");
-
-    // Lọc bỏ các cards mà cả term và definition đều rỗng
     const filteredCards = allCards.filter(
       (card) => !(card.term.trim() === "" && card.definition.trim() === ""),
     );
 
-    // Nếu có cards bị lọc bỏ, cập nhật lại fields
     if (filteredCards.length < allCards.length) {
-      // Thay thế toàn bộ fields bằng mảng đã lọc
       replace(filteredCards);
 
-      // Thông báo số lượng cards bị loại bỏ
       const removedCount = allCards.length - filteredCards.length;
       toast.success(`Removed ${removedCount} empty cards`);
     }
 
-    // Hiển thị thông báo thành công
     toast.success(`Imported ${parsedCards.length} cards successfully`);
 
-    // Reset form import
     importForm.reset({
       importText: "",
       termSeparator: "tab",
@@ -272,14 +242,10 @@ export default function CreateSetPage() {
     });
     setPreviewData([]);
 
-    // Đóng dialog
     if (dialogCloseRef.current) {
       dialogCloseRef.current.click();
     }
   };
-  // =========================================== //
-  // ============= END IMPORT FORM ============= //
-  // =========================================== //
 
   return (
     <Container className="flex flex-col gap-4">

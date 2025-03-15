@@ -1,7 +1,7 @@
-import { LoadSetDetail } from "@/actions/set/load-set-detail";
-import { Flashcard } from "@/components/clients/flashcard";
+import { LoadSetDetail } from "@/app/(core)/_actions/load-set-detail";
+import { Flashcard } from "@/app/(core)/_components/flashcard";
 import { Container } from "@/components/layouts/container";
-import { ProgressBar } from "@/components/servers/progress-bar";
+import { ProgressBar } from "@/app/(core)/_components/progress-bar";
 import { Params } from "@/types/page-params.type";
 
 interface LearnPageProps {

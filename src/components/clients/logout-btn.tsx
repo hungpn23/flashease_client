@@ -1,6 +1,6 @@
 "use client";
 
-import { Logout } from "@/actions/auth/logout";
+import { Logout } from "@/actions/logout";
 import { useTransition } from "react";
 
 export function LogoutBtn() {

@@ -26,13 +26,13 @@ import {
   RegisterInput,
   registerSchema,
   RegisterState,
-} from "@/types/auth/register.type";
+} from "@/app/(auth)/_types/register.type";
 import { useActionState, useEffect, startTransition } from "react";
-import { registerAction } from "@/actions/auth/register";
+import { registerAction } from "@/app/(auth)/_actions/register";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { Container } from "@/components/layouts/container";
-import { convertToFormData } from "@/lib/to-form-data";
+import { convertToFormData } from "@/lib/convert-formdata";
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState<

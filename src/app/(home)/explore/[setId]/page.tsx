@@ -1,7 +1,7 @@
-import { LoadSet } from "@/actions/set/load-set";
-import { StartLearningBtn } from "@/components/clients/start-learning-btn";
+import { LoadSet } from "@/app/(home)/_actions/load-set";
+import { StartLearningBtn } from "@/app/(home)/_components/start-learning.btn";
 import {
-  Card as CardComponent,
+  Card as CardUI,
   CardContent,
   CardDescription,
   CardHeader,
@@ -24,7 +24,7 @@ export default async function PublicSetDetail({ params }: { params: Params }) {
   if ("statusCode" in set) throw new Error("failed to fetch set");
 
   return (
-    <CardComponent>
+    <CardUI>
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
         <CardDescription>
@@ -66,6 +66,6 @@ export default async function PublicSetDetail({ params }: { params: Params }) {
           </TableFooter>
         </Table>
       </CardContent>
-    </CardComponent>
+    </CardUI>
   );
 }

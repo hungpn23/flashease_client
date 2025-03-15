@@ -1,6 +1,6 @@
-import { LoadUser } from "@/actions/user/load-user";
-import { EditProfileForm } from "@/components/clients/edit-profile-form";
-import UploadAvatarForm from "@/components/clients/upload-avatar-form";
+import { LoadUser } from "@/app/profile/_actions/load-user";
+import { EditProfileForm } from "@/app/profile/_components/edit-profile.form";
+import UploadAvatarForm from "@/app/profile/_components/upload-avatar.form";
 import { Container } from "@/components/layouts/container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ export default async function ProfilePage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
+              {/* UPLOAD AVATAR */}
               <Dialog>
                 <DialogTrigger asChild>
                   <Image
@@ -66,7 +67,7 @@ export default async function ProfilePage() {
               </div>
             </div>
 
-            {/* edit profile button */}
+            {/* EDIT PROFILE */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">Edit profile</Button>

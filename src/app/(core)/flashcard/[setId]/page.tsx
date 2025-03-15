@@ -1,14 +1,10 @@
-import { LoadSetDetail } from "@/actions/set/load-set-detail";
-import { Flashcard } from "@/components/clients/flashcard";
+import { LoadSetDetail } from "@/app/(core)/_actions/load-set-detail";
+import { Flashcard } from "@/app/(core)/_components/flashcard";
+import { ProgressBar } from "@/app/(core)/_components/progress-bar";
 import { Container } from "@/components/layouts/container";
-import { ProgressBar } from "@/components/servers/progress-bar";
 import { Params } from "@/types/page-params.type";
 
-interface FlashcardPageProps {
-  params: Params;
-}
-
-export default async function FlashcardPage({ params }: FlashcardPageProps) {
+export default async function FlashcardPage({ params }: { params: Params }) {
   const { setId } = await params;
   const setDetail = await LoadSetDetail(setId);
   if ("statusCode" in setDetail) throw new Error("Failed to load set detail");

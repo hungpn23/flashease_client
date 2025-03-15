@@ -1,13 +1,13 @@
-import { findPaginated } from "@/actions/find-paginated.action";
-import { Pagination } from "@/components/clients/pagination";
-import { SetComponent } from "@/components/servers/set";
+import { findPaginated } from "@/app/(home)/_actions/find-paginated.action";
+import { Pagination } from "@/app/(home)/_components/pagination";
+import { SetUI } from "@/app/(home)/_components/set";
 import { Blockquote, BlockquoteAuthor } from "@/components/ui/blockquote";
 import { Button } from "@/components/ui/button";
 import { searchParamsCache } from "@/lib/search-params";
-import { SetDetail } from "@/types/set";
+import { SetDetail } from "@/types/data/set";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 import { SearchParams } from "nuqs/server";
+import Link from "next/link";
 
 export default async function LibraryPage({
   searchParams,
@@ -42,12 +42,7 @@ export default async function LibraryPage({
       </div>
 
       {data.map(({ set, metadata }) => (
-        <SetComponent
-          path="library"
-          key={set.id}
-          set={set}
-          metadata={metadata}
-        />
+        <SetUI path="library" key={set.id} set={set} metadata={metadata} />
       ))}
 
       <Pagination key={metadata.totalPages} metadata={metadata} />

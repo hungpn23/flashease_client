@@ -1,11 +1,8 @@
-import { LoadSet } from "@/actions/set/load-set";
-import { EditSetForm } from "@/components/clients/edit-set-form";
-import { FlashcardBtn } from "@/components/clients/flashcard-btn";
-import { LearnBtn } from "@/components/clients/learn-btn";
-import { ResetFlashcardBtn } from "@/components/clients/reset-flashcard-btn";
+import { LoadSet } from "@/app/(home)/_actions/load-set";
+import { EditSetForm } from "@/app/(home)/_components/edit-set.form";
 import { Button } from "@/components/ui/button";
 import {
-  Card as CardComponent,
+  Card as CardUI,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -29,10 +26,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getCardsStatus } from "@/lib/get-cards-status";
-import { Card } from "@/types/data/card.type";
 import { Params } from "@/types/page-params.type";
-import { BookCheck, NotebookPen, Pencil } from "lucide-react";
+import { BookCheck, Pencil } from "lucide-react";
+import { ResetFlashcardBtn } from "@/app/(home)/_components/reset-flashcard.btn";
+import { FlashcardBtn } from "@/app/(home)/_components/flashcard.btn";
+import { LearnBtn } from "@/app/(home)/_components/learn.btn";
+import { Card } from "@/types/data/card.type";
+
+function getCardsStatus(cards: Card[] = []) {
+  const known =
+    cards.filter((c) => c.correctCount && c.correctCount >= 2) || [];
+  const learning =
+    cards.filter(
+      (c) => c.correctCount && c.correctCount >= 0 && c.correctCount <= 1,
+    ) || [];
+  const notStudied = cards.filter((c) => !c.correctCount) || [];
+
+  return {
+    known,
+    learning,
+    notStudied,
+  };
+}
 
 export default async function SetDetailPage({ params }: { params: Params }) {
   const { setId } = await params;
@@ -51,7 +66,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
   };
 
   return (
-    <CardComponent>
+    <CardUI>
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
         <CardDescription className="flex items-center justify-between">
@@ -145,6 +160,6 @@ export default async function SetDetailPage({ params }: { params: Params }) {
           </DialogContent>
         </Dialog>
       </CardFooter>
-    </CardComponent>
+    </CardUI>
   );
 }
