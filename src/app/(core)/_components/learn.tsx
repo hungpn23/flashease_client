@@ -50,7 +50,6 @@ export function Learn({ set }: { set: Set }) {
     [selectedAnswer, currentCard],
   );
 
-  // Load danh sách đáp án khi currentCard thay đổi
   useEffect(() => {
     if (currentCard) {
       const correctAnswer = currentCard.definition;
@@ -64,6 +63,7 @@ export function Learn({ set }: { set: Set }) {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.code === "Space" && selectedAnswer) {
+        e.preventDefault();
         saveAnswer(isCorrect!, currentCardIndex, set);
         setSelectedAnswer(null);
         setIsCorrect(null);
@@ -190,9 +190,11 @@ export function Learn({ set }: { set: Set }) {
 
               let borderClass = "";
               if (isSelected) {
-                borderClass = isCorrect ? "border-green-500" : "border-red-500";
+                borderClass = isCorrect
+                  ? "border-2 border-green-500"
+                  : "border-2 border-red-500";
               } else if (selectedAnswer && isCorrectAnswer) {
-                borderClass = "border-green-500 border-dashed";
+                borderClass = "border-2 border-green-500 border-dashed";
               }
 
               return (

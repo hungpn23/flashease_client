@@ -19,8 +19,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile
-      target: development
+      dockerfile: Dockerfile.local
     expose:
       - 3000
     volumes:

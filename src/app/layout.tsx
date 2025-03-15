@@ -6,6 +6,7 @@ import { Footer } from "@/components/layouts/footer";
 import { ThemeProvider } from "@/components/layouts/theme-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "react-hot-toast";
+import { cn } from "@/lib/utils";
 
 const font = Roboto({
   weight: ["100", "300", "400"],
@@ -35,7 +36,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={font.className}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("text-lg", font.className)}
+    >
       <body>
         <ThemeProvider
           attribute="class"
