@@ -36,7 +36,21 @@ export function Learn({ set }: { set: Set }) {
   });
 
   const [answers, setAnswers] = useState<string[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
+  const handleSelectAnswer = useCallback(
+    (answer: string) => {
+      if (selectedAnswer) return;
+
+      const correct = answer === currentCard.definition;
+      setSelectedAnswer(answer);
+      setIsCorrect(correct);
+    },
+    [selectedAnswer, currentCard],
+  );
+
+  // Load danh sách đáp án khi currentCard thay đổi
   useEffect(() => {
     if (currentCard) {
       const correctAnswer = currentCard.definition;
@@ -47,19 +61,35 @@ export function Learn({ set }: { set: Set }) {
     }
   }, [currentCard, get3RandomWrongAnswers]);
 
-  const handleSelectAnswer = useCallback(
-    (selectedAnswer: string) => {
-      const isCorrect = selectedAnswer === currentCard.definition;
-      saveAnswer(isCorrect, currentCardIndex, set);
-    },
-    [currentCard, currentCardIndex, saveAnswer, set],
-  );
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.code === "Space" && selectedAnswer) {
+        saveAnswer(isCorrect!, currentCardIndex, set);
+        setSelectedAnswer(null);
+        setIsCorrect(null);
+      }
+    };
+
+    if (selectedAnswer) window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [
+    selectedAnswer,
+    isCorrect,
+    saveAnswer,
+    currentCardIndex,
+    set,
+    currentCard,
+  ]);
+
   const isKeyProcessed = useRef(false);
   const isSoundKeyProcessed = useRef(false);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.repeat) {
+      if (e.repeat || selectedAnswer) {
         e.preventDefault();
         return;
       }
@@ -91,7 +121,7 @@ export function Learn({ set }: { set: Set }) {
         } else if (e.code === "Digit4" && answers[3]) {
           handleSelectAnswer(answers[3]);
         } else if (e.code === "KeyX") {
-          saveAnswer(false, currentCardIndex, set);
+          handleSelectAnswer("___skip___");
         }
 
         setTimeout(() => {
@@ -100,6 +130,7 @@ export function Learn({ set }: { set: Set }) {
       }
     },
     [
+      selectedAnswer,
       answers,
       currentCard,
       handlePlayWordPronunciation,
@@ -115,15 +146,7 @@ export function Learn({ set }: { set: Set }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    answers,
-    currentCard,
-    handlePlayWordPronunciation,
-    saveAnswer,
-    handleKeyDown,
-    currentCardIndex,
-    set,
-  ]);
+  }, [handleKeyDown]);
 
   return (
     <div className="mt-2 flex flex-col">
@@ -143,31 +166,64 @@ export function Learn({ set }: { set: Set }) {
         </CardHeader>
         <CardContent className="flex flex-1 items-center justify-center text-3xl font-medium">
           {currentCard.term}
-
           <Button
             variant="link"
-            className="absolute right-4 top-4 w-fit hover:underline"
+            className="absolute right-4 top-4 w-fit text-foreground hover:underline"
           >
-            Don&apos;t know?
+            Don't know?
           </Button>
         </CardContent>
 
         {/* Hiển thị danh sách đáp án */}
-        <div className="px-4 py-2">
+        <div className="flex flex-col gap-2 px-4 py-2">
+          {selectedAnswer && (
+            <p className="mx-auto mb-2 text-muted-foreground">
+              Click the correct answer or press{" "}
+              <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
+                Space
+              </kbd>{" "}
+              to continue.
+            </p>
+          )}
+
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
-            {answers.map((answer, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className="w-full text-left"
-                onClick={() => handleSelectAnswer(answer)}
-              >
-                <span className="flex w-full overflow-auto">
-                  <span className="mr-auto">{index + 1}.</span>
-                  <span className="mr-auto">{`${answer}`}</span>
-                </span>
-              </Button>
-            ))}
+            {answers.map((answer, index) => {
+              const isSelected = selectedAnswer === answer;
+              const isCorrectAnswer = answer === currentCard.definition;
+
+              let borderClass = "";
+              if (isSelected) {
+                borderClass = isCorrect ? "border-green-500" : "border-red-500";
+              } else if (selectedAnswer && isCorrectAnswer) {
+                borderClass = "border-green-500 border-dashed";
+              }
+
+              return (
+                <Button
+                  key={index}
+                  variant="outline"
+                  className={`w-full text-left ${borderClass}`}
+                  onClick={() => {
+                    if (selectedAnswer && isCorrectAnswer) {
+                      if (isCorrect !== null) {
+                        saveAnswer(isCorrect, currentCardIndex, set);
+                      }
+
+                      setSelectedAnswer(null);
+                      setIsCorrect(null);
+                    } else if (!selectedAnswer) {
+                      handleSelectAnswer(answer);
+                    }
+                  }}
+                  disabled={selectedAnswer !== null && !isCorrectAnswer}
+                >
+                  <span className="flex w-full overflow-auto">
+                    <span className="mr-auto">{index + 1}.</span>
+                    <span className="mr-auto">{`${answer}`}</span>
+                  </span>
+                </Button>
+              );
+            })}
           </div>
         </div>
 
@@ -175,7 +231,6 @@ export function Learn({ set }: { set: Set }) {
           <Badge variant="outline" className="px-2 py-1 hover:cursor-auto">
             {currentCardIndex + 1}/{orderedCards.length}
           </Badge>
-
           <Badge className="px-2 py-1 hover:cursor-auto">{cardStatus}</Badge>
         </div>
       </CardUI>
