@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
 import { convertToFormData } from "@/lib/convert-formdata";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { EditProfile } from "@/app/profile/_actions/edit-profile";
@@ -41,11 +41,15 @@ export function EditProfileForm({ user }: { user: User }) {
   });
   const errorDetails = state.error?.details;
 
+  const dialogCloseRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (state.error && state.error.details === undefined)
       toast.error(state.error.message);
 
-    if (state.success) toast.success("User updated successfully!");
+    if (state.success) {
+      toast.success("User updated successfully!");
+      dialogCloseRef.current?.click();
+    }
   }, [state]);
 
   function onSubmit(data: EditProfileInput) {
@@ -123,7 +127,7 @@ export function EditProfileForm({ user }: { user: User }) {
         <DialogFooter>
           <div className="flex w-full items-center justify-between gap-4">
             <div className="ml-auto flex gap-4">
-              <DialogClose asChild>
+              <DialogClose ref={dialogCloseRef} asChild>
                 <Button disabled={isPending} type="button" variant="secondary">
                   Close
                 </Button>

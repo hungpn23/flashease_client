@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { VisibleTo } from "@/lib/constants";
 import { Textarea } from "@/components/ui/textarea";
-import { useActionState, useEffect, useTransition } from "react";
+import { useActionState, useEffect, useRef, useTransition } from "react";
 import { convertToFormData } from "@/lib/convert-formdata";
 import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
@@ -75,11 +75,15 @@ export function EditSetForm({ set }: { set: Set }) {
   const [isDeleting, startTransition] = useTransition();
   const errorDetails = state.error?.details;
 
+  const dialogCloseRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (state.error && state.error.details === undefined)
       toast.error(state.error.message);
 
-    if (state.success) toast.success("Set updated successfully!");
+    if (state.success) {
+      toast.success("Set updated successfully!");
+      dialogCloseRef.current?.click();
+    }
   }, [state]);
 
   //! Debug: Log validation errors
@@ -350,7 +354,7 @@ export function EditSetForm({ set }: { set: Set }) {
             </Button>
 
             <div className="flex gap-4">
-              <DialogClose asChild>
+              <DialogClose ref={dialogCloseRef} asChild>
                 <Button disabled={isPending} type="button" variant="secondary">
                   Close
                 </Button>
