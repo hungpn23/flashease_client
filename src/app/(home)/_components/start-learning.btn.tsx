@@ -10,7 +10,7 @@ import {
 import { StartLearning } from "@/app/(home)/_actions/start-learning";
 import { convertToFormData } from "@/lib/convert-formdata";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import { showErrorDetail } from "@/lib/show-error-detail";
@@ -28,6 +28,7 @@ import {
   FormItem,
   FormControl,
   FormMessage,
+  Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
