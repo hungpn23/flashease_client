@@ -1,7 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
-import * as jose from "jose";
 import { verifyJwt } from "@/lib/jwt-verify";
 
 export async function GET(request: NextRequest) {

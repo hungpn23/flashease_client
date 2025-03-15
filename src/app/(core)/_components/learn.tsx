@@ -1,59 +1,113 @@
 "use client";
 
 import { Set } from "@/types/data/set";
-import { X, Check } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { SaveAnswer } from "@/app/(core)/_actions/save-answer";
+import { Volume2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card as CardUI, CardContent } from "@/components/ui/card";
+import { Card as CardUI, CardHeader, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { useSoundEffect } from "../_context/sound.context";
+import { useFlashcard } from "@/app/(core)/_hooks/use-flashcard";
 
 export function Learn({ set }: { set: Set }) {
-  const router = useRouter();
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const {
+    successSound,
+    finishSound,
+    isSoundEnabled,
+    handleSoundToggle,
+    playWordPronunciation,
+  } = useSoundEffect();
 
-  const handleFlip = useCallback(() => {
-    setIsFlipped((prev) => !prev);
-  }, []);
+  const {
+    currentCardIndex,
+    orderedCards,
+    currentCard,
+    cardStatus,
+    saveAnswer,
+    handlePlayWordPronunciation,
+    get3RandomWrongAnswers,
+  } = useFlashcard({
+    set,
+    isSoundEnabled,
+    successSound,
+    finishSound,
+    playWordPronunciation,
+  });
 
-  const saveAnswer = useCallback(
-    async (isCorrect: boolean, currentCardIndex: number, set: Set) => {
-      const cardId = set.cards[currentCardIndex].id;
-      const setId = set.id;
+  const [answers, setAnswers] = useState<string[]>([]);
 
-      const error = await SaveAnswer(setId, cardId, isCorrect);
+  useEffect(() => {
+    if (currentCard) {
+      const correctAnswer = currentCard.definition;
+      const wrongAnswers = get3RandomWrongAnswers(currentCard);
+      const allAnswers = [correctAnswer, ...wrongAnswers];
+      const shuffledAnswers = allAnswers.sort(() => 0.5 - Math.random());
+      setAnswers(shuffledAnswers);
+    }
+  }, [currentCard, get3RandomWrongAnswers]);
 
-      if (error)
-        return toast.error("An error occurred while saving the answer!");
-
-      if (currentCardIndex < set.cards.length - 1) {
-        setCurrentCardIndex((prev) => prev + 1);
-        setIsFlipped(false);
-      } else {
-        toast.success("You have completed all the cards!");
-        return router.replace("/library");
-      }
-
-      isCorrect ? toast.success("Good job!") : toast.error("Keep going!");
+  const handleSelectAnswer = useCallback(
+    (selectedAnswer: string) => {
+      const isCorrect = selectedAnswer === currentCard.definition;
+      saveAnswer(isCorrect, currentCardIndex, set);
     },
-    [router],
+    [currentCard, currentCardIndex, saveAnswer, set],
   );
+  const isKeyProcessed = useRef(false);
+  const isSoundKeyProcessed = useRef(false);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      if (e.repeat) {
         e.preventDefault();
-        handleFlip();
-      } else if (e.code === "ArrowLeft") {
-        saveAnswer(false, currentCardIndex, set);
-      } else if (e.code === "ArrowRight") {
-        saveAnswer(true, currentCardIndex, set);
+        return;
+      }
+
+      if (e.code === "KeyS" && !isSoundKeyProcessed.current) {
+        isSoundKeyProcessed.current = true;
+        handlePlayWordPronunciation(currentCard);
+        setTimeout(() => {
+          isSoundKeyProcessed.current = false;
+        }, 1000);
+      }
+
+      if (
+        (e.code === "Digit1" ||
+          e.code === "Digit2" ||
+          e.code === "Digit3" ||
+          e.code === "Digit4" ||
+          e.code === "KeyX") &&
+        !isKeyProcessed.current
+      ) {
+        isKeyProcessed.current = true;
+
+        if (e.code === "Digit1" && answers[0]) {
+          handleSelectAnswer(answers[0]);
+        } else if (e.code === "Digit2" && answers[1]) {
+          handleSelectAnswer(answers[1]);
+        } else if (e.code === "Digit3" && answers[2]) {
+          handleSelectAnswer(answers[2]);
+        } else if (e.code === "Digit4" && answers[3]) {
+          handleSelectAnswer(answers[3]);
+        } else if (e.code === "KeyX") {
+          saveAnswer(false, currentCardIndex, set);
+        }
+
+        setTimeout(() => {
+          isKeyProcessed.current = false;
+        }, 333);
       }
     },
-    [handleFlip, saveAnswer, currentCardIndex, set],
+    [
+      answers,
+      currentCard,
+      handlePlayWordPronunciation,
+      saveAnswer,
+      handleSelectAnswer,
+      currentCardIndex,
+      set,
+    ],
   );
 
   useEffect(() => {
@@ -61,58 +115,74 @@ export function Learn({ set }: { set: Set }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyDown]);
-
-  let cardStatus = "Not studied";
-  if (set.cards[currentCardIndex].correctCount !== null) {
-    if (set.cards[currentCardIndex].correctCount >= 2) {
-      cardStatus = "Known";
-    } else {
-      cardStatus = "Learning";
-    }
-  }
+  }, [
+    answers,
+    currentCard,
+    handlePlayWordPronunciation,
+    saveAnswer,
+    handleKeyDown,
+    currentCardIndex,
+    set,
+  ]);
 
   return (
     <div className="mt-2 flex flex-col">
-      <CardUI
-        className="relative mb-4 flex min-h-[500px] cursor-pointer dark:bg-secondary"
-        onClick={handleFlip}
-        tabIndex={0}
-      >
+      <CardUI className="relative mb-4 flex min-h-[500px] flex-col dark:bg-secondary">
+        <CardHeader>
+          <span className="flex items-center gap-2">
+            Term
+            <Button
+              className="rounded-full"
+              onClick={() => handlePlayWordPronunciation(currentCard)}
+              variant="ghost"
+              size="icon"
+            >
+              <Volume2 className="inline h-4 w-4" />
+            </Button>
+          </span>
+        </CardHeader>
         <CardContent className="flex flex-1 items-center justify-center text-3xl font-medium">
-          {isFlipped
-            ? set.cards[currentCardIndex].definition
-            : set.cards[currentCardIndex].term}
+          {currentCard.term}
+
+          <Button
+            variant="link"
+            className="absolute right-4 top-4 w-fit hover:underline"
+          >
+            Don&apos;t know?
+          </Button>
         </CardContent>
 
-        <Badge
-          variant="outline"
-          className="absolute bottom-4 left-4 px-2 py-1 hover:cursor-auto"
-        >
-          {currentCardIndex + 1}/{set.cards.length}
-        </Badge>
+        {/* Hiển thị danh sách đáp án */}
+        <div className="px-4 py-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
+            {answers.map((answer, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                className="w-full text-left"
+                onClick={() => handleSelectAnswer(answer)}
+              >
+                <span className="flex w-full overflow-auto">
+                  <span className="mr-auto">{index + 1}.</span>
+                  <span className="mr-auto">{`${answer}`}</span>
+                </span>
+              </Button>
+            ))}
+          </div>
+        </div>
 
-        <Badge className="absolute bottom-4 right-4 px-2 py-1 hover:cursor-auto">
-          {cardStatus}
-        </Badge>
+        <div className="mx-4 mb-4 flex justify-between">
+          <Badge variant="outline" className="px-2 py-1 hover:cursor-auto">
+            {currentCardIndex + 1}/{orderedCards.length}
+          </Badge>
+
+          <Badge className="px-2 py-1 hover:cursor-auto">{cardStatus}</Badge>
+        </div>
       </CardUI>
 
-      <div className="mx-auto flex gap-8">
-        <Button
-          variant="outline"
-          onClick={() => saveAnswer(false, currentCardIndex, set)}
-        >
-          Unfamiliar
-          <X className="inline text-destructive" />
-        </Button>
-
-        <Button
-          variant="outline"
-          onClick={() => saveAnswer(true, currentCardIndex, set)}
-        >
-          Already know
-          <Check className="inline text-highlight" />
-        </Button>
+      <div className="mx-auto flex items-center gap-2">
+        <Switch checked={isSoundEnabled} onCheckedChange={handleSoundToggle} />
+        <span>Sound effect</span>
       </div>
     </div>
   );

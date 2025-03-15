@@ -1,8 +1,8 @@
 import { LoadSetDetail } from "@/app/(core)/_actions/load-set-detail";
-import { Flashcard } from "@/app/(core)/_components/flashcard";
 import { Container } from "@/components/layouts/container";
 import { ProgressBar } from "@/app/(core)/_components/progress-bar";
 import { Params } from "@/types/page-params.type";
+import { Learn } from "@/app/(core)/_components/learn";
 
 interface LearnPageProps {
   params: Params;
@@ -19,10 +19,10 @@ export default async function LearnPage({ params }: LearnPageProps) {
     <Container>
       <ProgressBar metadata={metadata} />
 
-      <Flashcard set={set} />
+      <Learn set={set} />
 
       <div className="mt-4 text-center text-sm text-muted-foreground">
-        <p className="mb-2">
+        <p>
           Press{" "}
           <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
             1
@@ -42,12 +42,16 @@ export default async function LearnPage({ params }: LearnPageProps) {
           to quickly select an answer.
         </p>
 
-        <p>
+        <p className="mt-3">
           Press{" "}
           <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
             X
           </kbd>{" "}
-          to skip a question.{" "}
+          to skip a question,{" "}
+          <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
+            S
+          </kbd>{" "}
+          to play pronunciation.{" "}
         </p>
       </div>
     </Container>

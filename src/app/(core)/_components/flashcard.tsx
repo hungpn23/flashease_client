@@ -1,145 +1,49 @@
 "use client";
 
 import { Set } from "@/types/data/set";
-import { X, Check } from "lucide-react";
+import { X, Check, Volume2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SaveAnswer } from "@/app/(core)/_actions/save-answer";
 import { Badge } from "@/components/ui/badge";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { Card } from "@/types/data/card.type";
 import { Button } from "@/components/ui/button";
 import { Card as CardUI, CardHeader, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useSoundEffect } from "../_context/sound.context";
+import { useFlashcard } from "@/app/(core)/_hooks/use-flashcard";
 
-interface FlashcardProps {
-  set: Set;
-}
+export function Flashcard({ set }: { set: Set }) {
+  const {
+    successSound,
+    finishSound,
+    isSoundEnabled,
+    handleSoundToggle,
+    playWordPronunciation,
+  } = useSoundEffect();
 
-export function Flashcard({ set }: FlashcardProps) {
-  // **************
-  // * SOUND EFFECT
-  // **************
-  const [successSound, setSuccessSound] = useState<HTMLAudioElement | null>(
-    null,
-  );
-  const [finishSound, setFinishSound] = useState<HTMLAudioElement | null>(null);
-  const [isSoundEnabled, setIsSoundEnabled] = useState(true); // State cho âm thanh
+  const {
+    currentCardIndex,
+    orderedCards,
+    currentCard,
+    cardStatus,
+    saveAnswer,
+    handlePlayWordPronunciation,
+  } = useFlashcard({
+    set,
+    isSoundEnabled,
+    successSound,
+    finishSound,
+    playWordPronunciation,
+  });
 
-  useEffect(() => {
-    setSuccessSound(new Audio("/sound/success.mp3"));
-    setFinishSound(new Audio("/sound/finish.mp3"));
-  }, []);
-
-  useEffect(() => {
-    const soundEffect = localStorage.getItem("sound_effect");
-    if (soundEffect !== null) {
-      setIsSoundEnabled(soundEffect === "true");
-    } else {
-      setIsSoundEnabled(true);
-      localStorage.setItem("sound_effect", "true");
-    }
-  }, []);
-
-  const handleSoundToggle = (checked: boolean) => {
-    setIsSoundEnabled(checked);
-    localStorage.setItem("sound_effect", checked.toString());
-  };
-
-  // *****************
-  // * FLASHCARD LOGIC
-  // *****************
-  const router = useRouter();
   const [isFlipped, setIsFlipped] = useState(false);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [sortedCardIds, setSortedCardIds] = useState<string[]>([]);
-  const [orderedCards, setOrderedCards] = useState(set.cards);
 
   const handleFlip = useCallback(() => {
     setIsFlipped((prev) => !prev);
   }, []);
 
-  useEffect(() => {
-    if (sortedCardIds.length === 0 && set.cards.length > 0) {
-      const sorted = [...set.cards].sort((cardA, cardB) => {
-        const getOrder = (card: (typeof set.cards)[number]) => {
-          if (card.correctCount === null) return 0;
-          if (card.correctCount < 2) return 1;
-          return 2;
-        };
-        return getOrder(cardA) - getOrder(cardB);
-      });
-      setSortedCardIds(sorted.map((card) => card.id));
-      setOrderedCards(sorted);
-    }
-
-    if (sortedCardIds.length > 0) {
-      const newCardsMap = new Map(set.cards.map((card) => [card.id, card]));
-      const newOrderedCards = sortedCardIds
-        .map((id) => newCardsMap.get(id))
-        .filter((card) => card !== undefined) as Card[];
-      setOrderedCards(newOrderedCards);
-    }
-  }, [set, sortedCardIds]);
-
-  useEffect(() => {
-    const finished = orderedCards.every(
-      (card) => card.correctCount && card.correctCount >= 2,
-    );
-
-    if (finished) {
-      if (finishSound && isSoundEnabled) {
-        finishSound
-          .play()
-          .catch((err) => toast.error("Error playing finish sound:", err));
-      }
-
-      toast.dismiss();
-      toast.success("You have completed all the cards!", { duration: 3000 });
-      router.replace(`/library/${set.id}`);
-    }
-  }, [set, isSoundEnabled, orderedCards, router, finishSound]);
-
-  const saveAnswer = useCallback(
-    async (isCorrect: boolean, currentCardIndex: number, set: Set) => {
-      const cardId = orderedCards[currentCardIndex].id;
-      const setId = set.id;
-      await SaveAnswer(setId, cardId, isCorrect).catch((err) => {
-        toast.error("An error occurred while saving the answer!");
-      });
-
-      if (currentCardIndex < orderedCards.length - 1) {
-        setCurrentCardIndex((prev) => prev + 1);
-        setIsFlipped(false);
-      } else {
-        const remainingCards = orderedCards.filter(
-          (card) => card.correctCount === null || card.correctCount < 2,
-        );
-        setOrderedCards(remainingCards);
-        setCurrentCardIndex(0);
-        setIsFlipped(false);
-      }
-
-      if (isCorrect) {
-        if (successSound && isSoundEnabled) {
-          successSound
-            .play()
-            .catch((err) => toast.error("Error playing success sound:", err));
-        }
-
-        toast.dismiss();
-        toast.success("Good job!");
-      } else {
-        toast.dismiss();
-        toast.error("Keep going!");
-      }
-    },
-    [orderedCards, isSoundEnabled, successSound],
-  );
-
   const isKeyProcessed = useRef(false);
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      const COOLDOWN_TIME = 333;
       if (e.repeat) {
         e.preventDefault();
         return;
@@ -155,13 +59,23 @@ export function Flashcard({ set }: FlashcardProps) {
         saveAnswer(false, currentCardIndex, set);
       } else if (e.code === "ArrowRight") {
         saveAnswer(true, currentCardIndex, set);
+      } else if (e.code === "KeyS") {
+        e.preventDefault();
+        handlePlayWordPronunciation(currentCard);
       }
 
       setTimeout(() => {
         isKeyProcessed.current = false;
-      }, 333);
+      }, COOLDOWN_TIME);
     },
-    [handleFlip, saveAnswer, currentCardIndex, set],
+    [
+      handleFlip,
+      saveAnswer,
+      handlePlayWordPronunciation,
+      currentCardIndex,
+      set,
+      currentCard,
+    ],
   );
 
   useEffect(() => {
@@ -171,16 +85,6 @@ export function Flashcard({ set }: FlashcardProps) {
     };
   }, [handleKeyDown]);
 
-  const currentCard = orderedCards[currentCardIndex];
-  let cardStatus = "Not studied";
-  if (currentCard.correctCount) {
-    if (currentCard.correctCount >= 2) {
-      cardStatus = "Known";
-    } else {
-      cardStatus = "Learning";
-    }
-  }
-
   return (
     <div className="mt-2 flex flex-col">
       <CardUI
@@ -188,7 +92,22 @@ export function Flashcard({ set }: FlashcardProps) {
         onClick={handleFlip}
         tabIndex={0}
       >
-        <CardHeader>{isFlipped ? "Definition" : "Term"}</CardHeader>
+        <CardHeader>
+          <span className="flex items-center gap-2">
+            {isFlipped ? "Definition" : "Term"}{" "}
+            <Button
+              className="rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePlayWordPronunciation(currentCard);
+              }}
+              variant="ghost"
+              size="icon"
+            >
+              <Volume2 className="inline h-4 w-4" />
+            </Button>
+          </span>
+        </CardHeader>
         <CardContent className="flex flex-1 items-center justify-center text-3xl font-medium">
           {isFlipped ? currentCard.definition : currentCard.term}
         </CardContent>

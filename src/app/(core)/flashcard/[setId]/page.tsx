@@ -24,10 +24,14 @@ export default async function FlashcardPage({ params }: { params: Params }) {
           <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
             Space
           </kbd>{" "}
-          to flip card
+          to flip card,{" "}
+          <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
+            S
+          </kbd>{" "}
+          to play pronunciation.
         </p>
 
-        <p>
+        <p className="mt-3">
           Press{" "}
           <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
             ←
@@ -36,7 +40,7 @@ export default async function FlashcardPage({ params }: { params: Params }) {
           <kbd className="rounded border-b-2 border-primary bg-muted px-2 py-1 text-foreground">
             →
           </kbd>{" "}
-          for correct
+          for correct.
         </p>
       </div>
     </Container>
