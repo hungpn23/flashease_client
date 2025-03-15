@@ -5,14 +5,18 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 RUN chown -R node:node /app
-
 USER node
 
-COPY --chown=node:node package*.json pnpm-lock.yaml ./
-
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN pnpm install
 
-COPY --chown=node:node . .
+COPY --chown=node:node next.config.ts ./
+COPY --chown=node:node tsconfig.json ./
+COPY --chown=node:node components.json ./
+COPY --chown=node:node postcss.config.mjs ./
+COPY --chown=node:node tailwind.config.ts ./
+COPY --chown=node:node public/ ./public/
+COPY --chown=node:node src/ ./src/
 
 ENV NODE_ENV=development
 

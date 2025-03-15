@@ -26,7 +26,6 @@ services:
       - ./src:/app/src
     networks:
       - flashease
-    command: ["pnpm", "dev"]
 
 networks:
   flashease:
