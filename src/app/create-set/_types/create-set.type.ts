@@ -44,4 +44,5 @@ export type CreateSetInput = z.infer<typeof createSetSchema>;
 export type CreateSetState = {
   input?: CreateSetInput;
   error?: HttpError;
+  success?: boolean;
 };

@@ -96,7 +96,7 @@ export function Flashcard({ set }: FlashcardProps) {
 
       toast.dismiss();
       toast.success("You have completed all the cards!", { duration: 3000 });
-      router.push(`/library/${set.id}`);
+      router.replace(`/library/${set.id}`);
     }
   }, [set, isSoundEnabled, orderedCards, router, finishSound]);
 

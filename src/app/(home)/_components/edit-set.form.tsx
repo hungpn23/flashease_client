@@ -45,6 +45,7 @@ import {
 import { Set } from "@/types/data/set";
 import { DeleteSet } from "@/app/(home)/_actions/delete-set";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 export function EditSetForm({ set }: { set: Set }) {
   const EditSetWithSetId = EditSet.bind(null, set.id);
@@ -103,6 +104,8 @@ export function EditSetForm({ set }: { set: Set }) {
 
     startTransition(() => formAction(convertToFormData(data)));
   }
+
+  const router = useRouter();
 
   return (
     <Form {...form}>
@@ -346,7 +349,12 @@ export function EditSetForm({ set }: { set: Set }) {
               onClick={() =>
                 startTransition(async () => {
                   const success = await DeleteSet(set.id);
-                  if (!success) toast.error("Failed to delete set");
+                  if (success) {
+                    toast.success("Set deleted successfully!");
+                    router.replace("/library");
+                  } else {
+                    toast.error("Failed to delete set");
+                  }
                 })
               }
             >

@@ -34,7 +34,7 @@ export function Learn({ set }: { set: Set }) {
         setIsFlipped(false);
       } else {
         toast.success("You have completed all the cards!");
-        return router.push("/library");
+        return router.replace("/library");
       }
 
       isCorrect ? toast.success("Good job!") : toast.error("Keep going!");

@@ -60,7 +60,7 @@ export function StartLearningBtn({
 
     if (state.success && state.redirectUrl) {
       toast.success("This set has been successfully added to your library!");
-      router.push(state.redirectUrl);
+      router.replace(state.redirectUrl);
     }
   }, [state, router]);
 

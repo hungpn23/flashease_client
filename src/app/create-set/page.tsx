@@ -47,6 +47,7 @@ import { showErrorDetail } from "@/lib/show-error-detail";
 import { cn } from "@/lib/utils";
 import { showErrorBorder } from "@/lib/show-error-border";
 import { ImportCards } from "./_components/import-cards";
+import { useRouter } from "next/navigation";
 
 export default function CreateSetPage() {
   const [state, formAction, isPending] = useActionState<
@@ -78,9 +79,15 @@ export default function CreateSetPage() {
 
   const errorDetails = state.error?.details;
 
+  const router = useRouter();
   useEffect(() => {
     if (state.error && state.error.details === undefined)
       toast.error(state.error.message);
+
+    if (state.success) {
+      toast.success("Flashcard set created successfully");
+      router.replace("/library");
+    }
   }, [state]);
 
   function onSubmit(data: CreateSetInput) {
@@ -89,6 +96,7 @@ export default function CreateSetPage() {
     );
     if (hasEmptyFields)
       return toast.error("All terms and definitions must be filled");
+
     startTransition(() => formAction(convertToFormData(data)));
   }
 
@@ -106,6 +114,7 @@ export default function CreateSetPage() {
       const removedCount = allCards.length - filteredCards.length;
       toast.success(`Removed ${removedCount} empty cards`);
     }
+
     toast.success(`Imported ${importedCards.length} cards successfully`);
   };
 

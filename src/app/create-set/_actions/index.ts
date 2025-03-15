@@ -39,5 +39,7 @@ export async function CreateSet(
     } as CreateSetState;
   }
 
-  redirect("/library");
+  return {
+    success: true,
+  } as CreateSetState;
 }

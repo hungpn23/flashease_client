@@ -18,5 +18,5 @@ export async function DeleteSet(setId: string) {
 
   if (!response.ok) return false;
 
-  redirect("/library");
+  return true;
 }
