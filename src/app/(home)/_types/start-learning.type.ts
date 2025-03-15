@@ -11,4 +11,6 @@ export type StartLearningInput = z.infer<typeof startLearningSchema>;
 export type StartLearningState = {
   input?: StartLearningInput;
   error?: HttpError;
+  success?: boolean;
+  redirectUrl?: string;
 };
