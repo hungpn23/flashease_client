@@ -134,10 +134,7 @@ export function Learn({ set }: { set: Set }) {
       answers,
       currentCard,
       handlePlayWordPronunciation,
-      saveAnswer,
       handleSelectAnswer,
-      currentCardIndex,
-      set,
     ],
   );
 
@@ -170,7 +167,7 @@ export function Learn({ set }: { set: Set }) {
             variant="link"
             className="absolute right-4 top-4 w-fit text-foreground hover:underline"
           >
-            Don't know?
+            Don&apos;t know?
           </Button>
         </CardContent>
 
