@@ -1,16 +1,17 @@
 "use client";
 
-import { Set } from "@/types/data/set.type";
-import { Volume2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Volume2 } from "lucide-react";
+import { Set } from "@/types/data/set.type";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as CardUI, CardHeader, CardContent } from "@/components/ui/card";
+import { Card as CardUI, CardContent, CardHeader } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { useSoundEffect } from "../_context/sound.context";
 import { useFlashcard } from "@/app/(core)/_hooks/use-flashcard";
+import { useSoundEffect } from "../_context/sound.context";
 
 export function Learn({ set }: { set: Set }) {
+  // Hooks từ context và custom hook
   const {
     successSound,
     finishSound,
@@ -35,14 +36,17 @@ export function Learn({ set }: { set: Set }) {
     playWordPronunciation,
   });
 
+  // State và Ref
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const isKeyProcessed = useRef(false);
+  const isSoundKeyProcessed = useRef(false);
 
+  // Callback handlers
   const handleSelectAnswer = useCallback(
     (answer: string) => {
       if (selectedAnswer) return;
-
       const correct = answer === currentCard.definition;
       setSelectedAnswer(answer);
       setIsCorrect(correct);
@@ -50,77 +54,46 @@ export function Learn({ set }: { set: Set }) {
     [selectedAnswer, currentCard],
   );
 
-  useEffect(() => {
-    if (currentCard) {
-      const correctAnswer = currentCard.definition;
-      const wrongAnswers = get3RandomWrongAnswers(currentCard);
-      const allAnswers = [correctAnswer, ...wrongAnswers];
-      const shuffledAnswers = allAnswers.sort(() => 0.5 - Math.random());
-      setAnswers(shuffledAnswers);
-    }
-  }, [currentCard, get3RandomWrongAnswers]);
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === "Space" && selectedAnswer) {
-        e.preventDefault();
-        saveAnswer(isCorrect!, currentCardIndex, set);
-        setSelectedAnswer(null);
-        setIsCorrect(null);
-      }
-    };
-
-    if (selectedAnswer) window.addEventListener("keydown", handleKeyPress);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [
-    selectedAnswer,
-    isCorrect,
-    saveAnswer,
-    currentCardIndex,
-    set,
-    currentCard,
-  ]);
-
-  const isKeyProcessed = useRef(false);
-  const isSoundKeyProcessed = useRef(false);
-
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.repeat || selectedAnswer) {
+      if (e.repeat) {
         e.preventDefault();
         return;
       }
 
+      // Xử lý phím phát âm thanh
       if (e.code === "KeyS" && !isSoundKeyProcessed.current) {
+        e.preventDefault();
         isSoundKeyProcessed.current = true;
         handlePlayWordPronunciation(currentCard);
         setTimeout(() => {
           isSoundKeyProcessed.current = false;
         }, 1000);
+        return;
       }
 
+      // Xử lý phím chọn đáp án khi chưa chọn
+      if (selectedAnswer) return;
+
       if (
-        (e.code === "Digit1" ||
-          e.code === "Digit2" ||
-          e.code === "Digit3" ||
-          e.code === "Digit4" ||
-          e.code === "KeyX") &&
+        ["Digit1", "Digit2", "Digit3", "Digit4", "KeyX"].includes(e.code) &&
         !isKeyProcessed.current
       ) {
+        e.preventDefault();
         isKeyProcessed.current = true;
 
-        if (e.code === "Digit1" && answers[0]) {
-          handleSelectAnswer(answers[0]);
-        } else if (e.code === "Digit2" && answers[1]) {
-          handleSelectAnswer(answers[1]);
-        } else if (e.code === "Digit3" && answers[2]) {
-          handleSelectAnswer(answers[2]);
-        } else if (e.code === "Digit4" && answers[3]) {
-          handleSelectAnswer(answers[3]);
-        } else if (e.code === "KeyX") {
+        const keyMap: { [key: string]: number | string } = {
+          Digit1: 0,
+          Digit2: 1,
+          Digit3: 2,
+          Digit4: 3,
+          KeyX: "___skip___",
+        };
+
+        const answerIndex = keyMap[e.code];
+        if (typeof answerIndex === "number" && answers[answerIndex]) {
+          handleSelectAnswer(answers[answerIndex]);
+        } else if (answerIndex === "___skip___") {
           handleSelectAnswer("___skip___");
         }
 
@@ -138,13 +111,40 @@ export function Learn({ set }: { set: Set }) {
     ],
   );
 
+  // Effects
+  useEffect(() => {
+    if (currentCard) {
+      const correctAnswer = currentCard.definition;
+      const wrongAnswers = get3RandomWrongAnswers(currentCard);
+      const shuffledAnswers = [correctAnswer, ...wrongAnswers].sort(
+        () => 0.5 - Math.random(),
+      );
+      setAnswers(shuffledAnswers);
+    }
+  }, [currentCard, get3RandomWrongAnswers]);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.code === "Space" && selectedAnswer) {
+        e.preventDefault();
+        saveAnswer(isCorrect!, currentCardIndex, set);
+        setSelectedAnswer(null);
+        setIsCorrect(null);
+      }
+    };
+
+    if (selectedAnswer) {
+      window.addEventListener("keydown", handleKeyPress);
+      return () => window.removeEventListener("keydown", handleKeyPress);
+    }
+  }, [selectedAnswer, isCorrect, saveAnswer, currentCardIndex, set]);
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  // JSX
   return (
     <div className="mt-2 flex flex-col">
       <CardUI className="relative mb-4 flex min-h-[500px] flex-col dark:bg-secondary">
@@ -153,11 +153,11 @@ export function Learn({ set }: { set: Set }) {
             Term
             <Button
               className="rounded-full"
-              onClick={() => handlePlayWordPronunciation(currentCard)}
               variant="ghost"
               size="icon"
+              onClick={() => handlePlayWordPronunciation(currentCard)}
             >
-              <Volume2 className="inline h-4 w-4" />
+              <Volume2 className="h-4 w-4" />
             </Button>
           </span>
         </CardHeader>
@@ -166,12 +166,12 @@ export function Learn({ set }: { set: Set }) {
           <Button
             variant="link"
             className="absolute right-4 top-4 w-fit text-foreground hover:underline"
+            onClick={() => handleSelectAnswer("___skip___")}
           >
             Don&apos;t know?
           </Button>
         </CardContent>
 
-        {/* Hiển thị danh sách đáp án */}
         <div className="flex flex-col gap-2 px-4 py-2">
           {selectedAnswer && (
             <p className="mx-auto mb-2 text-muted-foreground">
@@ -182,12 +182,10 @@ export function Learn({ set }: { set: Set }) {
               to continue.
             </p>
           )}
-
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
             {answers.map((answer, index) => {
               const isSelected = selectedAnswer === answer;
               const isCorrectAnswer = answer === currentCard.definition;
-
               let borderClass = "";
               if (isSelected) {
                 borderClass = isCorrect
@@ -204,21 +202,18 @@ export function Learn({ set }: { set: Set }) {
                   className={`w-full text-left ${borderClass}`}
                   onClick={() => {
                     if (selectedAnswer && isCorrectAnswer) {
-                      if (isCorrect !== null) {
-                        saveAnswer(isCorrect, currentCardIndex, set);
-                      }
-
+                      saveAnswer(isCorrect!, currentCardIndex, set);
                       setSelectedAnswer(null);
                       setIsCorrect(null);
-                    } else if (!selectedAnswer) {
+                    } else {
                       handleSelectAnswer(answer);
                     }
                   }}
                   disabled={selectedAnswer !== null && !isCorrectAnswer}
                 >
                   <span className="flex w-full overflow-auto">
-                    <span className="mr-auto">{index + 1}.</span>
-                    <span className="mr-auto">{`${answer}`}</span>
+                    <span className="mr-2">{index + 1}.</span>
+                    <span>{answer}</span>
                   </span>
                 </Button>
               );

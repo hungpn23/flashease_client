@@ -1,16 +1,17 @@
 "use client";
 
-import { Set } from "@/types/data/set.type";
-import { X, Check, Volume2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Check, Volume2, X } from "lucide-react";
+import { Set } from "@/types/data/set.type";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as CardUI, CardHeader, CardContent } from "@/components/ui/card";
+import { Card as CardUI, CardContent, CardHeader } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { useSoundEffect } from "../_context/sound.context";
 import { useFlashcard } from "@/app/(core)/_hooks/use-flashcard";
+import { useSoundEffect } from "../_context/sound.context";
 
 export function Flashcard({ set }: { set: Set }) {
+  // Hooks từ context và custom hook
   const {
     successSound,
     finishSound,
@@ -34,34 +35,43 @@ export function Flashcard({ set }: { set: Set }) {
     playWordPronunciation,
   });
 
+  // State và Ref
   const [isFlipped, setIsFlipped] = useState(false);
+  const isKeyProcessed = useRef(false);
 
+  // Callback handlers
   const handleFlip = useCallback(() => {
     setIsFlipped((prev) => !prev);
   }, []);
 
-  const isKeyProcessed = useRef(false);
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       const COOLDOWN_TIME = 333;
-      if (e.repeat) {
+
+      if (e.repeat || isKeyProcessed.current) {
         e.preventDefault();
         return;
       }
 
-      if (isKeyProcessed.current) return;
       isKeyProcessed.current = true;
 
-      if (e.code === "Space") {
-        e.preventDefault();
-        handleFlip();
-      } else if (e.code === "ArrowLeft") {
-        saveAnswer(false, currentCardIndex, set);
-      } else if (e.code === "ArrowRight") {
-        saveAnswer(true, currentCardIndex, set);
-      } else if (e.code === "KeyS") {
-        e.preventDefault();
-        handlePlayWordPronunciation(currentCard);
+      switch (e.code) {
+        case "Space":
+          e.preventDefault();
+          handleFlip();
+          break;
+        case "ArrowLeft":
+          saveAnswer(false, currentCardIndex, set);
+          break;
+        case "ArrowRight":
+          saveAnswer(true, currentCardIndex, set);
+          break;
+        case "KeyS":
+          e.preventDefault();
+          handlePlayWordPronunciation(currentCard);
+          break;
+        default:
+          break;
       }
 
       setTimeout(() => {
@@ -78,13 +88,13 @@ export function Flashcard({ set }: { set: Set }) {
     ],
   );
 
+  // Effect để xử lý sự kiện phím
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  // JSX
   return (
     <div className="mt-2 flex flex-col">
       <CardUI
@@ -94,29 +104,27 @@ export function Flashcard({ set }: { set: Set }) {
       >
         <CardHeader>
           <span className="flex items-center gap-2">
-            {isFlipped ? "Definition" : "Term"}{" "}
+            {isFlipped ? "Definition" : "Term"}
             <Button
               className="rounded-full"
+              variant="ghost"
+              size="icon"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlayWordPronunciation(currentCard);
               }}
-              variant="ghost"
-              size="icon"
             >
-              <Volume2 className="inline h-4 w-4" />
+              <Volume2 className="h-4 w-4" />
             </Button>
           </span>
         </CardHeader>
         <CardContent className="flex flex-1 items-center justify-center text-3xl font-medium">
           {isFlipped ? currentCard.definition : currentCard.term}
         </CardContent>
-
         <div className="mx-4 mb-4 flex justify-between">
           <Badge variant="outline" className="px-2 py-1 hover:cursor-auto">
             {currentCardIndex + 1}/{orderedCards.length}
           </Badge>
-
           <Badge className="px-2 py-1 hover:cursor-auto">{cardStatus}</Badge>
         </div>
       </CardUI>
@@ -127,15 +135,14 @@ export function Flashcard({ set }: { set: Set }) {
           onClick={() => saveAnswer(false, currentCardIndex, set)}
         >
           Unfamiliar
-          <X className="inline text-destructive" />
+          <X className="ml-2 text-destructive" />
         </Button>
-
         <Button
           variant="outline"
           onClick={() => saveAnswer(true, currentCardIndex, set)}
         >
           Already know
-          <Check className="inline text-highlight" />
+          <Check className="ml-2 text-highlight" />
         </Button>
       </div>
 

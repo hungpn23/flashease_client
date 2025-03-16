@@ -2,10 +2,12 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
-  useState,
   useEffect,
-  ReactNode,
+  useMemo,
+  useState,
+  type ReactNode,
 } from "react";
 
 interface SoundContextType {
@@ -25,52 +27,78 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
   const [finishSound, setFinishSound] = useState<HTMLAudioElement | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
+  // Khởi tạo audio objects một lần duy nhất
   useEffect(() => {
-    setSuccessSound(new Audio("/sound/success.mp3"));
-    setFinishSound(new Audio("/sound/finish.mp3"));
+    const success = new Audio("/sound/success.mp3");
+    const finish = new Audio("/sound/finish.mp3");
+    setSuccessSound(success);
+    setFinishSound(finish);
+
+    // Cleanup để tránh memory leak
+    return () => {
+      success.pause();
+      finish.pause();
+    };
   }, []);
 
+  // Đồng bộ trạng thái âm thanh với localStorage
   useEffect(() => {
     const soundEffect = localStorage.getItem("sound_effect");
-    if (soundEffect !== null) {
-      setIsSoundEnabled(soundEffect === "true");
-    } else {
-      setIsSoundEnabled(true);
+    const initialSoundEnabled =
+      soundEffect !== null ? soundEffect === "true" : true;
+    setIsSoundEnabled(initialSoundEnabled);
+    if (soundEffect === null) {
       localStorage.setItem("sound_effect", "true");
     }
   }, []);
 
-  const handleSoundToggle = (checked: boolean) => {
+  // Xử lý toggle âm thanh
+  const handleSoundToggle = useCallback((checked: boolean) => {
     setIsSoundEnabled(checked);
     localStorage.setItem("sound_effect", checked.toString());
-  };
+  }, []);
 
-  const playWordPronunciation = (word: string, lang: string = "en-US") => {
-    if (isSoundEnabled) {
+  // Phát âm thanh từ
+  const playWordPronunciation = useCallback(
+    (word: string, lang: string = "en-US") => {
+      if (!isSoundEnabled) return;
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = lang; // Ngôn ngữ phát âm (có thể thay đổi)
+      utterance.lang = lang;
       window.speechSynthesis.speak(utterance);
-    }
-  };
+    },
+    [isSoundEnabled],
+  );
+
+  // Memoize context value để tránh re-render không cần thiết
+  const contextValue = useMemo(
+    () => ({
+      successSound,
+      finishSound,
+      isSoundEnabled,
+      handleSoundToggle,
+      playWordPronunciation,
+    }),
+    [
+      successSound,
+      finishSound,
+      isSoundEnabled,
+      handleSoundToggle,
+      playWordPronunciation,
+    ],
+  );
 
   return (
-    <SoundContext.Provider
-      value={{
-        successSound,
-        finishSound,
-        isSoundEnabled,
-        handleSoundToggle,
-        playWordPronunciation,
-      }}
-    >
+    <SoundContext.Provider value={contextValue}>
       {children}
     </SoundContext.Provider>
   );
 };
 
+// Custom hook để sử dụng context
 export const useSoundEffect = () => {
   const context = useContext(SoundContext);
-  if (!context) throw new Error("useSound must be used within a SoundProvider");
-
+  if (!context) {
+    throw new Error("useSoundEffect must be used within a SoundProvider");
+  }
   return context;
 };

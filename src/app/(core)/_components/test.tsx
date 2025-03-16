@@ -1,19 +1,22 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Set } from "@/types/data/set.type";
+import { Card } from "@/types/data/card.type";
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as CardUI, CardHeader, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Card as CardUI, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,28 +25,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Set } from "@/types/data/set.type";
-import { Card } from "@/types/data/card.type";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 export function Test({ set }: { set: Set }) {
-  const [configDialogOpen, setConfigDialogOpen] = useState(true);
-  const [questions, setQuestions] = useState<Card[]>([]);
-  const [questionType, setQuestionType] = useState<"term" | "definition">(
-    "definition",
-  );
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [correctIndices, setCorrectIndices] = useState<number[]>([]);
-
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
-
+  // Schema và Type cho form
   const testSchema = z.object({
     questions: z
       .number()
@@ -60,6 +49,18 @@ export function Test({ set }: { set: Set }) {
 
   type TestInput = z.infer<typeof testSchema>;
 
+  // State và Ref
+  const [configDialogOpen, setConfigDialogOpen] = useState(true);
+  const [questions, setQuestions] = useState<Card[]>([]);
+  const [questionType, setQuestionType] = useState<"term" | "definition">(
+    "definition",
+  );
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [correctIndices, setCorrectIndices] = useState<number[]>([]);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  // Form setup
   const form = useForm<TestInput>({
     resolver: zodResolver(testSchema),
     defaultValues: {
@@ -68,55 +69,58 @@ export function Test({ set }: { set: Set }) {
     },
   });
 
-  const handleConfigSubmit = (values: TestInput) => {
-    const selectedCards = set.cards
-      .sort(() => 0.5 - Math.random())
-      .slice(0, values.questions) as Card[];
-    setQuestions(selectedCards);
-    setAnswers(new Array(selectedCards.length).fill(""));
-    setQuestionType(values.questionType);
-    setConfigDialogOpen(false);
+  // Handlers
+  const handleConfigSubmit = useCallback(
+    (values: TestInput) => {
+      const selectedCards = set.cards
+        .sort(() => 0.5 - Math.random())
+        .slice(0, values.questions) as Card[];
+      setQuestions(selectedCards);
+      setAnswers(new Array(selectedCards.length).fill(""));
+      setQuestionType(values.questionType);
+      setConfigDialogOpen(false);
+      cardRefs.current = new Array(selectedCards.length).fill(null);
+    },
+    [set.cards],
+  );
 
-    cardRefs.current = new Array(selectedCards.length).fill(null);
-  };
-
-  const handleCheckAnswers = () => {
+  const handleCheckAnswers = useCallback(() => {
     const hasEmptyAnswer = answers.some((answer) => answer.trim() === "");
-    if (hasEmptyAnswer)
-      return toast.error("Please fill in all answers before checking!");
+    if (hasEmptyAnswer) {
+      toast.error("Please fill in all answers before checking!");
+      return;
+    }
 
-    let correctCount = 0;
+    let count = 0;
     const newCorrectIndices: number[] = [];
 
     questions.forEach((card, index) => {
-      const userAnswer = (answers[index] || "").trim().toLowerCase();
+      const userAnswer = answers[index].trim().toLowerCase();
       const correctAnswer =
         questionType === "definition"
           ? card.term.trim().toLowerCase()
           : card.definition.trim().toLowerCase();
 
       if (userAnswer === correctAnswer) {
-        correctCount++;
+        count++;
         newCorrectIndices.push(index);
       }
     });
 
-    setCorrectCount(correctCount);
+    setCorrectCount(count);
     setCorrectIndices(newCorrectIndices);
-
     toast.success(
-      `You answered ${correctCount}/${questions.length} questions correctly!`,
+      `You answered ${count}/${questions.length} questions correctly!`,
     );
-  };
+  }, [answers, questions, questionType]);
 
+  // JSX
   return (
     <div>
-      {/* Test configuration */}
       <AlertDialog open={configDialogOpen} onOpenChange={setConfigDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Test configuration</AlertDialogTitle>
-
             <AlertDialogDescription>
               Please select the number of questions and question type.
             </AlertDialogDescription>
@@ -136,17 +140,19 @@ export function Test({ set }: { set: Set }) {
                       <Input
                         type="number"
                         {...field}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          field.onChange(value === "" ? 0 : parseInt(value));
-                        }}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value === ""
+                              ? 0
+                              : parseInt(e.target.value),
+                          )
+                        }
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="questionType"
@@ -173,7 +179,6 @@ export function Test({ set }: { set: Set }) {
                   </FormItem>
                 )}
               />
-
               <AlertDialogFooter>
                 <Button autoFocus type="submit">
                   Start
@@ -184,11 +189,9 @@ export function Test({ set }: { set: Set }) {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Test questions */}
       {questions.length > 0 && (
         <div className="flex flex-col">
           <h1 className="mx-auto mb-4 text-2xl font-bold">{set.name}</h1>
-
           <div className="space-y-4">
             {questions.map((card, index) => (
               <CardUI
@@ -211,7 +214,6 @@ export function Test({ set }: { set: Set }) {
                     </Badge>
                   </div>
                 </CardHeader>
-
                 <CardContent>
                   <p className="text-xl">
                     {questionType === "definition"
@@ -219,11 +221,10 @@ export function Test({ set }: { set: Set }) {
                       : card.term}
                   </p>
                 </CardContent>
-
                 <CardContent>
                   <Input
                     className={cn(
-                      "focus:dark:border-primary-foreground< rounded-lg focus:border-0 focus:border-b-2 focus:border-primary",
+                      "rounded-lg focus:border-0 focus:border-b-2 focus:border-primary focus:dark:border-primary-foreground",
                       { "border-highlight": correctIndices.includes(index) },
                     )}
                     placeholder={`Enter ${questionType === "definition" ? "term" : "definition"}`}
@@ -231,12 +232,10 @@ export function Test({ set }: { set: Set }) {
                     autoFocus={index === 0}
                     tabIndex={index + 1}
                     onFocus={() => {
-                      if (cardRefs.current[index]) {
-                        cardRefs.current[index].scrollIntoView({
-                          behavior: "instant",
-                          block: "center",
-                        });
-                      }
+                      cardRefs.current[index]?.scrollIntoView({
+                        behavior: "instant",
+                        block: "center",
+                      });
                     }}
                     onChange={(e) => {
                       const newAnswers = [...answers];
@@ -247,7 +246,6 @@ export function Test({ set }: { set: Set }) {
                 </CardContent>
               </CardUI>
             ))}
-
             <Button
               className="mx-auto flex w-fit"
               tabIndex={questions.length}

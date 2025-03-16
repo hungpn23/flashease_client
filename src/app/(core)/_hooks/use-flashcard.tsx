@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Set } from "@/types/data/set.type";
-import { Card } from "@/types/data/card.type";
 import { SaveAnswer } from "@/app/(core)/_actions/save-answer";
+import { Card } from "@/types/data/card.type";
+import { Set } from "@/types/data/set.type";
 
 interface UseFlashcardProps {
   set: Set;
@@ -40,22 +40,18 @@ export const useFlashcard = ({
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [sortedCardIds, setSortedCardIds] = useState<string[]>([]);
   const [orderedCards, setOrderedCards] = useState(set.cards);
+  const isSoundPlaying = useRef(false);
 
-  //* Tính toán currentCard và cardStatus
   const currentCard = useMemo(
     () => orderedCards[currentCardIndex],
     [orderedCards, currentCardIndex],
   );
-  let cardStatus = "Not studied";
-  if (currentCard.correctCount) {
-    if (currentCard.correctCount >= 2) {
-      cardStatus = "Known";
-    } else {
-      cardStatus = "Learning";
-    }
-  }
 
-  //* Lưu kết quả trả lời và chuyển sang card tiếp theo
+  const cardStatus = useMemo(() => {
+    if (currentCard.correctCount === null) return "Not studied";
+    return currentCard.correctCount >= 2 ? "Known" : "Learning";
+  }, [currentCard.correctCount]);
+
   const saveAnswer = useCallback(
     async (isCorrect: boolean, currentCardIndex: number, set: Set) => {
       const cardId = orderedCards[currentCardIndex].id;
@@ -80,7 +76,6 @@ export const useFlashcard = ({
             .play()
             .catch((err) => toast.error("Error playing success sound:", err));
         }
-
         toast.dismiss();
         toast.success("Good job!");
       } else {
@@ -91,29 +86,31 @@ export const useFlashcard = ({
     [orderedCards, isSoundEnabled, successSound],
   );
 
-  const isSoundPlaying = useRef(false);
-  const handlePlayWordPronunciation = (card: Card) => {
-    const COOLDOWN_TIME = 1000;
+  const handlePlayWordPronunciation = useCallback(
+    (card: Card) => {
+      const COOLDOWN_TIME = 1000;
 
-    if (isSoundPlaying.current) {
-      toast.dismiss();
-      toast.error("Please wait a moment before playing again!");
-      return;
-    }
-
-    if (isSoundEnabled) {
-      try {
-        isSoundPlaying.current = true;
-        playWordPronunciation(card.term);
-        setTimeout(() => {
-          isSoundPlaying.current = false;
-        }, COOLDOWN_TIME);
-      } catch (err) {
-        toast.error("Error playing pronunciation!");
-        isSoundPlaying.current = false;
+      if (isSoundPlaying.current) {
+        toast.dismiss();
+        toast.error("Please wait a moment before playing again!");
+        return;
       }
-    }
-  };
+
+      if (isSoundEnabled) {
+        try {
+          isSoundPlaying.current = true;
+          playWordPronunciation(card.term);
+          setTimeout(() => {
+            isSoundPlaying.current = false;
+          }, COOLDOWN_TIME);
+        } catch (err) {
+          toast.error("Error playing pronunciation!");
+          isSoundPlaying.current = false;
+        }
+      }
+    },
+    [isSoundEnabled, playWordPronunciation],
+  );
 
   const get3RandomWrongAnswers = useCallback(
     (currentCard: Card): string[] => {
@@ -127,7 +124,6 @@ export const useFlashcard = ({
   );
 
   useEffect(() => {
-    //* Khởi tạo danh sách thứ tự các cards theo id và sắp xếp
     if (sortedCardIds.length === 0 && set.cards.length > 0) {
       const sorted = [...set.cards].sort((cardA, cardB) => {
         const getOrder = (card: (typeof set.cards)[number]) => {
@@ -141,7 +137,6 @@ export const useFlashcard = ({
       setOrderedCards(sorted);
     }
 
-    //* Cập nhật và sắp xếp cards mới theo thứ tự card id đã khởi tạo
     if (sortedCardIds.length > 0) {
       const newCardsMap = new Map(set.cards.map((card) => [card.id, card]));
       const newOrderedCards = sortedCardIds
@@ -151,7 +146,6 @@ export const useFlashcard = ({
     }
   }, [set, sortedCardIds]);
 
-  //* Kiểm tra xem đã học hết tất cả các cards chưa
   useEffect(() => {
     const finished = orderedCards.every(
       (card) => card.correctCount && card.correctCount >= 2,
@@ -163,7 +157,6 @@ export const useFlashcard = ({
           .play()
           .catch((err) => toast.error("Error playing finish sound:", err));
       }
-
       toast.dismiss();
       toast.success("You have completed all the cards!", { duration: 3000 });
       router.replace(`/library/${set.id}`);
