@@ -1,4 +1,4 @@
-import { SetMetadata } from "@/types/data/set";
+import { SetMetadata } from "@/types/data/set.type";
 
 export function ProgressBar({ metadata }: { metadata: SetMetadata }) {
   const { totalCards, notStudiedCount, learningCount, knownCount } = metadata;

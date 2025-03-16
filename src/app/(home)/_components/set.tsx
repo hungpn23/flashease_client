@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Pencil } from "lucide-react";
-import { Set, SetMetadata } from "@/types/data/set";
+import { Set, SetMetadata } from "@/types/data/set.type";
 import { EditSetForm } from "./edit-set.form";
 import { Visibility } from "@/app/(home)/_components/visibility";
 import {

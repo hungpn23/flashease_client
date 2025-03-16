@@ -1,6 +1,6 @@
 import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
-import { Set } from "@/types/data/set";
+import { Set } from "@/types/data/set.type";
 import { cookies } from "next/headers";
 
 export async function LoadSet(setId: string, path: "library" | "explore") {

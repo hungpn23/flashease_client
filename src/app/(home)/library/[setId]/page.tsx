@@ -27,11 +27,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Params } from "@/types/page-params.type";
-import { BookCheck, Pencil } from "lucide-react";
+import { BookCheck, NotebookPen, Pencil, StickyNote } from "lucide-react";
 import { ResetFlashcardBtn } from "@/app/(home)/_components/reset-flashcard.btn";
-import { FlashcardBtn } from "@/app/(home)/_components/flashcard.btn";
-import { LearnBtn } from "@/app/(home)/_components/learn.btn";
 import { Card } from "@/types/data/card.type";
+import { LearningBtn } from "@/app/(home)/_components/learning.btn";
 
 function getCardsStatus(cards: Card[] = []) {
   const known =
@@ -82,13 +81,17 @@ export default async function SetDetailPage({ params }: { params: Params }) {
 
       <CardContent>
         <div className="flex flex-row items-center gap-4 overflow-x-auto">
-          <FlashcardBtn set={set} known={known.length} />
+          <LearningBtn type="flashcard" set={set} known={known.length}>
+            Flashcard <StickyNote className="ml-1 inline h-4 w-4" />
+          </LearningBtn>
 
-          <LearnBtn set={set} known={known.length} />
+          <LearningBtn type="learn" set={set} known={known.length}>
+            Learn <NotebookPen className="ml-1 inline h-4 w-4" />
+          </LearningBtn>
 
-          <Button variant="outline">
-            Test <BookCheck className="inline h-4 w-4" />
-          </Button>
+          <LearningBtn type="test" set={set} known={known.length}>
+            Test <BookCheck className="ml-1 inline h-4 w-4" />
+          </LearningBtn>
 
           <Button variant="outline">Coming soon...</Button>
         </div>

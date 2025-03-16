@@ -3,7 +3,7 @@ import { Pagination } from "@/app/(home)/_components/pagination";
 import { SetUI } from "@/app/(home)/_components/set";
 import { Blockquote, BlockquoteAuthor } from "@/components/ui/blockquote";
 import { searchParamsCache } from "@/lib/search-params";
-import { Set } from "@/types/data/set";
+import { Set } from "@/types/data/set.type";
 import { SearchParams } from "nuqs/server";
 
 export default async function Explore({

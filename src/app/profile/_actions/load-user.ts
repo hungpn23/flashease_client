@@ -2,7 +2,7 @@
 
 import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
-import { User } from "@/types/data/user";
+import { User } from "@/types/data/user.type";
 import { cookies } from "next/headers";
 
 export async function LoadUser() {

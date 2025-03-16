@@ -23,7 +23,7 @@ import {
   editProfileSchema,
   EditProfileState,
 } from "@/app/profile/_types/edit-profile.type";
-import { User } from "@/types/data/user";
+import { User } from "@/types/data/user.type";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 
 export function EditProfileForm({ user }: { user: User }) {

@@ -42,7 +42,7 @@ import {
   editSetSchema,
   EditSetState,
 } from "@/app/(home)/_types/edit-set.type";
-import { Set } from "@/types/data/set";
+import { Set } from "@/types/data/set.type";
 import { DeleteSet } from "@/app/(home)/_actions/delete-set";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";

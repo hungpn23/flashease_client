@@ -4,11 +4,7 @@ import { ProgressBar } from "@/app/(core)/_components/progress-bar";
 import { Params } from "@/types/page-params.type";
 import { Learn } from "@/app/(core)/_components/learn";
 
-interface LearnPageProps {
-  params: Params;
-}
-
-export default async function LearnPage({ params }: LearnPageProps) {
+export default async function LearnPage({ params }: { params: Params }) {
   const { setId } = await params;
   const setDetail = await LoadSetDetail(setId);
   if ("statusCode" in setDetail) throw new Error("Failed to load set detail");

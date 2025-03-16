@@ -1,7 +1,7 @@
 import { VisibleTo } from "@/lib/constants";
 import { BaseEntity } from "../base-entity.type";
 import { Card } from "./card.type";
-import { User } from "./user";
+import { User } from "./user.type";
 import { Folder } from "./folder.type";
 
 export type Set = BaseEntity & {

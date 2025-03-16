@@ -2,7 +2,7 @@
 
 import { SERVER_URL } from "@/lib/constants";
 import { HttpError } from "@/types/error.type";
-import { SetDetail } from "@/types/data/set";
+import { SetDetail } from "@/types/data/set.type";
 import { cookies } from "next/headers";
 
 export async function LoadSetDetail(setId: string) {

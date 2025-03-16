@@ -4,7 +4,7 @@ import { SetUI } from "@/app/(home)/_components/set";
 import { Blockquote, BlockquoteAuthor } from "@/components/ui/blockquote";
 import { Button } from "@/components/ui/button";
 import { searchParamsCache } from "@/lib/search-params";
-import { SetDetail } from "@/types/data/set";
+import { SetDetail } from "@/types/data/set.type";
 import { Plus } from "lucide-react";
 import { SearchParams } from "nuqs/server";
 import Link from "next/link";

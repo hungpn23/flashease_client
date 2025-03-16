@@ -1,6 +1,6 @@
 "use client";
 
-import { Set } from "@/types/data/set";
+import { Set } from "@/types/data/set.type";
 import { X, Check, Volume2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";

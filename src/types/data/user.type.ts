@@ -1,5 +1,5 @@
 import { BaseEntity } from "../base-entity.type";
-import { Set } from "./set";
+import { Set } from "./set.type";
 
 export type User = BaseEntity & {
   role: string;

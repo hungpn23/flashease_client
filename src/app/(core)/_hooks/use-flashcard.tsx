@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Set } from "@/types/data/set";
+import { Set } from "@/types/data/set.type";
 import { Card } from "@/types/data/card.type";
 import { SaveAnswer } from "@/app/(core)/_actions/save-answer";
 
