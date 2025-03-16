@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }} # Địa chỉ IP hoặc domain của VPS
+          username: ${{ secrets.VPS_USERNAME }} # Username để SSH vào VPS
+          key: ${{ secrets.VPS_SSH_KEY }} # SSH private key
+          port: ${{ secrets.VPS_PORT }} # Cổng SSH (mặc định là 22 nếu không khai báo)
+          script: |
+            cd /home/hungpn23/app/client
+            docker compose down
+            git pull origin main
+            docker build -t client .
+            docker compose up -d
+            docker system prune -f
