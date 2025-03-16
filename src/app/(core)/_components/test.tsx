@@ -30,6 +30,7 @@ import { Card } from "@/types/data/card.type";
 import { Badge } from "@/components/ui/badge";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function Test({ set }: { set: Set }) {
   const [configDialogOpen, setConfigDialogOpen] = useState(true);
@@ -80,6 +81,10 @@ export function Test({ set }: { set: Set }) {
   };
 
   const handleCheckAnswers = () => {
+    const hasEmptyAnswer = answers.some((answer) => answer.trim() === "");
+    if (hasEmptyAnswer)
+      return toast.error("Please fill in all answers before checking!");
+
     let correctCount = 0;
     const newCorrectIndices: number[] = [];
 
