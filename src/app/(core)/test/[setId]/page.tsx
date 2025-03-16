@@ -2,7 +2,6 @@ import { Container } from "@/components/layouts/container";
 import { Params } from "@/types/page-params.type";
 import { LoadSet } from "@/app/(home)/_actions/load-set";
 import { Test } from "@/app/(core)/_components/test";
-import { TestV2 } from "../../_components/test-v2";
 
 export default async function TestPage({ params }: { params: Params }) {
   const { setId } = await params;
@@ -19,7 +18,7 @@ export default async function TestPage({ params }: { params: Params }) {
         to quickly move to next question.
       </div>
 
-      <TestV2 set={set} />
+      <Test set={set} />
     </Container>
   );
 }
