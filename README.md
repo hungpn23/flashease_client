@@ -1,7 +1,5 @@
 # FlashEase
 
-![FlashEase Banner](https://via.placeholder.com/1200x400.png?text=FlashEase+Flashcard+Learning)
-
 **FlashEase** is a Quizlet-inspired flashcard learning application designed to help students and learners study efficiently. Built with [Next.js](https://nextjs.org/) for the frontend and [NestJS](https://nestjs.com/) for the backend, FlashEase offers a modern, responsive, and user-friendly experience for creating, managing, and studying flashcards. Whether you're preparing for exams or learning a new language, FlashEase makes studying engaging and effective.
 
 ## ✨ Features
