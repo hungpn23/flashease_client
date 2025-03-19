@@ -33,61 +33,68 @@ export default async function ProfilePage() {
   const firstLetter = user.username.charAt(0).toUpperCase();
 
   return (
-    <Container>
-      <Card>
+    <Container className="px-4 py-6 sm:px-6 lg:px-8">
+      <Card className="mx-auto w-full max-w-2xl">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-start sm:gap-0">
+            <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-start sm:space-x-6 sm:space-y-0">
               {/* UPLOAD AVATAR */}
               <Dialog>
                 <DialogTrigger asChild>
-                  <Image
-                    className="cursor-pointer rounded-full border-2 border-primary hover:opacity-75"
-                    src={
-                      user.avatar ||
-                      `https://placehold.co/200?text=${firstLetter}`
-                    }
-                    alt={user.username}
-                    height={100}
-                    width={100}
-                  />
+                  <div className="relative h-24 w-24 sm:h-28 sm:w-28">
+                    <Image
+                      className="cursor-pointer rounded-full border-2 border-primary object-cover hover:opacity-75"
+                      src={
+                        user.avatar ||
+                        `https://placehold.co/200?text=${firstLetter}`
+                      }
+                      alt={user.username}
+                      fill
+                      sizes="(max-width: 640px) 96px, 112px"
+                    />
+                  </div>
                 </DialogTrigger>
 
-                <DialogContent className="sm:max-w-lg">
+                <DialogContent className="w-[90vw] max-w-md sm:max-w-lg">
                   <DialogHeader>
                     <DialogTitle>Upload avatar</DialogTitle>
-
                     <DialogDescription>
                       Click input below to upload a new avatar.
                     </DialogDescription>
                   </DialogHeader>
-
                   <UploadAvatarForm />
                 </DialogContent>
               </Dialog>
 
-              <div>
-                <CardTitle className="text-2xl">@{user.username}</CardTitle>
-                <Badge variant="outline">{user.role}</Badge>
+              <div className="text-center sm:text-left">
+                <CardTitle className="text-xl sm:text-2xl">
+                  @{user.username}
+                </CardTitle>
+                <Badge variant="outline" className="mt-2">
+                  {user.role}
+                </Badge>
               </div>
             </div>
 
             {/* EDIT PROFILE */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline">Edit profile</Button>
+                <Button
+                  variant="outline"
+                  className="w-full px-4 py-2 text-sm sm:w-auto sm:text-base"
+                >
+                  Edit profile
+                </Button>
               </DialogTrigger>
 
-              <DialogContent className="sm:max-w-2xl">
+              <DialogContent className="w-[90vw] max-w-md sm:max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
-
                   <DialogDescription>
-                    Make changes to your profile here. Click save when
-                    you&apos;re done.
+                    Make changes to your profile here. Click save when you're
+                    done.
                   </DialogDescription>
                 </DialogHeader>
-
                 <EditProfileForm user={user} />
               </DialogContent>
             </Dialog>
@@ -95,12 +102,12 @@ export default async function ProfilePage() {
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-2">
+          <div className="space-y-4">
             <hr />
 
-            <h3>
-              <span className="mr-2">Email: {user.email}</span>
-
+            <h3 className="flex items-center gap-2 text-sm sm:text-base">
+              <span className="font-medium">Email:</span>
+              <span className="break-all">{user.email}</span>
               {user.isEmailVerified ? (
                 <Badge variant="outline">verified</Badge>
               ) : (
@@ -108,10 +115,14 @@ export default async function ProfilePage() {
               )}
             </h3>
 
-            <h3>Bio: {user.bio || "No bio provided"}</h3>
+            <h3 className="text-sm sm:text-base">
+              <span className="font-medium">Bio:</span>{" "}
+              {user.bio || "No bio provided"}
+            </h3>
 
-            <h3>
-              <time>Account created: {formatDate(user.createdAt)}</time>
+            <h3 className="text-sm sm:text-base">
+              <span className="font-medium">Account created:</span>{" "}
+              <time>{formatDate(user.createdAt)}</time>
             </h3>
           </div>
         </CardContent>
