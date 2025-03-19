@@ -18,8 +18,8 @@ services:
     container_name: nginx
     restart: unless-stopped
     volumes:
-      - ~/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ~/certs/letsencrypt:/etc/letsencrypt:ro
+      - ~/app/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ~/app/certs/letsencrypt:/etc/letsencrypt:ro
     ports:
       - 80:80
       - 443:443
