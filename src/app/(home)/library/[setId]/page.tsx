@@ -51,6 +51,7 @@ function getCardsStatus(cards: Card[] = []) {
 export default async function SetDetailPage({ params }: { params: Params }) {
   const { setId } = await params;
   const set = await LoadSet(setId, "library");
+  console.log("🚀 ~ SetDetailPage ~ set:", set);
   if ("statusCode" in set) throw new Error("failed to fetch set");
 
   const { known, learning, notStudied } = getCardsStatus(set.cards);
@@ -70,7 +71,7 @@ export default async function SetDetailPage({ params }: { params: Params }) {
         <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
         <CardDescription className="flex items-center justify-between">
           <div>
-            <span>Author: {set.author}</span>
+            <span>Author: {set.author.username}</span>
             <span className="mx-1">•</span>
             <span>{set.description || "No description provided."}</span>
           </div>

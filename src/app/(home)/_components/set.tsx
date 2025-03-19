@@ -56,7 +56,7 @@ export function SetUI({
         <div className="mt-2 text-sm text-muted-foreground">
           {!isLibrary && (
             <span>
-              <span>Author: {set.author}</span>
+              <span>Author: {set.author.username}</span>
               <span className="mx-1">•</span>
               <span>Total cards: {set.cards?.length ?? 0}</span>
             </span>

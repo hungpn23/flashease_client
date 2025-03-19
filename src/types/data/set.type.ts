@@ -7,9 +7,9 @@ import { Folder } from "./folder.type";
 export type Set = BaseEntity & {
   name: string;
   description?: string;
-  author: string;
   visibleTo: VisibleTo;
   passcode?: string;
+  author: User;
   user?: User;
   folder?: Folder;
   cards: Card[];

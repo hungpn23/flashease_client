@@ -28,7 +28,7 @@ export default async function PublicSetDetail({ params }: { params: Params }) {
       <CardHeader>
         <CardTitle className="text-xl font-semibold">{set.name}</CardTitle>
         <CardDescription>
-          <span>Author: {set.author}</span>
+          <span>Author: {set.author.username}</span>
           <span className="mx-1">•</span>
           <span>{set.description}</span>
         </CardDescription>
