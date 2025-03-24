@@ -42,7 +42,7 @@
 
 ### Installation
 
-## Client side
+#### Client side
 
 1. **Clone the repository and install dependencies**:
 
@@ -65,7 +65,7 @@
    The Nginx proxy routes requests to the Next.js frontend (http://client:3000).
    API requests to /api/v1/ will be proxied to the NestJS backend (if running on server:3001).
 
-## Server side
+#### Server side
 
 1. **Clone the repository and install dependencies**:
 
@@ -89,6 +89,9 @@
 
    The Nginx proxy routes requests to the Next.js frontend (http://client:3000).
    API requests to /api/v1/ will be proxied to the NestJS backend (if running on server:3001).
+
+4. **Access the api documentation**:
+   visit http://localhost/api-docs with username: admin & password: admin
 
 ## References
 
