@@ -1,48 +1,43 @@
-# FlashEase
+# Summary
 
 **FlashEase** is a Quizlet-inspired flashcard learning application designed to help students and learners study efficiently. Built with [Next.js](https://nextjs.org/) for the frontend and [NestJS](https://nestjs.com/) for the backend, FlashEase offers a modern, responsive, and user-friendly experience for creating, managing, and studying flashcards. Whether you're preparing for exams or learning a new language, FlashEase makes studying engaging and effective.
+
+## ✅ Checklist
+
+- [x] Sign in & sign up via email.
+- [x] OAuth2 (Google).
+- [x] Admin & User roles.
+- [x] Pagination: Offset.
+- [x] File upload (single and multiple): Using AWS S3 and Cloudfront service.
+- [x] Docker support: Docker compose and Dockerfile for development & production.
+- [x] CI: Github action.
+- [x] Database support: [TypeORM](https://www.npmjs.com/package/typeorm).
+- [x] Seeding: [Typeorm Extension](https://www.npmjs.com/package/typeorm-extension).
+- [x] Config service: [@nestjs/config](https://docs.nestjs.com/techniques/configuration).
+- [x] API Documentation (Swagger): Using NestJS cli plugin [@nestjs/openapi](https://docs.nestjs.com/openapi/cli-plugin).
+- [x] Format & Lint: [Prettier](https://www.npmjs.com/package/prettier) & [ESLint](https://www.npmjs.com/package/eslint)
+- [] Mailing ([@nestjs-modules/mailer](https://www.npmjs.com/package/@nestjs-modules/mailer) & [nodemailer](https://www.npmjs.com/package/nodemailer)).
+- [] E2E and units tests.
+- [] Internationalization/Translations (I18N) ([nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n)).
 
 ## ✨ Features
 
 - **Create and Manage Flashcards**: Easily create, edit, and organize flashcard sets for any subject.
-- **Study Modes**: Practice with interactive modes like flashcard, learn, and test mode.
+- **Study Modes**: Practice with interactive modes: flashcard, learn (multiple-choices question), and test (fill-in questions
+  ) mode.
+- **Share**: Share with others community or people you want.
 - **Responsive Design**: Optimized for both mobile and desktop devices using Tailwind CSS.
 - **User Profiles**: Manage your account, track progress, and customize your learning experience.
 - **Form Validation**: Robust form handling with React Hook Form and Zod for creating flashcard sets.
-- **Modern UI**: Accessible and customizable components powered by Radix UI.
+- **Modern UI**: Accessible and customizable components powered by Shadcn UI.
 - **Dark/Light Mode**: Theme support with `next-themes` for comfortable studying at any time.
-- **Backend API**: Powered by NestJS for secure and scalable data management.
-- **Type Safety**: Written in TypeScript for a better developer experience and fewer bugs.
 
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **Framework**: [Next.js](https://nextjs.org/) (v15.1.6)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [Shadcn UI](https://ui.shadcn.com/)
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
-- **Theme Support**: [next-themes](https://github.com/pacocoursey/next-themes)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Animations**: [motion](https://motion.dev/)
-
-### Backend
-
-- **Framework**: [NestJS](https://nestjs.com/)
-- **Database**: [PostgreSQL](https://www.postgresql.org/)
-
-### Tools
-
-- **Package Manager**: [pnpm](https://pnpm.io/)
-- **Linting**: [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/)
-
-## 🚀 Getting Started
+## 🚀 Running the app in client side
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v20 or higher)
-- [pnpm](https://pnpm.io/) (v10.4.1)
+- [pnpm](https://pnpm.io/) (v10.4.1 or higher)
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for Docker setup)
 
 ### Installation
@@ -67,3 +62,7 @@
 
    The Nginx proxy routes requests to the Next.js frontend (http://client:3000).
    API requests to /api/v1/ will be proxied to the NestJS backend (if running on server:3001).
+
+## References
+
+- [vndevteam](https://github.com/vndevteam/nestjs-boilerplate)

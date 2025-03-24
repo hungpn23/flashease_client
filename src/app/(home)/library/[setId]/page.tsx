@@ -51,7 +51,6 @@ function getCardsStatus(cards: Card[] = []) {
 export default async function SetDetailPage({ params }: { params: Params }) {
   const { setId } = await params;
   const set = await LoadSet(setId, "library");
-  console.log("🚀 ~ SetDetailPage ~ set:", set);
   if ("statusCode" in set) throw new Error("failed to fetch set");
 
   const { known, learning, notStudied } = getCardsStatus(set.cards);
