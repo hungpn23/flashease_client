@@ -20,7 +20,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }} # Cổng SSH (mặc định là 22 nếu không khai báo)
           script: |
             cd /home/hungpn23/app/client
-            COMPOSE_BAKE=true docker compose down
+            docker compose down
             git pull origin main
-            COMPOSE_BAKE=true docker compose up -d --build
+            docker compose up -d --build
             docker system prune -f

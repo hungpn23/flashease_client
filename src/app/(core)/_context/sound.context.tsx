@@ -27,21 +27,18 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
   const [finishSound, setFinishSound] = useState<HTMLAudioElement | null>(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
-  // Khởi tạo audio objects một lần duy nhất
   useEffect(() => {
     const success = new Audio("/sound/success.mp3");
     const finish = new Audio("/sound/finish.mp3");
     setSuccessSound(success);
     setFinishSound(finish);
 
-    // Cleanup để tránh memory leak
     return () => {
       success.pause();
       finish.pause();
     };
   }, []);
 
-  // Đồng bộ trạng thái âm thanh với localStorage
   useEffect(() => {
     const soundEffect = localStorage.getItem("sound_effect");
     const initialSoundEnabled =
@@ -52,13 +49,11 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Xử lý toggle âm thanh
   const handleSoundToggle = useCallback((checked: boolean) => {
     setIsSoundEnabled(checked);
     localStorage.setItem("sound_effect", checked.toString());
   }, []);
 
-  // Phát âm thanh từ
   const playWordPronunciation = useCallback(
     (word: string, lang: string = "en-US") => {
       if (!isSoundEnabled) return;
@@ -94,7 +89,6 @@ export const SoundProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook để sử dụng context
 export const useSoundEffect = () => {
   const context = useContext(SoundContext);
   if (!context) {

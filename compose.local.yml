@@ -1,4 +1,4 @@
-# COMPOSE_BAKE=true docker compose -f compose.local.yml up --build
+# docker compose -f compose.local.yml up --build
 services:
   nginx:
     image: nginx:latest
